@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.groups" id="group_menu_import_order">
+        <field name="name">Menu Import Order</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+        <field name="comment">Purchase/Import Order</field>
+    </record>
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <report
+                id="report_branch_id"
+                model="account.payment"
+                report_type="qweb-pdf"
+                string="Branch Report"
+                name="branch_report.branch_report_id"
+                file="branch_report.branch_report_id"
+        />
+    </data>
+</odoo>
