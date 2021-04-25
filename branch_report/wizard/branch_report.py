@@ -1,7 +1,92 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from datetime import datetime
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError , UserError
+
+class PaymentWizardInherit(models.TransientModel):
+    _inherit = "account.payment.register"
+
+    cheques_payment = fields.Boolean(string="Cheque", default=False)
+    online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
+    corporate_sale = fields.Boolean(string="Corporate sale", default=False)
+    other_receipt = fields.Boolean(string="Other Receipts", default=False)
+    branch_id = fields.Many2one('res.branch', default=lambda r: r.env.user.branch_id.id)
+    type = fields.Selection(related='journal_id.type')
+
+    @api.onchange('branch_id')
+    def onchange_get_branches(self):
+        branches = self.env.user.branch_ids
+
+        print(branches)
+
+        return {'domain': {'branch_id': [('id', 'in', branches.ids)]}}
+
+
+
+    def _create_payments(self):
+        if self.journal_id.type == 'bank':
+            if self.cheques_payment == False and self.online_credit_payment == False and self.corporate_sale == False and self.other_receipt == False:
+                raise UserError(_("Must select one option out of 4"))
+
+        res = super(PaymentWizardInherit, self)._create_payments()
+
+
+        if self.cheques_payment == True:
+            res.update({'cheques_payment': True})
+
+        if self.online_credit_payment == True:
+            res.update({'online_credit_payment': True})
+    
+        if self.corporate_sale == True:
+            res.update({'corporate_sale': True})
+
+        if self.other_receipt == True:
+            res.update({'other_receipt': True})
+        if self.branch_id:
+            res.update({'branch_id': self.branch_id.id})
+
+        return res
+
+    @api.onchange('cheques_payment')
+    def cheque_only(self):
+        if self.cheques_payment:
+            if self.journal_id.type == 'cash':
+                self.online_credit_payment = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.corporate_sale = False
+                self.online_credit_payment = False
+
+    @api.onchange('online_credit_payment')
+    def creditCard_only(self):
+        if self.online_credit_payment:
+            if self.journal_id.type == 'cash':
+                self.cheques_payment = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.cheques_payment = False
+                self.corporate_sale = False
+
+    @api.onchange('corporate_sale')
+    def corporate_only(self):
+        if self.corporate_sale:
+            if self.journal_id.type == 'cash':
+                self.other_receipt = False
+            if self.journal_id.type == 'bank':
+                self.other_receipt = False
+                self.cheques_payment = False
+                self.online_credit_payment = False
+
+
+    @api.onchange('other_receipt')
+    def otherReceipt_only(self):
+        if self.other_receipt:
+            if self.journal_id.type == 'cash':
+                self.corporate_sale = False
+            if self.journal_id.type == 'bank':
+                self.corporate_sale = False
+                self.cheques_payment = False
+                self.online_credit_payment = False
 
 
 class BranchReport(models.TransientModel):
