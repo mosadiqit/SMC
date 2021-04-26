@@ -8,9 +8,9 @@
 			<xpath expr="//field[@name='warehouse_id']" position="attributes">
 				<attribute name="invisible">1</attribute>
             </xpath>
+
 		</field>
 	</record>
-
 	<record id="view_sale_order_form_ware_inh" model="ir.ui.view">
 		<field name="name">sale.order.form</field>
 		<field name="model">sale.order</field>
@@ -18,7 +18,6 @@
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="warehouse_id"/>
-                    <field name="branch_id"/>
                 </xpath>
 		</field>
 	</record>
@@ -39,7 +38,7 @@
 		<field name="model">res.branch</field>
 		<field name="inherit_id" ref="branch.branch_res_branch_view_form"/>
 		<field name="arch" type="xml">
-			<xpath expr="//field[@name='division_id']" position="after">
+			<xpath expr="//field[@name='telephone']" position="after">
 				<field name="branch_code"/>
             </xpath>
 		</field>
