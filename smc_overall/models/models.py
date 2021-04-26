@@ -4,6 +4,18 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+class ResBranchInh(models.Model):
+    _inherit = 'res.branch'
+
+    branch_code = fields.Char('Branch Code')
+
+
+class ResUsersInh(models.Model):
+    _inherit = 'res.users'
+
+    agent_code = fields.Char('Agent Code')
+
+
 class ResPartnerInh(models.Model):
     _inherit = 'res.partner'
 
@@ -13,7 +25,6 @@ class ResPartnerInh(models.Model):
     no_cnic = fields.Char('CNIC')
     ntn = fields.Char('NTN')
     fax = fields.Char('Fax')
-
     beneficiary_name = fields.Char('Beneficiary Name')
     bank_name = fields.Char('Bank Name')
     address = fields.Char('Address')
@@ -48,24 +59,17 @@ class ResPartnerInh(models.Model):
     def create(self, vals):
         if vals.get('customer_code', _('New')) == _('New'):
             vals['customer_code'] = self.env['ir.sequence'].next_by_code('res.partner.sequence') or _('New')
+        branch = self.env['res.branch'].browse([vals.get('branch_id')])
+        vals['customer_code'] = str(1) + '-' + str(self.env.user.agent_code) + '-' + str(branch.branch_code) + vals['customer_code']
         result = super(ResPartnerInh, self).create(vals)
         return result
-
-
-# class SaleOrderInh(models.Model):
-#     _inherit = 'sale.order'
-#
-#     def action_confirm(self):
-#         res = super(SaleOrderInh, self).action_confirm()
-#         for order in self:
-#             for picking in order.picking_ids:
-#                 picking.do_unreserve()
-#         return res
 
 
 class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
     user_id = fields.Many2one('res.users', related='sale_id.user_id')
+
+
 
 
