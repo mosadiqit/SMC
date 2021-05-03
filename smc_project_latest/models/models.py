@@ -169,7 +169,7 @@ class SaleOrder(models.Model):
 
     def compute_self_id(self):
         for i in self:
-            i.create_user = i.user_id.id
+            i.create_user = i.env.uid
 
     def from_manager_approval(self):
         self.state = 'manager'
@@ -197,6 +197,7 @@ class SaleOrder(models.Model):
                 i.max_discount = diss
             else:
                 i.max_discount = 0
+
 
 class users_inherit(models.Model):
     _inherit = 'res.users'
