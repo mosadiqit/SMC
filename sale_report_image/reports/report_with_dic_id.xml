@@ -335,7 +335,7 @@
                                     </div>
                                     <div class="col-3  border-bottom">
                                         <p style="text-align:right; font-weight:bold;">
-                                            <t t-set="grand_total_balance" t-value="((total_amount - o.total_discount) + o.amount_tax)"/>
+                                            <t t-set="grand_total_balance" t-value="((total_amount - o.line_discount) + o.amount_tax)"/>
                                             <t t-esc="grand_total_balance" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
                                         </p>
                                     </div>
