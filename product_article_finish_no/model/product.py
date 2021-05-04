@@ -92,5 +92,5 @@ class SaleOrderLine(models.Model):
     @api.depends('product_uom_qty')
     def _onchange_product_uom_qty(self):
         for i in self:
-                i.total_sqm = i.product_uom_qty / (i.product_id.sqm_box or 1)
+                i.total_sqm = i.product_uom_qty / (i.product_id.pcs_box or 1)
                 i.total_pcs = i.total_sqm * i.product_id.pcs_box
