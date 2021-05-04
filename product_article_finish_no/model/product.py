@@ -86,11 +86,11 @@ class SaleOrderLine(models.Model):
 
     article_no = fields.Char("Article#", related="product_id.article_no")
     finish_no = fields.Char("Finish", related="product_id.finish_no")
-    total_sqm = fields.Char(string="Total Box", compute="_onchange_product_uom_qty")
-    total_pcs = fields.Char(string="Total Pcs", compute="_onchange_product_uom_qty")
+    total_sqm = fields.Float(string="Total Box", compute="_compute_product_uom_qty")
+    total_pcs = fields.Float(string="Total Pcs", compute="_compute_product_uom_qty")
 
     @api.depends('product_uom_qty')
-    def _onchange_product_uom_qty(self):
+    def _compute_product_uom_qty(self):
         for i in self:
                 i.total_sqm = i.product_uom_qty / (i.product_id.sqm_box or 1)
                 i.total_pcs = i.total_sqm * i.product_id.pcs_box
