@@ -17,6 +17,21 @@ class ResPartnerInh(models.Model):
             partner = self.env['res.partner'].search([('name', '=', rec.user_id.name)],limit=1)
             rec.partner_id = partner.id
 
+class ProductTemplateInh(models.Model):
+    _inherit = 'product.template'
+
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        # result = fields_view_get_extra(self, view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        result = super(ProductTemplateInh, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
+
+        if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
+            temp = etree.fromstring(result['arch'])
+            temp.set('create', '0')
+
+        return result
 
 class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
