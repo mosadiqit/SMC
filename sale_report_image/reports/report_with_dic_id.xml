@@ -172,7 +172,7 @@
                                                 </td>
                                                 <td class="div_tb" style="padding:0px; height:0%;border : 1px solid black;">
                                                     <t t-if="line.product_id.type != 'service'">
-                                                        <span t-field="line.product_uom_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
+                                                        <span t-field="line.product_uom_qty" />
                                                     </t>
                                                 </td>
                                                 <td class="div_tb" style="padding:0px; height:0%;border : 1px solid black;">
