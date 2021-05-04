@@ -82,7 +82,7 @@
                                 </div>
                                  <div class="col-6">
                                     <p class="p1">Branch :
-                                        <span t-field="o.create_user.branch_id.name"/><br/>
+                                        <span t-field="o.branch_id.name"/><br/>
                                         <t t-if="o.create_user.branch_id.address"><span style="margin-left:58px" t-field="o.create_user.branch_id.address"/><br/></t>
                                         <t t-if="o.create_user.branch_id.telephone"><span style="margin-left:58px" t-field="o.create_user.branch_id.telephone"/><br/></t>
 
