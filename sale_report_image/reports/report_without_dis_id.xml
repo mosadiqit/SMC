@@ -241,12 +241,12 @@
                                     </td>
 
                                     <td style="border : 1px solid black;text-align:center;border-top:1px solid;">
-                                        <b><t t-esc="grandtotal_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></b>
+                                        <b><t t-esc="grandtotal_qty" /></b>
                                     </td>
                                     <td colspan="1" style="border : 1px solid black;"/>
 
                                     <td style="border : 1px solid black;text-align:center;border-top:1px solid;">
-                                        <b><t t-esc="round(grandtotal_amount,0)" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></b>
+                                        <b><t t-esc="grandtotal_amount"/></b>
                                     </td>
                                 </tr>
                             </tbody>
