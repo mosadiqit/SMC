@@ -182,7 +182,7 @@
                                             <td style="text-align:center;border:1px solid black;">
                                                 <t t-set="tot_amount" t-value="(line.product_uom_qty * line.product_id.lst_price)"/>
                                                 <t t-if="line.product_id.type != 'service'">
-                                                  <t t-esc="tot_amount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
+                                                  <t t-esc="tot_amount" />
                                                 </t>
                                                 <t t-set="grandtotal_amount" t-value="((line.price_unit * line.product_uom_qty) + grandtotal_amount)"/>
                                             </td>
@@ -263,7 +263,7 @@
                                         </span>
                                     </td>
                                     <td style="text-align:center; border-top:1px solid;">
-                                        <b><t t-esc="grandtotal_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></b>
+                                        <b><t t-esc="grandtotal_qty" /></b>
                                     </td>
                                     <td style="border-top:1px solid;"/>
                                     <td style="text-align:center; border-top:1px solid;">
