@@ -50,15 +50,17 @@ class StockPickingInh(models.Model):
         result = super(StockPickingInh, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
             submenu=submenu)
-        if self.env.user.has_group('sales_consultant_user_rights.group_show_do_buttons_user'):
-            pass
-        else:
+        if not self.env.user.has_group('sales_consultant_user_rights.group_show_do_buttons_user'):
             temp = etree.fromstring(result['arch'])
             temp.set('create', '0')
             temp.set('duplicate', '0')
             temp.set('delete', '0')
             temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
+        if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
+            temp = etree.fromstring(result['arch'])
+            temp.set('create', '0')
+
         return result
 
     def check_date(self):
