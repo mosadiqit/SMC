@@ -71,7 +71,8 @@ class SaleOrderlineInh(models.Model):
     @api.onchange('price_unit')
     def onchange_unit_price(self):
         for rec in self:
-            if self.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
+            if rec.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
                 if rec.product_id.type != 'service':
-                    raise UserError('You Cannot Change Product Price!')
+                    if rec.price_unit:
+                        raise UserError('You Cannot Change Product Price!')
 
