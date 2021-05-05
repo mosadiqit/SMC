@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 from lxml import etree
 from dateutil.relativedelta import relativedelta
 
+
 class ResPartnerInh(models.Model):
     _inherit = 'res.partner'
 
@@ -14,14 +15,15 @@ class ResPartnerInh(models.Model):
     @api.onchange('user_id')
     def onchange_partner_id(self):
         for rec in self:
-            partner = self.env['res.partner'].search([('name', '=', rec.user_id.name)],limit=1)
+            partner = self.env['res.partner'].search([('name', '=', rec.user_id.name)], limit=1)
             rec.partner_id = partner.id
+
 
 class ProductTemplateInh(models.Model):
     _inherit = 'product.template'
 
     @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+    def fields_view_get(self, view_id=None, view_type='tree', toolbar=False, submenu=False):
         # result = fields_view_get_extra(self, view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         result = super(ProductTemplateInh, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
@@ -33,6 +35,7 @@ class ProductTemplateInh(models.Model):
             result['arch'] = etree.tostring(temp)
 
         return result
+
 
 class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
@@ -95,32 +98,32 @@ class StockPickingInh(models.Model):
                         rec.do_unreserve()
 
     def _create_notification(self):
-        groupObj = self.env['res.groups'].search([('name', '=', "Administrator")])
-        user_list = []
-        for user in groupObj.users:
-            user_list.append(user.id)
-        if self.sale_id.user_id.id not in user_list:
-            if self.sale_id.user_id.id:
-                user_list.append(self.sale_id.user_id.id)
-        for i in user_list:
-            userObj = self.env['res.users'].browse([i])
-            act_type_xmlid = 'mail.mail_activity_data_todo'
-            summary = 'Reserved DO Notification'
-            note = '25 Days passed.In 5 days left DO will be unreserved Automatically.'
-            if act_type_xmlid:
-                activity_type = self.sudo().env.ref(act_type_xmlid)
-            model_id = self.env['ir.model']._get(self._name).id
-            create_vals = {
-                'activity_type_id': activity_type.id,
-                'summary': summary or activity_type.summary,
-                'automated': True,
-                'note': note,
-                'date_deadline': datetime.today(),
-                'res_model_id': model_id,
-                'res_id': self.id,
-                'user_id': userObj.id,
-            }
-            activities = self.env['mail.activity'].create(create_vals)
+        # groupObj = self.env['res.groups'].search([('name', '=', "Administrator")])
+        # user_list = []
+        # for user in groupObj.users:
+        #     user_list.append(user.id)
+        # if self.sale_id.user_id.id not in user_list:
+        #     if self.sale_id.user_id.id:
+        #         user_list.append(self.sale_id.user_id.id)
+        # for i in user_list:
+        #     userObj = self.env['res.users'].browse([i])
+        act_type_xmlid = 'mail.mail_activity_data_todo'
+        summary = 'Reserved DO Notification'
+        note = '25 Days passed.In 5 days left DO will be unreserved Automatically.'
+        if act_type_xmlid:
+            activity_type = self.sudo().env.ref(act_type_xmlid)
+        model_id = self.env['ir.model']._get(self._name).id
+        create_vals = {
+            'activity_type_id': activity_type.id,
+            'summary': summary or activity_type.summary,
+            'automated': True,
+            'note': note,
+            'date_deadline': datetime.today(),
+            'res_model_id': model_id,
+            'res_id': self.id,
+            'user_id': self.sale_id.user_id.id,
+        }
+        activities = self.env['mail.activity'].create(create_vals)
 
     def action_reserve_approval_manager(self):
         self.state = 'reserve_ceo_approval'
@@ -141,7 +144,6 @@ class AccountMoveInh(models.Model):
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-        # result = fields_view_get_extra(self, view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         result = super(AccountMoveInh, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
             submenu=submenu)
@@ -155,3 +157,4 @@ class AccountMoveInh(models.Model):
             temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
         return result
+
