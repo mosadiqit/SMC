@@ -19,6 +19,13 @@ class BrachReport(models.Model):
     other_receipt = fields.Boolean(string="Other Receipts", default=False)
     type = fields.Selection(related='journal_id.type')
 
+    @api.model
+    def create(self, vals):
+        if vals['other_receipt'] or vals['corporate_sale'] or vals['online_credit_payment'] or vals['cheques_payment']:
+            return super(BrachReport, self).create(vals)
+        else:
+            raise UserError('Must Select at least One Option')
+
     @api.onchange('cheques_payment')
     def onchange_cheque_only(self):
         if self.cheques_payment:
