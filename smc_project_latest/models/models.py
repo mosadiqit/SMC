@@ -167,9 +167,17 @@ class SaleOrder(models.Model):
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
 
+    @api.model
+    def create(self, vals):
+        rec = super(SaleOrder, self).create(vals)
+        if rec.global_order_discount > rec.allowed_discount:
+            raise UserError('Global Discount Should be Less than Allowed Discount')
+        else:
+            return rec
+
     def compute_self_id(self):
         for i in self:
-            i.create_user = i.env.uid
+            i.create_user = i.user_id.id
 
     def from_manager_approval(self):
         self.state = 'manager'
@@ -181,7 +189,8 @@ class SaleOrder(models.Model):
         for sale_order in self:
             if sale_order.max_discount > sale_order.allowed_discount:
                 raise UserError(
-                    _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for approval_so_po'))
+                    _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
+
         return super(SaleOrder, self).action_confirm()
 
     @api.onchange("order_line.discount")
