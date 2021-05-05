@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 
 class SaleOrderInherit(models.Model):
@@ -54,35 +55,6 @@ class SaleOrderInherit(models.Model):
                     rec.price_unit = rec.product_id.lst_price
         return sum
 
-    # def compute_price_unit(self):
-    #     sum = 0
-    #     for rec in self.order_line:
-    #         if rec.product_id.type != 'service':
-    #             sum = sum + rec.product_id.installation_charges
-    #         rec.price_unit = 0
-    #     print(sum)
-
-
-# class SaleOrderLineInherit(models.Model):
-#     _inherit = 'sale.order.line'
-#
-#     # price_unit = fields.Float('Unit Price', compute='compute_price_unit')
-#     @api.onchange('product_id')
-#     def _onchange_price_unit(self):
-#         sum = 0
-#         for rec in self:
-#             if rec.product_id.type != 'service':
-#                 sum = sum + rec.product_id.installation_charges
-#             if rec.product_id.name == 'Installation Charges':
-#                 rec.price_unit = sum
-#                 # rec.price_subtotal = rec.price_unit * rec.product.uom_qty
-#             else:
-#                 if rec.product_id.type == 'service':
-#                     rec.price_unit = 0
-#                 else:
-#                     rec.price_unit = rec.product_id.lst_price
-#         print(sum)
-
 
 class ProductTemplateInherit(models.Model):
     _inherit = 'product.template'
@@ -91,4 +63,15 @@ class ProductTemplateInherit(models.Model):
     installation_charges = fields.Float('Installation Charges')
 
 
+class SaleOrderlineInh(models.Model):
+    _inherit = 'sale.order.line'
+
+    # is_service_product = fields.Boolean()
+
+    @api.onchange('price_unit')
+    def onchange_unit_price(self):
+        for rec in self:
+            if self.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
+                if rec.product_id.type != 'service':
+                    raise UserError('You Cannot Change Product Price!')
 
