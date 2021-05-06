@@ -65,7 +65,6 @@ class StockPickingInh(models.Model):
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-        # result = fields_view_get_extra(self, view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         result = super(StockPickingInh, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar,
             submenu=submenu)
@@ -79,6 +78,7 @@ class StockPickingInh(models.Model):
         if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
             temp = etree.fromstring(result['arch'])
             temp.set('create', '0')
+            temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
 
         return result
