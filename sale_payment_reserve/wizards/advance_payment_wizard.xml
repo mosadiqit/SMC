@@ -18,7 +18,10 @@
 						<field name="user_id" readonly="1" string="Sales Person"/>
 						<field name="order_amount" readonly="1"/>
 						<field name="ref" readonly="1"/>
-
+						<field name="cheques_payment" />
+						<field name="online_credit_payment" />
+						<field name="corporate_sale"/>
+						<field name="other_receipt"/>
 					</group>
 					<footer>
 						<button name="create_data" string="Apply" type="object" class="btn-primary"/>

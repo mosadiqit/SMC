@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_draft']" position="after">
-                    <button string="Advance Payment" type="object" name="action_register_payment" attrs="{'invisible': [('state', '!=', 'sale')]}" groups="sale_payment_reserve.group_show_advance_payment_buttons_user"/>
+                    <button string="Advance Payment" type="object" name="action_register_payment" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'sale')]}" groups="sale_payment_reserve.group_show_advance_payment_buttons_user"/>
                 </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button class="oe_stat_button" icon="fa-dollar"  type="object" name="action_show_payments" attrs="{'invisible': [('state', '!=', 'sale')]}" groups="sale_payment_reserve.group_show_advance_payment_buttons_user">

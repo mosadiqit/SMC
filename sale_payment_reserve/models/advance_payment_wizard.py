@@ -12,6 +12,10 @@ class AdvancePaymentWizard(models.TransientModel):
     order_amount = fields.Float('Order Amount')
     user_id = fields.Many2one('res.users')
     branch_id = fields.Many2one('res.branch')
+    cheques_payment = fields.Boolean(string="Cheque", default=False)
+    online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
+    corporate_sale = fields.Boolean(string="Corporate sale", default=False)
+    other_receipt = fields.Boolean(string="Other Receipts", default=False)
 
     def default_payment_method_id(self):
         method = self.env['account.payment.method'].search([('name', '=', 'Manual')], limit=1)
@@ -43,8 +47,19 @@ class AdvancePaymentWizard(models.TransientModel):
             'ref': self.ref,
             'user_id': self.user_id.id,
             'branch_id': self.branch_id.id,
+            'cheques_payment': self.cheques_payment,
+            'online_credit_payment': self.online_credit_payment,
+            'corporate_sale': self.corporate_sale,
+            'other_receipt': self.other_receipt,
             'state': 'draft',
         }
-        payment = self.env['account.payment'].create(vals)
-        payment.action_post()
+        if self.journal_id.type == 'bank':
+            if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
+                payment = self.env['account.payment'].create(vals)
+                payment.action_post()
+            else:
+                raise UserError('Must Select at least One Option')
+        else:
+            payment = self.env['account.payment'].create(vals)
+            payment.action_post()
 
