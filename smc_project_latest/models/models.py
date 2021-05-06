@@ -170,10 +170,17 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         rec = super(SaleOrder, self).create(vals)
-        if rec.global_order_discount > rec.allowed_discount:
-            raise UserError('Global Discount Should be Less than Allowed Discount')
+        if rec.global_discount_type == 'percent':
+            if rec.global_order_discount > rec.allowed_discount:
+                raise UserError('Global Discount Should be Less than Allowed Discount')
+            else:
+                return rec
         else:
-            return rec
+            amount = (rec.allowed_discount/100) * rec.amount_untaxed
+            if rec.global_order_discount > amount:
+                raise UserError('Global Discount Should be Less than Allowed Discount')
+            else:
+                return rec
 
     def compute_self_id(self):
         for i in self:
