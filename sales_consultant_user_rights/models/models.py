@@ -32,6 +32,7 @@ class ProductTemplateInh(models.Model):
         if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
             temp = etree.fromstring(result['arch'])
             temp.set('create', '0')
+            temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
 
         return result
