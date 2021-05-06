@@ -62,13 +62,23 @@ class AdvancePaymentWizard(models.TransientModel):
             'other_receipt': self.other_receipt,
             'state': 'draft',
         }
-        if self.journal_id.type == 'bank':
+        if self.journal_id.type == 'cash':
+            payment = self.env['account.payment'].create(vals)
+            payment.action_post()
+        elif self.journal_id.type == 'bank':
             if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
                 payment = self.env['account.payment'].create(vals)
                 payment.action_post()
             else:
                 raise UserError('Must Select at least One Option')
-        else:
-            payment = self.env['account.payment'].create(vals)
-            payment.action_post()
+
+        # if self.journal_id.type == 'bank':
+        #     if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
+        #         payment = self.env['account.payment'].create(vals)
+        #         payment.action_post()
+        #     else:
+        #         raise UserError('Must Select at least One Option')
+        # else:
+        #     payment = self.env['account.payment'].create(vals)
+        #     payment.action_post()
 
