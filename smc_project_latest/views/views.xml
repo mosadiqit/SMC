@@ -40,7 +40,6 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="groups_id" eval="[(4, ref('smc_project_latest.group_readonly_terms_and_condition_user'))]"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//field[@name='note']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
@@ -57,9 +56,20 @@
                 <xpath expr="//field[@name='order_line']//tree//field[@name='discount_type']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//field[@name='order_line']//tree//field[@name='discount']" position="attributes">
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_discount_amount_inh">
+            <field name="name">sale.order.discount.amount.inh</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="so_report_smc.view_sale_order_form_inherit_"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='order_line']//tree//field[@name='discount_amount']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+
             </field>
         </record>
 
