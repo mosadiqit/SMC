@@ -105,4 +105,4 @@ class StockPickingInh(models.Model):
 class AccountPaymentInh(models.Model):
     _inherit = 'account.payment'
 
-    user_id = fields.Many2one('res.users')
+    user_id = fields.Many2one('res.users', related="partner_id.user_id")

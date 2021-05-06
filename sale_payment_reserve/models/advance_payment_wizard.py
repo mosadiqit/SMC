@@ -46,39 +46,40 @@ class AdvancePaymentWizard(models.TransientModel):
 
     def create_data(self):
         model = self.env.context.get('active_model')
-        rec = self.env[model].browse(self.env.context.get('active_id'))
-        vals = {
-            'journal_id': self.journal_id.id,
-            'partner_id': rec.partner_id.id,
-            'date': datetime.today().date(),
-            'amount': self.amount,
-            'currency_id': self.currency_id.id,
-            'ref': self.ref,
-            'user_id': self.user_id.id,
-            'branch_id': self.branch_id.id,
-            'cheques_payment': self.cheques_payment,
-            'online_credit_payment': self.online_credit_payment,
-            'corporate_sale': self.corporate_sale,
-            'other_receipt': self.other_receipt,
-            'state': 'draft',
-        }
-        # if self.journal_id.type == 'cash':
-        #     payment = self.env['account.payment'].create(vals)
-        #     payment.action_post()
-        # elif self.journal_id.type == 'bank':
-        #     if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
-        #         payment = self.env['account.payment'].create(vals)
-        #         payment.action_post()
-        #     else:
-        #         raise UserError('Must Select at least One Option')
+        record = self.env[model].browse(self.env.context.get('active_id'))
+        for rec in self:
+            vals = {
+                'journal_id': rec.journal_id.id,
+                'partner_id': record.partner_id.id,
+                'date': datetime.today().date(),
+                'amount': rec.amount,
+                'currency_id': rec.currency_id.id,
+                'ref': rec.ref,
+                'user_id': rec.user_id.id,
+                'branch_id': rec.branch_id.id,
+                'cheques_payment': rec.cheques_payment,
+                'online_credit_payment': rec.online_credit_payment,
+                'corporate_sale': rec.corporate_sale,
+                'other_receipt': rec.other_receipt,
+                'state': 'draft',
+            }
+            # if self.journal_id.type == 'cash':
+            #     payment = self.env['account.payment'].create(vals)
+            #     payment.action_post()
+            # elif self.journal_id.type == 'bank':
+            #     if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
+            #         payment = self.env['account.payment'].create(vals)
+            #         payment.action_post()
+            #     else:
+            #         raise UserError('Must Select at least One Option')
 
-        if self.journal_id.type == 'bank':
-            if self.other_receipt == True or self.corporate_sale == True or self.online_credit_payment == True or self.cheques_payment == True:
+            if rec.journal_id.type == 'bank':
+                if rec.other_receipt or rec.corporate_sale or rec.online_credit_payment or rec.cheques_payment:
+                    payment = self.env['account.payment'].create(vals)
+                    payment.action_post()
+                else:
+                    raise UserError('Must Select at least One Option')
+            else:
                 payment = self.env['account.payment'].create(vals)
                 payment.action_post()
-            else:
-                raise UserError('Must Select at least One Option')
-        else:
-            payment = self.env['account.payment'].create(vals)
-            payment.action_post()
 
