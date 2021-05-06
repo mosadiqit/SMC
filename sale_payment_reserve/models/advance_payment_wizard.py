@@ -16,6 +16,15 @@ class AdvancePaymentWizard(models.TransientModel):
     online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
     corporate_sale = fields.Boolean(string="Corporate sale", default=False)
     other_receipt = fields.Boolean(string="Other Receipts", default=False)
+    is_cash = fields.Boolean(default=False)
+
+    @api.onchange('journal_id')
+    def onchange_journal_id(self):
+        for rec in self:
+            if rec.journal_id.type == 'cash':
+                rec.is_cash = True
+            else:
+                rec.is_cash = False
 
     def default_payment_method_id(self):
         method = self.env['account.payment.method'].search([('name', '=', 'Manual')], limit=1)
