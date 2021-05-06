@@ -65,7 +65,7 @@ class AdvancePaymentWizard(models.TransientModel):
         if self.journal_id.type == 'cash':
             payment = self.env['account.payment'].create(vals)
             payment.action_post()
-        elif self.journal_id.type == 'bank':
+        else:
             if self.other_receipt or self.corporate_sale or self.online_credit_payment or self.cheques_payment:
                 payment = self.env['account.payment'].create(vals)
                 payment.action_post()
