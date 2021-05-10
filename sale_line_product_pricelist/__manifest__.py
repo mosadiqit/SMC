@@ -10,7 +10,7 @@ Product Prices from Pricelists On Sale Line
 Avail Popup to display prices of product for each line.""",
     'category': 'Sale',
     'author': 'Hunain AK',
-    'depends': ['sale'],
+    'depends': ['sale','stock','sale_management','product'],
     'data': [
         'views/assets_view.xml',
         'views/sale_order.xml',
