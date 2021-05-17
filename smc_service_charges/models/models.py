@@ -55,6 +55,16 @@ class SaleOrderInherit(models.Model):
                     rec.price_unit = rec.product_id.lst_price
         return sum
 
+    # @api.onchange('order_line')
+    # def onchange_order_line(self):
+    #     for rec in self:
+    #         print('Helllo')
+    #         if rec.order_line:
+    #             for line in rec.order_line:
+    #                 # if rec.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
+    #                 if line.product_id.type != 'service':
+    #                     raise UserError('You Cannot Change Product Price!')
+
 
 class ProductTemplateInherit(models.Model):
     _inherit = 'product.template'
@@ -66,13 +76,22 @@ class ProductTemplateInherit(models.Model):
 class SaleOrderlineInh(models.Model):
     _inherit = 'sale.order.line'
 
-    # is_service_product = fields.Boolean()
+    is_service_product = fields.Boolean()
 
-    @api.onchange('price_unit')
-    def onchange_unit_price(self):
+    @api.onchange('product_id')
+    def compute_service_product(self):
         for rec in self:
-            if rec.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
-                if rec.product_id.type != 'service':
-                    if rec.price_unit:
-                        raise UserError('You Cannot Change Product Price!')
+            if rec.product_id.type != 'service':
+                rec.is_service_product = True
+            else:
+                rec.is_service_product = False
+
+    # @api.onchange('price_unit')
+    # def onchange_unit_price(self):
+    #     for rec in self:
+    #         if rec.product_id:
+    #             # if rec.env.user.has_group('smc_service_charges.group_readonly_unit_price_user'):
+    #         # if rec.product_id.type != 'service':
+    #             if rec.is_service_product:
+    #                 raise UserError('You Cannot Change Product Price!')
 

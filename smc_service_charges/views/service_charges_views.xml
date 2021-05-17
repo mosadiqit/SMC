@@ -10,6 +10,7 @@
 			<xpath expr="//field[@name='order_line']//tree//field[@name='product_uom']" position="attributes">
 				<attribute name="readonly">1</attribute>
 			</xpath>
+
 		</field>
 	</record>
 
@@ -19,6 +20,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="priority" eval="3"/>
         <field name="arch" type="xml">
+
             <xpath expr="//header/button[@name='action_draft']" position="after">
                 <button string="Add Service Charges" type="object" name="add_products" attrs="{'invisible':['|',('state','=','sale'), ('is_service_charges_added','=',True)]}"/>
                 <button string="Remove Service Charges" type="object" name="remove_service_products" attrs="{'invisible':['|',('state','=','sale'), ('is_service_charges_added','=',False)]}"/>
@@ -26,6 +28,13 @@
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="is_service_charges_added" invisible="1"/>
             </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+				<field name="is_service_product"/>
+			</xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+				<attribute name="attrs">{'readonly':[('is_service_product', '=', True)]}</attribute>
+			</xpath>
+
         </field>
     </record>
 
