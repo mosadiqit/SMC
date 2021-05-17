@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from itertools import groupby
 from odoo.tools.float_utils import float_is_zero
+from lxml import etree
 
 
 class SMC(models.Model):
@@ -223,6 +224,16 @@ class StockPicking(models.Model):
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
     invoice_origin = fields.Many2one('account.move', compute='_compute_invoice_origin')
     show_origin = fields.Boolean('Show Origin', compute='compute_show_origin')
+
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        result = super(StockPicking, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
+        reports = self.env['ir.actions.report'].search([('report_name', 'in', ['stock.report_picking','stock.report_deliveryslip', 'stock.label_transfer_template_view_pdf', 'stock.label_transfer_template_view_zpl'] )])
+        for report in reports:
+            report.unlink_action()
+        return result
 
     def compute_show_origin(self):
         for rec in self:
