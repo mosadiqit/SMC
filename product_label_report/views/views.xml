@@ -9,7 +9,7 @@
             <field name="page_height">35</field>
             <field name="page_width">60</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">4</field>
+            <field name="margin_top">1</field>
             <field name="margin_bottom">0</field>
             <field name="margin_left">0</field>
             <field name="margin_right">0</field>
@@ -31,16 +31,17 @@
 
         <template id="custom_report_simple_label" inherit_id="product.report_simple_label">
             <xpath expr="//div" position="replace">
-                <div style="width: 100%; display: inline-table; height:5rem; border: 0px solid black;">
+                <div style="width: 100%; display: inline-table; border: 0px solid black;">
                     <!--                <table class="table table-bordered mb-0" style="border: 2px solid black;">-->
                     <table class="table mb-0" style="border:1px solid black; table-layout: fixed;">
-                        <tr style="border:1px solid black;">
+
+                        <tr style="border:1px solid black;white-space: nowrap;">
                             <!--                        <td class="table-active text-left" style="height: 4rem;">-->
-                            <td class="text-left" style="height: 0.1rem;border:1px solid black; border-right:none;">
+                            <td class="text-left" style="border:1px solid black; border-right:none; width:30%; ">
                                 <div name="left-upper-side"
                                      style="margin-left:-12px; margin-right:10px; padding-right:10px;" class="col-1">
                                     <img src="/product_label_report/static/logo.jpeg"
-                                         style="max-height: 50px; padding-left:-5px; margin-left:-6px;"
+                                         style="max-height: 35px; padding-left:-5px; margin-left:-6px;"
                                          class="float-left" alt="Logo"/>
 <!--                                    t-att-src="image_data_uri(res_company.logo)"-->
                                     <!--                                <img t-if="product.company_id.logo" t-att-src="image_data_uri(product.company_id.logo)" style="max-height: 45px;" alt="Logo"/>-->
@@ -51,31 +52,32 @@
 
                             </td>
 
-                            <td colspan="2"  style="text-align:right; border:1px solid black; border-left:none; padding-left:15px;">
+                            <td colspan="2" class="text-right"  style="border:1px solid black; border-left:none; padding-left:15px;width:70%;">
                                 <t t-if="product.barcode">
                                     <img alt="Barcode" t-if="len(product.barcode) == 13"
-                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', quote_plus(product.barcode or ''), 400, 50)"
-                                         style="width:100%;height:2rem; margin-left:10px;"/>
+                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', quote_plus(product.barcode or ''), 350, 50)"
+                                         style="width:100%; margin-left:10px;"/>
                                     <img alt="Barcode" t-elif="len(product.barcode) == 8"
-                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', quote_plus(product.barcode or ''), 400, 50)"
-                                         style="width:100%;height:2rem;  margin-left:10px;"/>
+                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', quote_plus(product.barcode or ''), 350, 50)"
+                                         style="width:100%;  margin-left:10px;"/>
 
                                     <img alt="Barcode" t-else=""
-                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', quote_plus(product.barcode or ''), 400, 50)"
-                                         style="width:100%;height:2rem;  margin-left:10px;"/>
-                                    <span style="font-size:12px;margin-right:40px;" t-field="product.barcode"/>
+                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', quote_plus(product.barcode or ''), 350, 50)"
+                                         style="width:100%;  margin-left:10px;"/>
+                                    <div style="font-size:12px;margin-right:20px;" t-field="product.barcode"/>
                                 </t>
                                 <t t-else="">
+
                                     <span class="text-muted">No barcode available</span>
                                 </t>
                             </td>
                         </tr>
-                        <tr style="border:1px solid black;font-size:11px; white-space:wrap; height:2px;">
+                        <tr style="border:1px solid black;font-size:8px; white-space:wrap;">
                             <!--                            <td style="border:1px solid black; width:2px; text-align:right;padding-top:-30px;">-->
-                            <td style="border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px; padding-left:1px;">
+                            <td style="border:1px solid black; width:1px; text-align:center; padding:0px; margin:0px;">
                                 <div style="display:inline-block; padding:0px; margin:0px ; ">
                                     <!--                                    <strong style="padding-left:-10px;margin-left:-10px; margin-top:-30px;">Description:</strong>-->
-                                    <strong style="">Description:</strong>
+                                    <strong >Description:</strong>
                                 </div>
                                 <!--                           <div style="display:inline-block;"> <span t-esc="product.name"/></div>-->
                                 <!--                            <strong>Description:</strong>-->
@@ -86,19 +88,19 @@
                             <td colspan="2" style="border:1px solid black; border-right:none; text-align:left; padding:0px; margin:0px ">
                                 <div style="display:inline-block; padding:0px; margin:0px ;padding-left:2px;">
                                     <!--                                    <span style="padding-top:-30px; margin-left:-10px; margin-top:-30px;" t-esc="product.name"/>-->
-                                    <span style="" t-esc="product.name"/>
+                                    <span t-esc="product.name"/>
                                 </div>
                             </td>
                             <!--                            <td style="text-align:left; border:1px solid black; border-left:none">-->
                             <!--                            </td>-->
                         </tr>
-                        <!--                        for test-->
-                        <tr style="border:1px solid black;font-size:11px; white-space:wrap; height:2px;">
+<!--                        &lt;!&ndash;                        for test&ndash;&gt;-->
+                        <tr style="border:1px solid black;font-size:8px; white-space:wrap; height:1px;">
                             <!--                            <td style="border:1px solid black; width:2px; text-align:right;padding-top:-30px;">-->
                             <td style="border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px;  padding-left:1px;">
                                 <div style="display:inline-block; padding:0px; margin:0px ">
                                     <!--                                    <strong style="padding-left:-10px;margin-left:-10px; margin-top:-30px;">Description:</strong>-->
-                                    <strong style="">Article:</strong>
+                                <strong style="">Article:</strong>
                                 </div>
                                 <!--                           <div style="display:inline-block;"> <span t-esc="product.name"/></div>-->
                                 <!--                            <strong>Description:</strong>-->
@@ -109,13 +111,13 @@
                             <td colspan="2" style="border:1px solid black; border-right:none; text-align:left; padding:0px; margin:0px; padding-left:1px; ">
                                 <div style="display:inline-block; padding:0px; margin:0px;padding-left:2px; ">
                                     <!--                                    <span style="padding-top:-30px; margin-left:-10px; margin-top:-30px;" t-esc="product.name"/>-->
-                                    <span style="" t-esc="product.article_no"/>
+                               <span style="" t-esc="product.article_no"/>
                                 </div>
                             </td>
                             <!--                            <td style="text-align:left; border:1px solid black; border-left:none">-->
                             <!--                            </td>-->
                         </tr>
-                        <tr style="border:1px solid black;font-size:11px; white-space:wrap; height:2px;">
+                        <tr style="border:1px solid black;font-size:8px; white-space:wrap; height:1px;">
                             <!--                            <td style="border:1px solid black; width:2px; text-align:right;padding-top:-30px;">-->
                             <td style="border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px; padding-left:1px;">
                                 <div style="display:inline-block; padding:0px; margin:0px ">
@@ -137,7 +139,7 @@
                             <!--                            <td style="text-align:left; border:1px solid black; border-left:none">-->
                             <!--                            </td>-->
                         </tr>
-                        <tr style="height:1px; border:1px solid black; font-size:11px;  white-space: nowrap;">
+                        <tr style="height:1px; border:1px solid black; font-size:8px;  white-space: nowrap;">
                             <td style="border:1px solid black; width:2px;text-align:center;  padding:0px; margin:0px;">
                                 <div style="display:inline-block; ">
                                     <strong>Unit:</strong>
@@ -157,7 +159,7 @@
                             </td>
                         </tr>
 
-                        <tr style=" border:1px solid black; font-size:13px; white-space: nowrap;">
+                        <tr style=" border:1px solid black; font-size:9px;">
                             <td style=" border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px;padding-left:1px; ">
                                 <div style="display:inline-block; ">
                                     <strong>Price:</strong>
