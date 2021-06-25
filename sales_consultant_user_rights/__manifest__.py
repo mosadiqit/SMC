@@ -10,7 +10,7 @@
        is confirmed.
     """,
 
-    'author': "Atif Ali",
+    'author': "Viltco Technologies",
     'website': "http://www.abc.co",
 
     # Categories can be used to filter modules in modules listing
@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'sale_management', 'account', 'stock', 'smc_project_latest'],
+    'depends': ['base', 'sale', 'sale_management', 'account', 'stock'],
 
     # always loaded
     'data': [

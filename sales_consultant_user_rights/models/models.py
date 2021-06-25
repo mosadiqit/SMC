@@ -11,6 +11,25 @@ class ResPartnerInh(models.Model):
 
     user_id = fields.Many2one('res.users', default=lambda self: self.env.uid)
     partner_id = fields.Many2one('res.partner')
+    # is_same_branch = fields.Boolean(compute='compute_is_same_branch')
+
+
+    @api.model
+    def _search(self, args, offset=0, limit=None, order=None, count=False, access_rights_uid=None):
+        if self._context.get('my_branch'):
+            args += [('branch_id', '!=', False),
+                     ('branch_id', 'in', [branch.id for branch in self.env.user.branch_ids])]
+        return super(ResPartnerInh, self)._search(args, offset=offset, limit=limit, order=order, count=count,
+                                                 access_rights_uid=access_rights_uid)
+
+    # def compute_is_same_branch(self):
+    #
+    #     for rec in self:
+    #         print()
+    #         if rec.branch_id.id == rec.env.user.branch_id.id:
+    #             rec.is_same_branch = True
+    #         else:
+    #             rec.is_same_branch = False
 
     @api.onchange('user_id')
     def onchange_partner_id(self):

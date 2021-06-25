@@ -42,14 +42,12 @@
 			<xpath expr="//field[@name='user_id']" position="before">
 				<field name="partner_id" options="{'no_create': True, 'no_edit' : True}"/>
             </xpath>
-
 			<xpath expr="//field[@name='user_id']" position="replace">
 				<field name="user_id" options="{'create': False, 'edit' : False}"/>
             </xpath>
+
 		</field>
 	</record>
-
-
 
 
     <record id="view_sale_order_form_inh" model="ir.ui.view">
@@ -135,12 +133,24 @@
 		</field>
 	</record>
 
+<!--	<record id="view_res_partner_form_inh" model="ir.ui.view">-->
+<!--		<field name="name">res.partner.form</field>-->
+<!--		<field name="model">res.partner</field>-->
+<!--		<field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--		<field name="arch" type="xml">-->
+<!--			<xpath expr="//field[@name='email']" position="after">-->
+<!--			<field name="is_same_branch"/>-->
+<!--			</xpath>-->
+
+<!--		</field>-->
+<!--	</record>-->
+
 	<record id="res_partner_action_customer_inh" model="ir.actions.act_window">
             <field name="name">Customers</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">kanban,tree,form</field>
-<!--            <field name="domain">[('user_id','=', uid)]</field>-->
+            <field name="domain"> [('user_id', '=', uid)]</field>
             <field name="context">{'default_is_company': True, 'default_customer_rank': 1}</field>
             <field name="help" type="html">
               <p class="o_view_nocontent_smiling_face">
@@ -151,34 +161,29 @@
             </field>
         </record>
 
-<!--	<record id="res_partner_action_manager_inh" model="ir.actions.act_window">-->
-<!--            <field name="name">Customers</field>-->
-<!--            <field name="type">ir.actions.act_window</field>-->
-<!--            <field name="res_model">res.partner</field>-->
-<!--            <field name="view_mode">kanban,tree,form</field>-->
-<!--            <field name="domain">[('branch_id','=', uid.branch_id.id)]</field>-->
-<!--            <field name="context">{'default_is_company': True, 'default_customer_rank': 1}</field>-->
-<!--            <field name="help" type="html">-->
-<!--              <p class="o_view_nocontent_smiling_face">-->
-<!--                Create a new customer in your address book-->
-<!--              </p><p>-->
-<!--                Odoo helps you easily track all activities related to a customer.-->
-<!--              </p>-->
-<!--            </field>-->
-<!--        </record>-->
+	<record id="action_contacts" model="ir.actions.act_window">
+        <field name="name">Branch Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="context">{'default_is_company': True, 'my_branch':1}</field>
+        <field name="domain"></field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a contact in your address book
+          </p><p>
+            Odoo helps you to easily track all activities related to a customer.
+          </p>
+        </field>
+    </record>
 
-<!--	<menuitem name="Contacts"-->
-<!--        id="contacts.menu_contacts"-->
-<!--        sequence="4"-->
-<!--        web_icon="contacts,static/description/icon.png"-->
-<!--        groups="sales_team.group_sale_manager"/>-->
+    <menuitem id="res_partner_menu_contacts"
+        name="Branch Contacts"
+        action="action_contacts"
+        parent="contacts.menu_contacts"
+        sequence="3"/>
 
-<!--	<menuitem id="contacts.res_partner_menu_contacts"-->
-<!--        name="Contacts"-->
-<!--        action="contacts.action_contacts"-->
-<!--        parent="contacts.menu_contacts"-->
-<!--	   groups="sales_team.group_sale_manager"-->
-<!--        sequence="2"/>-->
 
 	<menuitem id="sale.res_partner_menu"
 		 	 active="false"
@@ -188,16 +193,10 @@
 
 	<menuitem id="menu_sale_customers"
 			  name="Contacts"
-			  parent="sale.sale_menu_root"
+			  parent="contacts.menu_contacts"
 			  sequence="7"
 			  action="res_partner_action_customer_inh"
 			  groups="sales_team.group_sale_salesman"/>
 
-<!--	<menuitem id="menu_sale_manager"-->
-<!--			  name="Contacts"-->
-<!--			  parent="sale.sale_menu_root"-->
-<!--			  sequence="8"-->
-<!--			  action="res_partner_action_manager_inh"-->
-<!--			  groups="sales_team.group_sale_salesman_all_leads"/>-->
 
 </odoo>
