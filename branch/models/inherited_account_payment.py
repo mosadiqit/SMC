@@ -12,7 +12,5 @@ MAP_INVOICE_TYPE_PARTNER_TYPE = {
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
-
-
-    branch_id = fields.Many2one('res.branch')
+    branch_id = fields.Many2one('res.branch', default=lambda self: self.env.user.branch_id.id)
 
