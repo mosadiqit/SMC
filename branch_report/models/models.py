@@ -1,57 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+from odoo import models, fields, api,_
 from odoo.exceptions import UserError
-
-
-class AccountAccountInh(models.Model):
-    _inherit = 'account.account'
-
-    is_denomination = fields.Boolean("Denomination")
-
-
-class AccountMovenh(models.Model):
-    _inherit = 'account.move'
-
-    denomination_acc = fields.Boolean("Denomination", compute="_compute_denomination_account")
-    five_hund = fields.Integer()
-    five_th = fields.Integer()
-    one_th = fields.Integer()
-
-    @api.depends('line_ids')
-    def _compute_denomination_account(self):
-        flag = False
-        for rec in self.line_ids:
-            if rec.account_id.is_denomination:
-                flag = True
-        if flag:
-            self.denomination_acc = True
-        else:
-            self.denomination_acc = False
-
-    @api.model
-    def create(self, vals_list):
-        record = super(AccountMovenh, self).create(vals_list)
-        total = 0
-        for rec in record.line_ids:
-            total = total + rec.debit
-        sum = (record.one_th * 1000) + (record.five_th * 5000) + (record.five_hund * 500)
-        print(sum)
-        if sum != total:
-            raise UserError('Sum Should be Same')
-        return record
-
-    def write(self, vals):
-        record = super(AccountMovenh, self).write(vals)
-        total = 0
-        for rec in self.line_ids:
-            total= total + rec.debit
-        sum = (self.one_th * 1000) + (self.five_th * 5000) + (self.five_hund * 500)
-        print(sum)
-        if sum != total:
-            raise UserError('Sum Should be Same')
-
-
 class BrachReport(models.Model):
     _inherit = 'account.payment'
 
@@ -60,19 +10,12 @@ class BrachReport(models.Model):
     five_th = fields.Integer(string="5000 x")
     one_th = fields.Integer(string="1000 x")
     five_hundred = fields.Integer(string='500 x')
-    currency_note = fields.Boolean(string="Note", default=False)
-    cheques_payment = fields.Boolean(string="Cheque", default=False)
+    currency_note = fields.Boolean(string="Note", default= False)
+    cheques_payment = fields.Boolean(string="Cheque", default= False)
     online_credit_payment = fields.Boolean(string="Online/ Credit Card", default=False)
     corporate_sale = fields.Boolean(string="Corporate sale", default=False)
     other_receipt = fields.Boolean(string="Other Receipts", default=False)
     type = fields.Selection(related='journal_id.type')
-
-    @api.model
-    def create(self, vals):
-        if vals['other_receipt'] or vals['corporate_sale'] or vals['online_credit_payment'] or vals['cheques_payment']:
-            return super(BrachReport, self).create(vals)
-        else:
-            raise UserError('Must Select at least One Option')
 
     @api.onchange('cheques_payment')
     def onchange_cheque_only(self):
@@ -114,13 +57,20 @@ class BrachReport(models.Model):
                 self.cheques_payment = False
                 self.online_credit_payment = False
 
+
+
+
+
+
+
+
     @api.onchange('partner_id')
     def curr_note_check(self):
         if self.partner_id:
             if self.partner_id.ceo_currency_check == True:
                 self.currency_note = True
             elif self.partner_id.ceo_currency_check == False:
-                self.currency_note = False
+               self.currency_note = False
 
     @api.onchange('cheques_payment')
     def cheque_only(self):
@@ -131,6 +81,8 @@ class BrachReport(models.Model):
     def creditCard_only(self):
         if self.online_credit_payment:
             self.cheques_payment = False
+
+
 
     def action_post(self):
 
@@ -148,6 +100,7 @@ class BrachReport(models.Model):
 
 
 class resPartner_CurrencyNote(models.Model):
-    _inherit = "res.partner"
+    _inherit="res.partner"
 
-    ceo_currency_check = fields.Boolean(string="Currency Note", default=False)
+    ceo_currency_check= fields.Boolean(string="Currency Note", default=False)
+
