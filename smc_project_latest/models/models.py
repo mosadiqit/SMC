@@ -183,7 +183,6 @@ class SaleOrder(models.Model):
             if sale_order.max_discount > sale_order.allowed_discount:
                 raise UserError(
                     _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
-            print('Hello')
             if sale_order.global_discount_type == 'percent':
                 if sale_order.global_order_discount > sale_order.allowed_discount:
                     raise UserError('Global Discount Should be Less than Allowed Discount')
@@ -225,15 +224,15 @@ class StockPicking(models.Model):
     invoice_origin = fields.Many2one('account.move', compute='_compute_invoice_origin')
     show_origin = fields.Boolean('Show Origin', compute='compute_show_origin')
 
-    @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-        result = super(StockPicking, self).fields_view_get(
-            view_id=view_id, view_type=view_type, toolbar=toolbar,
-            submenu=submenu)
-        reports = self.env['ir.actions.report'].search([('report_name', 'in', ['stock.report_picking','stock.report_deliveryslip', 'stock.label_transfer_template_view_pdf', 'stock.label_transfer_template_view_zpl'] )])
-        for report in reports:
-            report.unlink_action()
-        return result
+    # @api.model
+    # def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+    #     result = super(StockPicking, self).fields_view_get(
+    #         view_id=view_id, view_type=view_type, toolbar=toolbar,
+    #         submenu=submenu)
+    #     reports = self.env['ir.actions.report'].search([('report_name', 'in', ['stock.report_picking','stock.report_deliveryslip', 'stock.label_transfer_template_view_pdf', 'stock.label_transfer_template_view_zpl'] )])
+    #     for report in reports:
+    #         report.unlink_action()
+    #     return result
 
     def compute_show_origin(self):
         for rec in self:
