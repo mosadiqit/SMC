@@ -4,6 +4,54 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+class AccountAccountInh(models.Model):
+    _inherit = 'account.account'
+
+    is_denomination = fields.Boolean("Denomination")
+
+
+class AccountMovenh(models.Model):
+    _inherit = 'account.move'
+
+    denomination_acc = fields.Boolean("Denomination", compute="_compute_denomination_account")
+    five_hund = fields.Integer()
+    five_th = fields.Integer()
+    one_th = fields.Integer()
+
+    @api.depends('line_ids')
+    def _compute_denomination_account(self):
+        flag = False
+        for rec in self.line_ids:
+            if rec.account_id.is_denomination:
+                flag = True
+        if flag:
+            self.denomination_acc = True
+        else:
+            self.denomination_acc = False
+
+    @api.model
+    def create(self, vals_list):
+        record = super(AccountMovenh, self).create(vals_list)
+        total = 0
+        for rec in record.line_ids:
+            total = total + rec.debit
+        sum = (record.one_th * 1000) + (record.five_th * 5000) + (record.five_hund * 500)
+        print(sum)
+        if sum != total:
+            raise UserError('Sum Should be Same')
+        return record
+
+    def write(self, vals):
+        record = super(AccountMovenh, self).write(vals)
+        total = 0
+        for rec in self.line_ids:
+            total= total + rec.debit
+        sum = (self.one_th * 1000) + (self.five_th * 5000) + (self.five_hund * 500)
+        print(sum)
+        if sum != total:
+            raise UserError('Sum Should be Same')
+
+
 class BrachReport(models.Model):
     _inherit = 'account.payment'
 

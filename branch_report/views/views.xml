@@ -1,5 +1,36 @@
 <odoo>
     <data>
+
+
+        <record id="view_account_account_form_inh" model="ir.ui.view">
+            <field name="name">account.account.inh</field>
+            <field name="model">account.account</field>
+<!--            <field name="type">form</field>-->
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='deprecated']" position="after">
+                    <field name="is_denomination"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_account_move_form_inh" model="ir.ui.view">
+            <field name="name">account.move.inh</field>
+            <field name="model">account.move</field>
+<!--            <field name="type">form</field>-->
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="denomination_acc"/>
+                    <field name="five_th" string="5000 *" attrs="{'invisible':[('denomination_acc','=',False)]}"/>
+                    <field name="one_th" string="1000 *" attrs="{'invisible':[('denomination_acc','=',False)]}"/>
+                    <field name="five_hund" string="500 *" attrs="{'invisible':[('denomination_acc','=',False)]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
         <record id="branch_report_form" model="ir.ui.view">
             <field name="name">report.form</field>
             <field name="model">account.payment</field>
