@@ -204,20 +204,27 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 if rec.debit:
                     dbt = rec.debit
                     journal_entry = rec.move_id
-                    payment = self.env['account.payment'].search([('move_id', '=', journal_entry.id),
-                                                                  ('state', '=', 'posted'),
-                                                                  ('date', '>=', date_from),
-                                                                  ('date', '<=', date_to),
-                                                                  ('branch_id.id', '=',selected_id ),
-                                                                  ])
+                    ceo_account = rec.move_id.line_ids.account_id.filtered(lambda q:q.ceo_check == True)
+                    if not ceo_account:
+                        payment = self.env['account.payment'].search([('move_id', '=', journal_entry.id),
+                                                                      ('state', '=', 'posted'),
+                                                                      ('date', '>=', date_from),
+                                                                      ('date', '<=', date_to),
+                                                                      ('branch_id.id', '=',selected_id ),
+                                                                      ])
+    
+                        if payment:
+                            if payment.corporate_sale == False and payment.other_receipt == False and payment.cheques_payment == False and payment.online_credit_payment == False:
+                                acc_wise_bal_lst.append({
+                                    'partner_journal': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
+                                    'debit': dbt,
+                                })
 
-                    if payment:
-                        if payment.corporate_sale == False and payment.other_receipt == False and payment.cheques_payment == False and payment.online_credit_payment == False:
-                            acc_wise_bal_lst.append({
-                                'partner_journal': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
-                                'debit': dbt,
-                            })
-
+                    else:
+                        acc_wise_bal_lst.append({
+                                    'partner_journal': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
+                                    'debit': dbt,
+                                })
 
 
 

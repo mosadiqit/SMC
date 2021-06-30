@@ -1,5 +1,37 @@
 <odoo>
     <data>
+    
+    
+     <!-- <template id="your_custom_layout_header" inherit_id="web.external_layout_standard">
+          <xpath expr="//*[contains(@t-attf-class='footer')]" position="attributes">
+               <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+                    <div class="text-center" style="border-top:3px solid black;">
+                        <ul class="list-inline mb4">
+                            using the list-inline-item class from bootstrap causes weird behaviours in pdf report
+                                 adding d-inline class fixes the problem
+                            <li t-if="company.phone" class="list-inline-item d-inline"><span class="o_force_ltr" t-field="company.phone"/></li>
+                            <li t-if="company.email" class="list-inline-item d-inline"><span t-field="company.email"/></li>
+                            <li t-if="company.website" class="list-inline-item d-inline"><span t-field="company.website"/></li>
+                            <li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
+                        </ul>
+        
+                        <div name="financial_infos">
+                            <span t-field="company.report_footer"/>
+                        </div>
+        
+                        <div t-if="report_type == 'pdf'" class="text-muted">
+                            Page: <span class="page"/> / <span class="topage"/>
+                        </div>
+                    </div>
+              </div>
+          </xpath>
+       
+   </template> -->
+    
+    
+    
+    
+    
         <template id="branch_report_id">
             <t t-call="web.html_container">
                 <t t-call="web.external_layout">
@@ -49,21 +81,7 @@
                         }
 
                     </style>
-                    <!-- <div class="row" style="margin-top:0px;">-->
-                    <!--  <div class="col-3 mb4">-->
-                    <!-- <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:65px;" alt="Logo"/>-->
-                    <!--</div>-->
 
-                    <!--  &lt;!&ndash; <div class="col-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>&ndash;&gt;-->
-                    <!--</div>-->
-                    <!--                    <div class="col-12" style="margin-top:15px;">-->
-                    <!--                        <div style="border-bottom: 1px solid black;"/>-->
-                    <!--                    </div>-->
-                    <!--                        <div class="col-12 mb10">-->
-                    <!--                            &lt;!&ndash;                             <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' %res_company.logo"/>&ndash;&gt;-->
-                    <!--                            <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" alt="Logo"/>-->
-                    <!--                            &lt;!&ndash;                              <img t-if="res_company.logo"  t-att-src="'data:image/png;base64,%s' %res_company.logo" alt="Logo"/>&ndash;&gt;-->
-                    <!--                        </div>-->
                     <div class="page" style="padding-top:1px;margin-top:1px; padding-bottom:1px;margin-bottom:1px;">
 
                         <!--                            <div class="header">-->
@@ -71,7 +89,8 @@
                         <!--&lt;!&ndash;                           <<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>&ndash;&gt;-->
                         <!--                            </div>-->
                         <div class="oe_structure"/>
-                        <div class="container col-12" style="border: 0px solid black;padding-top:25px; padding-right:0;padding-left: 30px;">
+                        <div class="container col-12"
+                             style="border: 0px solid black;padding-top:25px; padding-right:0;padding-left: 30px;">
                             <!-- top heading -->
                             <div class="container row col-12 border_bottom text-center">
                                 <h6 style="margin-left: 45%;">
@@ -87,14 +106,16 @@
                                 </div>
                                 <div class="col-2"/>
                                 <div class="col-3 text-left border_bottom">
-                                    <strong>Date from:</strong> <span t-esc="docs.date_from.strftime('%Y-%m-%d')"/>
+                                    <strong>Date from:</strong>
+                                    <span t-esc="docs.date_from.strftime('%Y-%m-%d')"/>
 
                                     <!--                                                                <span t-esc="branch_name"/>-->
 
                                 </div>
-                                 <div class="col-3 text-right border_bottom">
-                                     <strong>Date to:</strong><span t-esc="docs.date_to.strftime('%Y-%m-%d')"/>
-                                 </div>
+                                <div class="col-3 text-right border_bottom">
+                                    <strong>Date to:</strong>
+                                    <span t-esc="docs.date_to.strftime('%Y-%m-%d')"/>
+                                </div>
                             </div>
 
 
@@ -152,14 +173,13 @@
                                 </div>
                                 <div class="col-2 text-right all_border border-top-0 border-right-0 pb-0 bold_pt_pb">
                                 </div>
-                                <!--                            <div class="col-4 text-left all_border border-top-0 border-right-0 pl-1 pb-0 bold_pt_pb">-->
-                                <!--                                Client Refreshment-->
-                                <!--                            </div>-->
-                                <!--                            <div class="col-2 text-right all_border border-top-0 bold_pt_pb pb-0">-->
-                                <!--                            </div>-->
+
                             </div>
 
-                            <t t-set="empty_lines" t-value="len(acc_debits) -len(acc_credits)" />
+                            <t t-set="empty_lines" t-value="len(acc_debits) -len(acc_credits)"/>
+
+                            <t t-set="empty_lines_debit_side" t-value="len(acc_credits) - len(acc_debits)"/>
+
                             <table width="100%" style="margin-left: -15px;">
                                 <tbody>
                                     <tr>
@@ -167,31 +187,52 @@
                                             <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_receipt" t-value="0"/>
-                                                    <!--  <t t-foreach="customer_list" t-as="val">-->
-                                                    <!--<tr>-->
-                                                    <!--<td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">-->
-                                                    <!-- <span t-esc="val['partner_id']"/>(<span t-esc="val['journal_name']"/>)-->
-                                                    <!-- </td>-->
-                                                    <!-- <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">-->
-                                                    <!--                                                                <span t-esc="val['amount']"/>-->
-                                                    <!--                                                            </td>-->
 
-                                                    <!--                                                        </tr>-->
-                                                    <!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
-                                                    <!--                                                    </t>-->
                                                     <t t-foreach="acc_debits" t-as="ac_dbt">
                                                         <tr>
-                                                            <td class="text-left pl-2" width="65.8%" style="border: 1px solid black; font-size:15.8px;">
+                                                            <td class="text-left pl-2" width="65.8%"
+                                                                style="border: 1px solid black; font-size:13.8px;">
                                                                 <span t-esc="ac_dbt['partner_journal']"/>
                                                             </td>
-                                                            <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="33.2%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="ac_dbt['debit']"/>
                                                             </td>
 
                                                         </tr>
-                                                        <t t-set="total_receipt" t-value="(total_receipt + ac_dbt['debit'])"/>
-                                                        <!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
+                                                        <t t-set="total_receipt"
+                                                           t-value="(total_receipt + ac_dbt['debit'])"/>
+
                                                     </t>
+
+
+                                                    <!-- print empty lines in debit side 'retail sale' -->
+                                                    <t t-set="extra_line1" t-value="1"/>
+                                                    <t t-set="line_pass1" t-value="1"/>
+                                                    <t t-foreach="acc_credits" t-as="acc_crdt">
+                                                        <t t-if="line_pass1 &gt; len(acc_debits)">
+
+                                                            <tr>
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; color: white;">
+                                                                    <span t-esc="acc_crdt['name']"/>&#160;&#160;[
+                                                                    <span t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(
+                                                                    <span t-esc="acc_crdt['partner']"/>)
+                                                                </td>
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black; color: white">
+
+                                                                    <span t-esc="acc_crdt['credit']"/>
+                                                                </td>
+
+                                                            </tr>
+
+
+                                                        </t>
+                                                        <t t-set="line_pass1" t-value="line_pass1+1"/>
+                                                    </t>
+
+
                                                 </tbody>
                                             </table>
                                         </td>
@@ -204,16 +245,21 @@
                                                     <t t-foreach="acc_credits" t-as="acc_crdt">
 
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(<span t-esc="acc_crdt['partner']"/>)
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black;">
+                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span
+                                                                    t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(<span
+                                                                    t-esc="acc_crdt['partner']"/>)
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
-                                                                <!--                                                            <span t-esc="val3['debit']"/>-->
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
+
                                                                 <span t-esc="acc_crdt['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_debit" t-value="(total_debit + acc_crdt['credit'])"/>
-                                                        <!--                                                    <t t-set="total_debit" t-value="(total_debit + val3['debit'])"/>-->
+                                                        <t t-set="total_debit"
+                                                           t-value="(total_debit + acc_crdt['credit'])"/>
+
                                                     </t>
 
                                                     <t t-set="extra_line" t-value="1"/>
@@ -222,10 +268,12 @@
                                                         <t t-if="line_pass &gt; len(acc_credits)">
                                                             <t t-if="extra_line &lt;= empty_lines">
                                                                 <tr>
-                                                                    <td class="text-left pl-2" width="66.9%" style="border: 1px solid black; color: white;font-size:15.8px; ">
+                                                                    <td class="text-left pl-2" width="66.9%"
+                                                                        style="border: 1px solid black; color: black;font-size:15.8px; ">
                                                                         <span t-esc="ac_dbt['partner_journal']"/>
                                                                     </td>
-                                                                    <td class="text-right pr-2" width="33.2%" style="border: 1px solid black; color: white;">
+                                                                    <td class="text-right pr-2" width="33.2%"
+                                                                        style="border: 1px solid black; color: black;">
                                                                         <span t-esc="ac_dbt['debit']"/>
                                                                     </td>
 
@@ -238,73 +286,12 @@
                                                     </t>
 
 
-
-
-
-
-
-
-                                                    <!--                                                    <t t-foreach="acc_total_list" t-as="val3">-->
-
-                                                    <!--                                                        <tr>-->
-                                                    <!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">-->
-                                                    <!--                                                                <span t-esc="val3['name']"/>-->
-                                                    <!--                                                            </td>-->
-                                                    <!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-                                                    <!--                                                                &lt;!&ndash;                                                            <span t-esc="val3['debit']"/>&ndash;&gt;-->
-                                                    <!--                                                                <span t-esc="val3['bal']"/>-->
-                                                    <!--                                                            </td>-->
-                                                    <!--                                                        </tr>-->
-                                                    <!--                                                        <t t-set="total_debit" t-value="(total_debit + val3['bal'])"/>-->
-                                                    <!--                                                        &lt;!&ndash;                                                    <t t-set="total_debit" t-value="(total_debit + val3['debit'])"/>&ndash;&gt;-->
-                                                    <!--                                                    </t>-->
                                                 </tbody>
                                             </table>
                                         </td>
 
                                     </tr>
-                                    <!--<tr>-->
-                                    <!--    <td width="50%">-->
-                                    <!--        <table width="100%">-->
-                                    <!--            <tbody>-->
-                                    <!--                <t t-set="total_receipt" t-value="0"/>-->
-                                    <!--                <t t-foreach="customer_list" t-as="val">-->
-                                    <!--                    <tr >-->
-                                    <!--                        <td class="text-left pl-2" width="65.8%" style="border: 1px solid black;">-->
-                                    <!--                            <span>    &#160;</span>-->
-                                    <!--                        </td> -->
-                                    <!--                        <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">-->
-                                    <!--                            <span style="padding:20px;">   </span>-->
-                                    <!--                        </td>-->
 
-                                    <!--                    </tr>-->
-                                    <!--<t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
-                                    <!--                </t>-->
-                                    <!--            </tbody>-->
-                                    <!--        </table>-->
-                                    <!--    </td>-->
-
-
-                                    <!--<td width="50%">-->
-                                    <!--    <table width="99.3%">-->
-                                    <!--        <tbody>-->
-                                    <!--            <t t-set="total_debit" t-value="0"/>-->
-                                    <!--            <t t-foreach="account_line" t-as="val3">-->
-                                    <!--                <tr>-->
-                                    <!--                    <td class="pl-2" width="66.9%" style="border: 1px solid black;">-->
-                                    <!--                        <span t-esc="val3['name']"/>-->
-                                    <!--                    </td>-->
-                                    <!--                    <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-                                    <!--                        <span t-esc="val3['debit']"/>-->
-                                    <!--                    </td>-->
-                                    <!--                </tr>-->
-                                    <!--                <t t-set="total_debit" t-value="(total_debit + val3['debit'])"/>-->
-                                    <!--            </t>-->
-                                    <!--        </tbody>-->
-                                    <!--    </table>-->
-                                    <!--</td>-->
-
-                                    <!--</tr>-->
                                 </tbody>
                             </table>
 
@@ -326,7 +313,6 @@
                             </div>
 
 
-
                             <!-- purchase div -->
 
                             <div class="container col-12 row zero_padding border-top-0">
@@ -344,46 +330,55 @@
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" width="90%">
                                 </div>
                             </div>
-                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;"  cellspacing="0">
+                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;" cellspacing="0">
                                 <tbody>
                                     <tr>
-                                      <td width="49%">
-                                            <table width="99.8%"  style="border-collapse:collapse;"  cellspacing="0">
+                                        <td width="49%">
+                                            <table width="99.8%" style="border-collapse:collapse;" cellspacing="0">
                                                 <tbody>
                                                     <t t-set="total_cash_corporate" t-value="0"/>
-                                                    <t t-set="cash_corporate" t-value="cash_corporate_receipt(corporate = True , cash= True)"/>
+                                                    <t t-set="cash_corporate"
+                                                       t-value="cash_corporate_receipt(corporate = True , cash= True)"/>
                                                     <t t-if="len(cash_corporate) > 0">
-                                                        <t  t-foreach="cash_corporate" t-as="line">
+                                                        <t t-foreach="cash_corporate" t-as="line">
                                                             <tr style="">
-                                                                <td class="pl-2" width="66.9%" style="border: 1px solid black; user-select:none;  -moz-user-select:none;">
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; user-select:none;  -moz-user-select:none;">
                                                                     <span t-esc="line['name']"/>
                                                                 </td>
-                                                                <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
                                                                 </td>
-                                                              </tr>
+                                                            </tr>
 
-                                                              <t t-set="total_cash_corporate" t-value="(total_cash_corporate +line['debit'])"/>
+                                                            <t t-set="total_cash_corporate"
+                                                               t-value="(total_cash_corporate +line['debit'])"/>
                                                         </t>
                                                     </t>
                                                 </tbody>
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
+                                            <table width="99.8%" style="border-collapse: collapse;" cellspacing="0">
                                                 <tbody>
                                                     <t t-set="total_purchase" t-value="0"/>
                                                     <!--                                                    <t t-foreach="customer_vendor_list" t-as="val1">-->
                                                     <t t-foreach="purchase_data" t-as="val1">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; border-left:none;">
+                                                                (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span
+                                                                    t-esc="val1['partnr']"/>&#160;[<span
+                                                                    t-esc="val1['cre_acc']"/>]
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="val1['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_purchase" t-value="(total_purchase + val1['credit'])"/>
+                                                        <t t-set="total_purchase"
+                                                           t-value="(total_purchase + val1['credit'])"/>
                                                     </t>
                                                 </tbody>
                                             </table>
@@ -396,7 +391,7 @@
                                     Total corporate sale:
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" style="padding-left:10px;">
-                                    <span style="padding-left:10px; margin-left:10px;" t-esc="total_cash_corporate" />
+                                    <span style="padding-left:10px; margin-left:10px;" t-esc="total_cash_corporate"/>
                                 </div>
 
                                 <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
@@ -408,155 +403,6 @@
                             </div>
 
                             <!-- purchase div -->
-
-<!--                            <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Online Payments &amp; Cross Cheques-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="cheq_payment" t-as="val1">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="val1['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_expense" t-value="0"/>-->
-<!--                                                    <t t-foreach="cheq_payment" t-as="val2">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="val2['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="val2['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_expense" t-value="(total_expense + val2['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-
-<!--&lt;!&ndash;                            creditss&ndash;&gt;-->
-<!--                        <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Credit card-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        &lt;!&ndash;                                    <td width="50%">&ndash;&gt;-->
-
-<!--                                        &lt;!&ndash;                                    </td>&ndash;&gt;-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="cheq_payment1" t-as="val1">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="val1['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-
-<!--                                                        </tr>-->
-
-<!--                                                    </t>-->
-
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_expense1" t-value="0"/>-->
-<!--                                                    <t t-foreach="cheq_payment1" t-as="val2">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="val2['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="val2['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_expense1" t-value="(total_expense1 + val2['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-
-<!--&lt;!&ndash;                            creditsss&ndash;&gt;-->
-
-
-
-
-
-
-<!--                            <div class="col-12 row zero_padding ">-->
-<!--                                <div class="col-4 text-right all_border border-top-0 border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right border-top-0 all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-right all_border border-top-0 border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Total:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right border-top-0 all_border bold_pt_pb pb-0">-->
-<!--                                    <t t-esc="total_expense +total_expense1 "/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-
 
                             <!-- sale return div -->
                             <div class="container col-12 row zero_padding border-top-0">
@@ -582,17 +428,21 @@
                                             <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_cash_oreceipt" t-value="0"/>
-                                                    <t t-set="cash_otherReceipt" t-value="cash_corporate_receipt(receipt = True , cash=True)"/>
+                                                    <t t-set="cash_otherReceipt"
+                                                       t-value="cash_corporate_receipt(receipt = True , cash=True)"/>
                                                     <t t-if="len(cash_otherReceipt) > 0">
                                                         <t t-foreach="cash_otherReceipt" t-as="o_receipt">
                                                             <tr>
-                                                                <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="o_receipt['name']"/>
                                                                 </td>
-                                                                <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="o_receipt['debit']"/>
                                                                 </td>
-                                                                   <t t-set="total_cash_oreceipt" t-value="total_cash_oreceipt + o_receipt['debit']"/>
+                                                                <t t-set="total_cash_oreceipt"
+                                                                   t-value="total_cash_oreceipt + o_receipt['debit']"/>
                                                             </tr>
 
                                                         </t>
@@ -604,17 +454,44 @@
                                             <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_sale_return" t-value="0"/>
-                                                    <!--                                                    <t t-foreach="out_refund_list" t-as="val4">-->
+
                                                     <t t-foreach="sale_return_data" t-as="val4">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                <span t-esc="val4['partnr']"/> &#160;[<span t-esc="val4['cre_acc']"/>]
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; border-left:none;">
+                                                                <span t-esc="val4['partnr']"/> &#160;[<span
+                                                                    t-esc="val4['cre_acc']"/>]
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="val4['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_sale_return" t-value="(total_sale_return + val4['credit'])"/>
+                                                        <t t-set="total_sale_return"
+                                                           t-value="(total_sale_return + val4['credit'])"/>
+                                                    </t>
+
+
+                                                    <!-- empty lines in sale Return side (Other Receipts(cash)) -->
+                                                    <t t-set="line_pass_sale_rt" t-value="1"/>
+                                                    <t t-foreach="cash_otherReceipt" t-as="cor">
+                                                        <t t-if="line_pass_sale_rt &gt; len(sale_return_data)">
+
+                                                            <tr>
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; border-left:none; color:white">
+                                                                    <span t-esc="cor['name']"/>
+                                                                </td>
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black;border-left:none;  color:white;">
+                                                                    <span t-esc="cor['debit']"/>
+                                                                </td>
+
+                                                            </tr>
+
+
+                                                        </t>
+                                                        <t t-set="line_pass_sale_rt" t-value="line_pass_sale_rt+1"/>
                                                     </t>
                                                 </tbody>
                                             </table>
@@ -622,25 +499,26 @@
                                     </tr>
                                 </tbody>
                             </table>
-<!--                            <div class="container" style="">-->
+                            <!--                            <div class="container" style="">-->
 
-                                <div class="container col-12 row zero_padding border-top-0">
-                                    <div class="col-4 text-center  all_border border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total other Receipts
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <span t-esc="total_cash_oreceipt" />
-                                    </div>
-                                    <div class="col-4 text-right all_border border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-esc="total_sale_return"/>
-                                    </div>
-                                </div>
-                                <!-- Cash transfer -->
                             <div class="container col-12 row zero_padding border-top-0">
-                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="color:white;">
+                                <div class="col-4 text-center  all_border border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total other Receipts
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <span t-esc="total_cash_oreceipt"/>
+                                </div>
+                                <div class="col-4 text-right all_border border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-esc="total_sale_return"/>
+                                </div>
+                            </div>
+                            <!-- Cash transfer -->
+                            <div class="container col-12 row zero_padding border-top-0">
+                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb"
+                                     style="color:white;">
                                     cash transfer hidden:
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
@@ -654,22 +532,27 @@
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" width="90%">
                                 </div>
                             </div>
-                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;"  cellspacing="0">
+                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;" cellspacing="0">
                                 <tbody>
                                     <tr>
                                         <!--<td width="50%">-->
 
                                         <!--</td>-->
                                         <td width="49%">
-                                            <table width="99.8%"  style="user-select:none; -moz-user-select:none; border-collapse:collapse;"  cellspacing="0">
+                                            <table width="99.8%"
+                                                   style="user-select:none; -moz-user-select:none; border-collapse:collapse;"
+                                                   cellspacing="0">
                                                 <tbody>
 
                                                     <t t-foreach="cash_transfer_data" t-as="cash_transfer">
                                                         <tr style="user-select:none;  -moz-user-select:none;">
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; user-select:none;  -moz-user-select:none;">
-                                                                (dbt:<span t-esc="cash_transfer['debit_acc']"/>)&#160;[<span t-esc="cash_transfer['cre_acc']"/>]
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; color: white; user-select:none;  -moz-user-select:none;">
+                                                                (dbt:<span t-esc="cash_transfer['debit_acc']"/>)&#160;[
+                                                                <span t-esc="cash_transfer['cre_acc']"/>]
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span>&#160;</span>
                                                             </td>
 
@@ -684,20 +567,24 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
+                                            <table width="99.8%" style="border-collapse: collapse;" cellspacing="0">
                                                 <tbody>
                                                     <t t-set="total_cash_transfer" t-value="0"/>
                                                     <!--                                                    <t t-foreach="customer_vendor_list" t-as="val1">-->
                                                     <t t-foreach="cash_transfer_data" t-as="cash_trnsfer">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                (dbt:<span t-esc="cash_trnsfer['debit_acc']"/>)&#160;[<span t-esc="cash_trnsfer['cre_acc']"/>]
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; border-left:none;">
+                                                                (dbt:<span t-esc="cash_trnsfer['debit_acc']"/>)&#160;[
+                                                                <span t-esc="cash_trnsfer['cre_acc']"/>]
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="cash_trnsfer['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_cash_transfer" t-value="(total_cash_transfer + cash_trnsfer['credit'])"/>
+                                                        <t t-set="total_cash_transfer"
+                                                           t-value="(total_cash_transfer + cash_trnsfer['credit'])"/>
                                                     </t>
                                                 </tbody>
                                             </table>
@@ -722,126 +609,123 @@
                             </div>
 
 
-
-
-
-
                             <!--End Cash transfer-->
 
-                                <!-- currency note div   -->
+                            <!-- currency note div   -->
 
-                                <div class="container col-12 row zero_padding border-top-0">
-                                    <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="color:white;">
-                                        &#160;
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        &#160;
-                                    </div>
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        5000 x:
-                                    </div>
-                                    <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
-                                        <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
-                                        <t t-esc="fivth_notes"/>
-                                    </div>
+                            <div class="container col-12 row zero_padding border-top-0">
+                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb"
+                                     style="color:white;">
+                                    &#160;
                                 </div>
-
-                                <div class="container col-12 row zero_padding border-top-0">
-
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        &#160;
-                                    </div>
-                                    <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
-                                        <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
-                                        <span> &#160;</span>
-                                    </div>
-
-
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        1000 x:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_not_bold_pt_pbpt_pb pb-0">
-                                        <t t-esc="oneth_note"/>
-                                    </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    &#160;
                                 </div>
-                                <div class="container col-12 row zero_padding border-top-0">
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    5000 x:
+                                </div>
+                                <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
+                                    <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
+                                    <t t-esc="fivth_notes"/>
+                                </div>
+                            </div>
 
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        &#160;
-                                    </div>
-                                    <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
-                                        <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
-                                        <span> &#160;</span>
-                                    </div>
+                            <div class="container col-12 row zero_padding border-top-0">
 
-
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        500 x:
-                                    </div>
-                                    <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
-                                        <t t-esc="five_hndrd"/>
-                                    </div>
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    &#160;
+                                </div>
+                                <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
+                                    <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
+                                    <span>&#160;</span>
                                 </div>
 
 
-                                <!-- closing balance div -->
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    1000 x:
+                                </div>
+                                <div class="col-2 text-right all_border bold_not_bold_pt_pbpt_pb pb-0">
+                                    <t t-esc="oneth_note"/>
+                                </div>
+                            </div>
+                            <div class="container col-12 row zero_padding border-top-0">
 
-                                <t t-set="closing_bal" t-value="0.0"/>
-                                <div class="container col-12 row zero_padding border-top-0">
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        &#160;
-                                    </div>
-                                    <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
-                                        <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
-                                        <span> &#160;</span>
-                                    </div>
-
-
-
-
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Closing Balance:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-set="closing_balance" t-value="((total_purchase+total_debit+total_sale_return) - (total_receipt))"/>
-                                        <!--corrected closing bal -->
-                                        <t t-set="closing_bal" t-value="((total_receipt + all_acc_ob +total_cash_corporate +total_cash_oreceipt) - (total_purchase+total_debit+total_sale_return + total_cash_transfer))"/>
-                                        <!--                                        <t t-esc="closing_balance"/>-->
-                                        <t t-esc="round(closing_bal,2)"/>
-                                    </div>
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    &#160;
+                                </div>
+                                <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
+                                    <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
+                                    <span>&#160;</span>
                                 </div>
 
 
-
-                              <!--total debits and total credits-->
-                                <div class="container col-12 row zero_padding border-top-0 mt-4">
-                                     <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-esc="total_receipt + ob + total_cash_oreceipt +total_cash_corporate"/>
-                                    </div>
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-set="total" t-value="(total_purchase+total_debit+total_sale_return + total_cash_transfer)"/>
-                                        <t t-esc="total + round(closing_bal,2)"/>
-                                    </div>
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    500 x:
                                 </div>
-                                      <!--end total debits and total credits (Cash section)-->
+                                <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
+                                    <t t-esc="five_hndrd"/>
+                                </div>
+                            </div>
 
-                                   <div class="container col-12 row zero_padding border-top-0 mt-4">
-                                   </div>
+
+                            <!-- closing balance div -->
+
+                            <t t-set="closing_bal" t-value="0.0"/>
+                            <div class="container col-12 row zero_padding border-top-0">
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    &#160;
+                                </div>
+                                <div class="col-2 text-right all_border not_bold_pt_pb pb-0">
+                                    <!--                                <t t-set="closing_balance" t-value="((total_expense+total_purchase+total_debit+total_sale_return) - (total_receipt))"/>-->
+                                    <span>&#160;</span>
+                                </div>
 
 
- <!--                            Atif start-->
-                             <div class="container col-12  row zero_padding border-top-0">
-                                <div class="col-4 text-center all_border border-right-0" >
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Closing Balance:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-set="closing_balance"
+                                       t-value="((total_purchase+total_debit+total_sale_return) - (total_receipt))"/>
+                                    <!--corrected closing bal -->
+                                    <t t-set="closing_bal"
+                                       t-value="((total_receipt + all_acc_ob +total_cash_corporate +total_cash_oreceipt) - (total_purchase+total_debit+total_sale_return + total_cash_transfer))"/>
+                                    <!--                                        <t t-esc="closing_balance"/>-->
+                                    <t t-esc="round(closing_bal,2)"/>
+                                </div>
+                            </div>
+
+
+                            <!--total debits and total credits-->
+                            <div class="container col-12 row zero_padding border-top-0 mt-4">
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-esc="total_receipt + ob + total_cash_oreceipt +total_cash_corporate"/>
+                                </div>
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-set="total"
+                                       t-value="(total_purchase+total_debit+total_sale_return + total_cash_transfer)"/>
+                                    <t t-esc="total + round(closing_bal,2)"/>
+                                </div>
+                            </div>
+                            <!--end total debits and total credits (Cash section)-->
+
+                            <div class="container col-12 row zero_padding border-top-0 mt-4">
+                            </div>
+
+
+                            <!--                            Atif start-->
+                            <div class="container col-12  row zero_padding border-top-0">
+                                <div class="col-4 text-center all_border border-right-0">
                                     <strong>Bank Receipts</strong>
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" style="color:white;">
-                                    <t t-esc="total_debit" />
+                                    <t t-esc="total_debit"/>
                                 </div>
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Bank Payments
@@ -851,36 +735,20 @@
                             </div>
 
                             <div class="container col-12  row zero_padding border-top-0">
-                                <div class="col-4 text-center all_border border-right-0" >
-                                   &#160;
+                                <div class="col-4 text-center all_border border-right-0">
+                                    &#160;
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0" style="color:white;">
                                     <t t-esc="total_debit"/>
                                 </div>
 
-                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
+                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Online Payments / Credit Card
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
                                 </div>
                             </div>
 
-<!--                            <div class="container col-12  row zero_padding border-top-0">-->
-<!--                                <div class="col-4 text-center all_border border-right-0" >-->
-<!--                                   Opening Bank Balance:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0" >-->
-<!--                                    <t t-set="open_bal" t-value="opening_balance()"/>-->
-<!--                                      <t t-set="total_receipt" t-value="total_receipt + open_bal"/>-->
-<!--                                   <span t-esc="opening_balance()"/>-->
-<!--                                </div>-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="color:white;">-->
-<!--                                   Opening Bank Balance:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0" style="color:white;">-->
-<!--                                    <t t-esc="total_debit" />-->
-<!--                                </div>-->
-<!--                            </div>-->
 
                             <!-- purchase div -->
                             <div class="container col-12 row zero_padding border-top-0">
@@ -889,53 +757,109 @@
                                 </div>
                                 <div class="col-2 text-right all_border  pb-0 bold_pt_pb">
                                 </div>
-                               <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
+                                <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Sale Return(Bank)
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
                                 </div>
                             </div>
                             <t t-set="total_bank_debit" t-value="0"/>
-                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;"  cellspacing="0">
+                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;" cellspacing="0">
                                 <tbody>
                                     <tr>
                                         <!--<td width="50%">-->
                                         <!--</td>-->
                                         <td width="49%">
-                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
+                                            <table width="99.8%" style="border-collapse: collapse;" cellspacing="0">
                                                 <t t-set="bank_cheque_total" t-value="0.0"/>
                                                 <tbody>
                                                     <t t-foreach="credit_check()" t-as="line">
-                                                        <tr >
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                        <tr>
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="line['name']"/>
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
-                                                                <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
-                                                               <span t-esc="line['debit']"/>
-                                                                <t t-set="bank_cheque_total"  t-value="bank_cheque_total+ line['debit']" />
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
+                                                                <t t-set="total_bank_debit"
+                                                                   t-value="total_bank_debit + int(line['debit'])"/>
+                                                                <span t-esc="line['debit']"/>
+                                                                <t t-set="bank_cheque_total"
+                                                                   t-value="bank_cheque_total+ line['debit']"/>
                                                             </td>
                                                         </tr>
                                                         <!--                                                        <t t-set="total_purchase" t-value="(total_purchase + val1['amount'])"/>-->
+
+
+                                                        <!-- empty line in  cheque(bank) side -->
+                                                        <t t-set="line_pass_cheque_bank" t-value="1"/>
+                                                        <t t-set="cr_chk" t-value="credit_check()"/>
+                                                        <t t-foreach="bank_sale_return" t-as="empt_bank_sale_ret">
+                                                            <t t-if="line_pass_cheque_bank &gt; len(cr_chk)">
+                                                                <tr>
+                                                                    <td class="pl-2" width="66.9%"
+                                                                        style="border: 1px solid black; ">
+                                                                        <span t-esc="empt_bank_sale_ret['partnr']"/>
+                                                                        (<span t-esc="empt_bank_sale_ret['cre_acc']"/>)
+                                                                    </td>
+                                                                    <td class="text-right pr-2" width="37.1%"
+                                                                        style="border: 1px solid black;">
+                                                                        <span t-esc="empt_bank_sale_ret['credit']"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            <t t-set="line_pass_cheque_bank"
+                                                               t-value="line_pass_cheque_bank+1"/>
+                                                        </t>
+
                                                     </t>
 
                                                 </tbody>
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_bank_sale_return" t-value="0"/>
                                                     <t t-foreach="bank_sale_return" t-as="bank_sale_ret">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; ">
-                                                                 <span t-esc="bank_sale_ret['partnr']"/> (<span t-esc="bank_sale_ret['cre_acc']"/>)
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; ">
+                                                                <span t-esc="bank_sale_ret['partnr']"/>
+                                                                (<span t-esc="bank_sale_ret['cre_acc']"/>)
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="bank_sale_ret['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_bank_sale_return" t-value="(total_bank_sale_return + bank_sale_ret['credit'])"/>
+                                                        <t t-set="total_bank_sale_return"
+                                                           t-value="(total_bank_sale_return + bank_sale_ret['credit'])"/>
+                                                    </t>
+
+
+                                                    <!-- empty line in sale return(bank) side -->
+
+                                                    <t t-set="line_pass_sale_rt_bank" t-value="1"/>
+                                                    <t t-foreach="credit_check()" t-as="cor_line">
+                                                        <t t-if="line_pass_sale_rt_bank &gt; len(bank_sale_return)">
+
+                                                            <tr>
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; border-left:none; color:white;">
+                                                                    <span t-esc="cor_line['name']"/>
+                                                                </td>
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black; color:white;">
+
+                                                                    <span t-esc="cor_line['debit']"/>
+                                                                </td>
+                                                            </tr>
+
+
+                                                        </t>
+                                                        <t t-set="line_pass_sale_rt_bank"
+                                                           t-value="line_pass_sale_rt_bank+1"/>
                                                     </t>
                                                 </tbody>
                                             </table>
@@ -945,9 +869,9 @@
                             </table>
 
                             <!-- sale return total (Bank section)   -->
-                             <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
-                                   Total
+                                    Total
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
                                     <span t-esc="bank_cheque_total"/>
@@ -960,15 +884,10 @@
                                     <t t-esc="total_bank_sale_return"/>
                                 </div>
 
-                                  <div class="col-4 text-right border-right-0 pl-1 pb-0 bold_pt_pb">
+                                <div class="col-4 text-right border-right-0 pl-1 pb-0 bold_pt_pb">
 
                                 </div>
                             </div>
-
-
-
-
-
 
 
                             <div class="container col-12 row zero_padding border-top-0">
@@ -983,25 +902,30 @@
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
                                 </div>
                             </div>
-                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;"  cellspacing="0">
+                            <table width="100%" style="margin-left:-15px; border-collapse: collapse;border-spacing : 0;"
+                                   cellspacing="0">
                                 <tbody>
                                     <tr>
                                         <!--<td width="50%">-->
 
                                         <!--</td>-->
                                         <td width="49%">
-                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
+                                            <table width="99.8%" style="border-collapse: collapse;" cellspacing="0">
                                                 <tbody>
                                                     <t t-set="bank_credit_total" t-value="0.0"/>
                                                     <t t-foreach="credit_online()" t-as="line">
-                                                        <tr >
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                        <tr>
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="line['name']"/>
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
-                                                                <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
-                                                               <span t-esc="line['debit']"/>
-                                                                 <t t-set="bank_credit_total" t-value="bank_credit_total + line['debit']"/>
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
+                                                                <t t-set="total_bank_debit"
+                                                                   t-value="total_bank_debit + int(line['debit'])"/>
+                                                                <span t-esc="line['debit']"/>
+                                                                <t t-set="bank_credit_total"
+                                                                   t-value="bank_credit_total + line['debit']"/>
                                                             </td>
 
                                                         </tr>
@@ -1013,45 +937,76 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="99.8%" style="border-collapse: collapse; border-spacing : 0;">
                                                 <tbody>
                                                     <t t-set="total_bank_credit_card" t-value="0"/>
                                                     <t t-foreach="bank_credit_card" t-as="bank_creditcard">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                <span t-esc="bank_creditcard['partnr']"/> (<span t-esc="bank_creditcard['cre_acc']"/>)
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; border-left:none;">
+                                                                <span t-esc="bank_creditcard['partnr']"/>
+                                                                (<span t-esc="bank_creditcard['cre_acc']"/>)
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="bank_creditcard['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_bank_credit_card" t-value="(total_bank_credit_card + bank_creditcard['credit'])"/>
+                                                        <t t-set="total_bank_credit_card"
+                                                           t-value="(total_bank_credit_card + bank_creditcard['credit'])"/>
                                                     </t>
+
+
+                                                    <!-- empty line in cross cheque(bank) side -->
+
+                                                    <t t-set="line_pass_cross_cheque_bank" t-value="1"/>
+                                                    <t t-foreach="credit_online()" t-as="co_line">
+                                                        <t t-if="line_pass_cross_cheque_bank &gt; len(bank_credit_card)">
+
+                                                            <tr>
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; border-left:none; color:white;">
+                                                                    <span t-esc="co_line['name']"/>
+                                                                </td>
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black; color:white;">
+
+                                                                    <span t-esc="co_line['debit']"/>
+
+                                                                </td>
+                                                            </tr>
+
+
+                                                        </t>
+                                                        <t t-set="line_pass_cross_cheque_bank"
+                                                           t-value="line_pass_cross_cheque_bank + 1"/>
+                                                    </t>
+
                                                 </tbody>
                                             </table>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-<!--                            Atif End-->
+                            <!--                            Atif End-->
 
-                                <div class="col-12 row zero_padding border-top-0">
-                                    <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <span t-esc="bank_credit_total"/>
-                                    </div>
+                            <div class="col-12 row zero_padding border-top-0">
+                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <span t-esc="bank_credit_total"/>
+                                </div>
 
-                                    <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total:
-                                    </div>
-                                    <div class="col-2 text-right   all_border bold_pt_pb pb-0">
-                                        <t t-esc="total_bank_credit_card"/>
-                                    </div>
-                              </div>
-                                <!-- bank transfer section-->
-                              <div class="col-12 row zero_padding border-top-0" style="">
+                                <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total:
+                                </div>
+                                <div class="col-2 text-right   all_border bold_pt_pb pb-0">
+                                    <t t-esc="total_bank_credit_card"/>
+                                </div>
+                            </div>
+                            <!-- bank transfer section-->
+                            <div class="col-12 row zero_padding border-top-0" style="">
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Corporate Sale
                                 </div>
@@ -1075,18 +1030,23 @@
                                             <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_bank_corporate" t-value="0"/>
-                                                    <t t-set="bank_corporate" t-value="cash_corporate_receipt(corporate = True , bank=True)"/>
+                                                    <t t-set="bank_corporate"
+                                                       t-value="cash_corporate_receipt(corporate = True , bank=True)"/>
                                                     <t t-if="len(bank_corporate) > 0">
                                                         <t t-foreach="bank_corporate" t-as="line">
                                                             <tr>
-                                                                <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="line['name']"/>
                                                                 </td>
-                                                                <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
                                                                 </td>
-                                                                  <t t-set="total_bank_corporate" t-value="total_bank_corporate + line['debit']"/>
-                                                                    <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
+                                                                <t t-set="total_bank_corporate"
+                                                                   t-value="total_bank_corporate + line['debit']"/>
+                                                                <t t-set="total_bank_debit"
+                                                                   t-value="total_bank_debit + int(line['debit'])"/>
                                                             </tr>
                                                         </t>
                                                     </t>
@@ -1094,32 +1054,64 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_bank_transfer" t-value="0"/>
                                                     <t t-foreach="bank_transfer" t-as="bank_trnsfer">
                                                         <tr>
-                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                               <span t-esc="bank_trnsfer['partnr']"/> (<span t-esc="bank_trnsfer['cre_acc']"/> )
+                                                            <td class="pl-2" width="66.9%"
+                                                                style="border: 1px solid black; border-left:none;">
+                                                                <span t-esc="bank_trnsfer['partnr']"/>
+                                                                (
+                                                                <span t-esc="bank_trnsfer['cre_acc']"/>
+                                                                )
                                                             </td>
-                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                            <td class="text-right pr-2" width="37.1%"
+                                                                style="border: 1px solid black;">
                                                                 <span t-esc="bank_trnsfer['credit']"/>
                                                             </td>
                                                         </tr>
-                                                        <t t-set="total_bank_transfer" t-value="(total_bank_transfer + bank_trnsfer['credit'])"/>
+                                                        <t t-set="total_bank_transfer"
+                                                           t-value="(total_bank_transfer + bank_trnsfer['credit'])"/>
                                                     </t>
+                                                    <t t-set="bank_corporate_oside"
+                                                       t-value="cash_corporate_receipt(corporate = True , bank=True)"/>
+                                                    <t t-if="len(bank_corporate_oside) &gt; len(bank_transfer)">
+                                                        <t t-set="oline" t-value="len(bank_corporate_oside)"/>
+                                                        <t t-set="lin_pass" t-value="0"/>
+                                                        <t t-foreach="bank_corporate_oside" t-as="other_side">
+                                                            <t t-if="lin_pass &gt;= len(bank_transfer)">
+                                                                <t t-if="oline  &gt; len(bank_transfer)">
+                                                                    <tr>
+                                                                        <td class="pl-2" width="66.9%"
+                                                                            style="border: 1px solid black; border-left:none; color:white;">
+                                                                            <span t-esc="other_side['name']"/>
+                                                                        </td>
+                                                                        <td class="text-right pr-2" width="37.1%"
+                                                                            style="border: 1px solid black;border-left:none; color:white;">
+                                                                            <span t-esc="other_side['debit']"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                                <t t-set="oline" t-value="oline - 1"/>
+                                                            </t>
+                                                            <t t-set="lin_pass" t-value="lin_pass +1"/>
+                                                        </t>
+
+                                                    </t>
+
                                                 </tbody>
                                             </table>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                               <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total:
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                      <span t-esc="total_bank_corporate"/>
+                                    <span t-esc="total_bank_corporate"/>
                                 </div>
 
                                 <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
@@ -1130,11 +1122,10 @@
                                 </div>
                             </div>
 
-                           <!-- end bank transfer section -->
+                            <!-- end bank transfer section -->
 
 
-
-                             <div class="col-12 row zero_padding border-top-0" style="">
+                            <div class="col-12 row zero_padding border-top-0" style="">
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Other Receipts
                                 </div>
@@ -1142,7 +1133,8 @@
                                     &#160;
                                 </div>
 
-                                <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="color:white;">
+                                <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb"
+                                     style="color:white;">
                                     Transfers(Bank)
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
@@ -1156,18 +1148,23 @@
                                             <table width="99.8%">
                                                 <tbody>
                                                     <t t-set="total_bank_oreceipt" t-value="0"/>
-                                                    <t t-set="bank_oreceipt" t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
+                                                    <t t-set="bank_oreceipt"
+                                                       t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
                                                     <t t-if="len(bank_oreceipt) > 0">
                                                         <t t-foreach="bank_oreceipt" t-as="line">
                                                             <tr>
-                                                                <td class="pl-2" width="66.9%" style="border: 1px solid black;">
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="line['name']"/>
                                                                 </td>
-                                                                <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
                                                                 </td>
-                                                                  <t t-set="total_bank_oreceipt" t-value="total_bank_oreceipt + line['debit']"/>
-                                                                  <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
+                                                                <t t-set="total_bank_oreceipt"
+                                                                   t-value="total_bank_oreceipt + line['debit']"/>
+                                                                <t t-set="total_bank_debit"
+                                                                   t-value="total_bank_debit + int(line['debit'])"/>
                                                             </tr>
                                                         </t>
                                                     </t>
@@ -1175,16 +1172,19 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="99.8%">
                                                 <tbody>
-                                                    <t t-set="bank_oreceipt" t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
+                                                    <t t-set="bank_oreceipt"
+                                                       t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
                                                     <t t-if="len(bank_oreceipt) > 0">
                                                         <t t-foreach="bank_oreceipt" t-as="line_hidden">
                                                             <tr>
-                                                                <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none; color:white;">
+                                                                <td class="pl-2" width="66.9%"
+                                                                    style="border: 1px solid black; border-left:none; color:white;">
                                                                     <span t-esc="line_hidden['name']"/>
                                                                 </td>
-                                                                <td class="text-right pr-2" width="37.1%" style="border: 1px solid black; color:white;">
+                                                                <td class="text-right pr-2" width="37.1%"
+                                                                    style="border: 1px solid black; color:white;">
                                                                     <span t-esc="line_hidden['debit']"/>
                                                                 </td>
                                                             </tr>
@@ -1197,7 +1197,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                               <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total:
                                 </div>
@@ -1206,7 +1206,7 @@
                                 </div>
 
                                 <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                     &#160;
+                                    &#160;
                                 </div>
                                 <div class="col-2 text-right   all_border bold_pt_pb pb-0">
                                     &#160;
@@ -1214,391 +1214,39 @@
                             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<!--                            &lt;!&ndash;Bank Payments div&ndash;&gt;-->
-<!--                             <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Bank Payments-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-<!--                               <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Online Payments &amp; Cross Cheques-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="cheq_payment" t-as="val1">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="val1['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-
-<!--                                                        </tr>-->
-
-<!--                                                    </t>-->
-
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_expense" t-value="0"/>-->
-<!--                                                    <t t-foreach="cheq_payment" t-as="val2">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="val2['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="val2['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_expense" t-value="(total_expense + val2['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-
-<!--&lt;!&ndash;                            creditss&ndash;&gt;-->
-<!--                          <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Sale Return(Bank)-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        &lt;!&ndash;                                    <td width="50%">&ndash;&gt;-->
-
-<!--                                        &lt;!&ndash;                                    </td>&ndash;&gt;-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="bank_sale_return" t-as="bank_sale_ret_hidden">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="bank_sale_ret_hidden['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-
-<!--                                                        </tr>-->
-
-<!--                                                    </t>-->
-
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_bank_sale_return" t-value="0"/>-->
-<!--                                                    <t t-foreach="bank_sale_return" t-as="bank_sale_ret">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="bank_sale_ret['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="bank_sale_ret['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_bank_sale_return" t-value="(total_bank_sale_return + bank_sale_ret['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                            <div class="col-12 row zero_padding border-top-0">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Total:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right   all_border bold_pt_pb pb-0">-->
-<!--                                    <t t-esc="total_bank_sale_return"/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                           &lt;!&ndash;end Bank Payments div&ndash;&gt;-->
-<!--                                &lt;!&ndash;bank credit card&ndash;&gt;-->
-<!--                               <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Credit Card (Bank)-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        &lt;!&ndash;                                    <td width="50%">&ndash;&gt;-->
-
-<!--                                        &lt;!&ndash;                                    </td>&ndash;&gt;-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="bank_credit_card" t-as="bank_credit_card_hidden">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="bank_credit_card_hidden['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-
-<!--                                                        </tr>-->
-
-<!--                                                    </t>-->
-
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_bank_credit_card" t-value="0"/>-->
-<!--                                                    <t t-foreach="bank_credit_card" t-as="bank_creditcard">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="bank_creditcard['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="bank_creditcard['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_bank_credit_card" t-value="(total_bank_credit_card + bank_creditcard['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                             <div class="col-12 row zero_padding border-top-0">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Total:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right   all_border bold_pt_pb pb-0">-->
-<!--                                    <t t-esc="total_bank_credit_card"/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash;end bank credit card &ndash;&gt;-->
-<!--                            &lt;!&ndash; bank transfer section&ndash;&gt;-->
-<!--                              <div class="col-12 row zero_padding border-top-0" style="">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Transfers(Bank)-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <table width="100%" style="margin-left:-15px; margin-bottom:0px;">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        &lt;!&ndash;                                    <td width="50%">&ndash;&gt;-->
-
-<!--                                        &lt;!&ndash;                                    </td>&ndash;&gt;-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%">-->
-<!--                                                <tbody>-->
-
-<!--                                                    <t t-foreach="bank_transfer" t-as="bank_transfer_hidden">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black;  color:white;">-->
-
-<!--                                                                <span t-esc="bank_transfer_hidden['cre_acc']"/>-->
-
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span>&#160;</span>-->
-<!--                                                            </td>-->
-
-<!--                                                        </tr>-->
-
-<!--                                                    </t>-->
-
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                        <td width="49%">-->
-<!--                                            <table width="99.8%" >-->
-<!--                                                <tbody>-->
-<!--                                                    <t t-set="total_bank_transfer" t-value="0"/>-->
-<!--                                                    <t t-foreach="bank_transfer" t-as="bank_trnsfer">-->
-<!--                                                        <tr>-->
-<!--                                                            <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">-->
-<!--                                                                <span t-esc="bank_trnsfer['cre_acc']"/>-->
-<!--                                                            </td>-->
-<!--                                                            <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">-->
-<!--                                                                <span t-esc="bank_trnsfer['credit']"/>-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <t t-set="total_bank_transfer" t-value="(total_bank_transfer + bank_trnsfer['credit'])"/>-->
-<!--                                                    </t>-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                               <div class="col-12 row zero_padding border-top-0">-->
-<!--                                <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right all_border bold_pt_pb pb-0">-->
-<!--                                    &#160;-->
-<!--                                </div>-->
-
-<!--                                <div class="col-4 text-right all_border  border-right-0 pl-1 pb-0 bold_pt_pb">-->
-<!--                                    Total:-->
-<!--                                </div>-->
-<!--                                <div class="col-2 text-right   all_border bold_pt_pb pb-0">-->
-<!--                                    <t t-esc="total_bank_transfer"/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-
-
-
-
-
-
                             <!--end bank transfer section-->
 
 
-
-
-                             <!--total debits and total credits(Bank section )-->
-                                <div class="container col-12 row zero_padding border-top-0 mt-4">
-                                     <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total Bank Debits:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-esc="total_bank_debit"/>
-                                    </div>
-                                    <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
-                                        Total Bank Credits:
-                                    </div>
-                                    <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                        <t t-set="total_bank_credits" t-value="(total_bank_transfer+total_bank_credit_card+total_bank_sale_return)"/>
-                                        <t t-esc="total_bank_credits"/>
-                                    </div>
+                            <!--total debits and total credits(Bank section )-->
+                            <div class="container col-12 row zero_padding border-top-0 mt-4">
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total Bank Debits:
                                 </div>
-                                      <!--end total debits and total credits (Bank section)-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-esc="total_bank_debit"/>
+                                </div>
+                                <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
+                                    Total Bank Credits:
+                                </div>
+                                <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                    <t t-set="total_bank_credits"
+                                       t-value="(total_bank_transfer+total_bank_credit_card+total_bank_sale_return)"/>
+                                    <t t-esc="total_bank_credits"/>
+                                </div>
                             </div>
-                        </div>
+                            <!--end total debits and total credits (Bank section)-->
 
-<!--                    </div>-->
+
+                        </div>
+                    </div>
+
+                    <!--                    </div>-->
                 </t>
                 <!--                </t>-->
             </t>
         </template>
         <!-- This Menu Item must have a parent and an action -->
-<!--        <menuitem id="branch_report_menu" name="Daily Cash Statement Report" parent="account.account_account_menu" action="branch_report.create_branch_report_wizard"  sequence="15"/>-->
+        <!--        <menuitem id="branch_report_menu" name="Daily Cash Statement Report" parent="account.account_account_menu" action="branch_report.create_branch_report_wizard"  sequence="15"/>-->
 
     </data>
 </odoo>
