@@ -19,8 +19,7 @@ class ResBranchInh(models.Model):
 class ResPartnerInh(models.Model):
     _inherit = 'res.partner'
 
-    customer_code = fields.Char('Customer Code', required=True, copy=False,
-                                index=True, default=lambda self: _('New'))
+    customer_code = fields.Char('Customer Code', copy=False, index=True)
     test = fields.Boolean("Test Field")
     no_cnic = fields.Char('CNIC')
     ntn = fields.Char('NTN')
