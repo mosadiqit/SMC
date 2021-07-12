@@ -6,7 +6,8 @@ from odoo import models, fields, api
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
-    sale_link = fields.Char()
+    do_link = fields.Char()
+    invoice_link = fields.Char()
 
 
 class PurchaseOrderInh(models.Model):
