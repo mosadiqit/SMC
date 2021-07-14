@@ -33,7 +33,7 @@
             <xpath expr="//div" position="replace">
                 <div style="width: 100%; display: inline-table; border: 0px solid black;">
                     <!--                <table class="table table-bordered mb-0" style="border: 2px solid black;">-->
-                    <table class="table mb-0" style="border:1px solid black; table-layout: fixed;">
+                    <table class="table mb-0" style="border:1px solid black; table-layout: fixed;font-weight:bold;">
 
                         <tr style="border:1px solid black;white-space: nowrap;">
                             <!--                        <td class="table-active text-left" style="height: 4rem;">-->
@@ -159,7 +159,7 @@
                             </td>
                         </tr>
 
-                        <tr style=" border:1px solid black; font-size:9px;">
+                        <tr style="border:1px solid black; font-size:9px;font-weight:bold;">
                             <td style=" border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px;padding-left:1px; ">
                                 <div style="display:inline-block; ">
                                     <strong>Price:</strong>
@@ -169,7 +169,7 @@
 
                             <td style="border:1px solid black; border-right:none;padding:0px; margin:0px; text-align:left; ">
                                 <!--                              <div style="display:inline-block;"> <span t-esc="product.uom_id.name"/></div>-->
-                                <div style="display:inline-block;padding-left:2px;">
+                                <div style="display:inline-block;padding-left:2px;width:100%;">
                                     <span>Per PCS</span>
                                 </div>
                                 <!--                              <div style="display:inline-block; border:1px solid black;"> <span t-esc="product.pcs_box"/></div>-->
