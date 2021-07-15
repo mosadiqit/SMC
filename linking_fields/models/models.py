@@ -11,6 +11,25 @@ class SaleOrderInh(models.Model):
     cus_invoice_link = fields.Many2one("account.move", "Sale Order", compute="_compute_the_invoice_link")
     qty_invoice_link = fields.Integer("Sale Order QTY", compute="_compute_the_invoice_link")
 
+    cus_do_link = fields.Many2one("stock.picking", "Stock Picking", compute="_compute_the_do_link")
+    qty_do_link = fields.Integer("DO QTY", compute="_compute_the_do_link")
+
+    def _compute_the_do_link(self):
+        for i in self:
+            obj = self.env["stock.picking"].search([("stock_link", '=', i.client_order_ref)], limit=1)
+            print(obj.stock_link)
+            i.cus_do_link = obj.id
+            i.qty_do_link = len(self.env["stock.picking"].search([("stock_link", '=', i.client_order_ref)]))
+
+    def smart_delivery_button(self):
+        return {
+            'name': _('Picking'),
+            'view_mode': 'tree,form',
+            'res_model': 'stock.picking',
+            'domain': [('stock_link', '=', self.client_order_ref)],
+            'type': 'ir.actions.act_window',
+        }
+
     def _compute_the_invoice_link(self):
         for i in self:
             obj = self.env["account.move"].search([("account_link", '=', i.client_order_ref)],limit=1)
@@ -60,6 +79,15 @@ class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
     stock_link = fields.Char()
+
+    cus_do_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_do_link")
+    qty_do_link = fields.Integer("SO QTY", compute="_compute_the_do_link")
+
+    def _compute_the_do_link(self):
+        for i in self:
+            obj = self.env["sale.order"].search([("client_order_ref", '=', i.stock_link)], limit=1)
+            i.cus_do_link = obj.id
+            i.qty_do_link = len(self.env["sale.order"].search([("client_order_ref", '=', i.stock_link)]))
 
 
 class AccountPaymentInh(models.Model):

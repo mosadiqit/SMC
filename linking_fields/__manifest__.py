@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Field Linking",
+    'name': "linking_fields",
 
     'summary': """
-       Link SO,PO,DO,Inovices""",
+        Short (1 phrase/line) summary of the module's purpose, used as
+        subtitle on modules listing or apps.openerp.com""",
 
     'description': """
-         Link SO,PO,DO,Inovices
+        Long description of module's purpose
     """,
 
     'author': "My Company",

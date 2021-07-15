@@ -1,11 +1,13 @@
 <odoo>
 	<data>
 
+
 		<record id="view_sale_order_form_inh" model="ir.ui.view">
 			<field name="name">sale.order.form</field>
 			<field name="model">sale.order</field>
 			<field name="inherit_id" ref="sale.view_order_form"/>
 			<field name="arch" type="xml">
+
 				  <xpath expr="//div[@name='button_box']" position="inside">
 
                     <button class="oe_stat_button" name="smart_invoice_button"
@@ -13,12 +15,19 @@
                             type="object" attrs="{'invisible': [('qty_invoice_link', '=', 0)]}">
 						   <field string="Invoice" name="qty_invoice_link" widget="statinfo"/>
                     </button>
+					    <button class="oe_stat_button" name="smart_delivery_button"
+                            icon="fa-truck"
+                            type="object" attrs="{'invisible': [('qty_do_link', '=', 0)]}">
+						   <field string="Delivery" name="qty_do_link" widget="statinfo"/>
+                    </button>
                 </xpath>
 
 				<xpath expr="//field[@name='client_order_ref']" position="after">
 					<field name="do_link"/>
 					<field name="invoice_link" invisible="0"/>
 						<field name="cus_invoice_link" invisible="0"/>
+					<field name="cus_do_link" invisible="0"/>
+					<field name="qty_do_link" invisible="0"/>
 				</xpath>
 
 			</field>
@@ -80,6 +89,7 @@
 
 				<xpath expr="//field[@name='user_id']" position="after">
 					<field name="stock_link"/>
+					<field name="cus_do_link"/>
 				</xpath>
 
 			</field>
