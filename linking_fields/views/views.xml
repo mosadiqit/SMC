@@ -6,10 +6,19 @@
 			<field name="model">sale.order</field>
 			<field name="inherit_id" ref="sale.view_order_form"/>
 			<field name="arch" type="xml">
+				  <xpath expr="//div[@name='button_box']" position="inside">
+
+                    <button class="oe_stat_button" name="smart_invoice_button"
+                            icon="fa-pencil-square-o"
+                            type="object" attrs="{'invisible': [('qty_invoice_link', '=', 0)]}">
+						   <field string="Invoice" name="qty_invoice_link" widget="statinfo"/>
+                    </button>
+                </xpath>
 
 				<xpath expr="//field[@name='client_order_ref']" position="after">
 					<field name="do_link"/>
-					<field name="invoice_link"/>
+					<field name="invoice_link" invisible="0"/>
+						<field name="cus_invoice_link" invisible="0"/>
 				</xpath>
 
 			</field>
@@ -33,11 +42,20 @@
 			<field name="model">account.move</field>
 			<field name="inherit_id" ref="account.view_move_form"/>
 			<field name="arch" type="xml">
+				<xpath expr="//div[@name='button_box']" position="inside">
+
+                    <button class="oe_stat_button" name="smart_sale_order_button"
+                            icon="fa-pencil-square-o"
+                            type="object" attrs="{'invisible': [('qty_account_link', '=', 0)]}">
+						   <field string="Sale Order" name="qty_account_link" widget="statinfo"/>
+                    </button>
+                </xpath>
 
 				<xpath expr="//field[@name='invoice_incoterm_id']" position="after">
 					<field name="account_link"/>
-				</xpath>
+					<field name="cus_so_link"/>
 
+				</xpath>
 			</field>
 		</record>
 
