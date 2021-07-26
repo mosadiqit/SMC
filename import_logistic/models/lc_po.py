@@ -22,9 +22,10 @@ class StockLandedCost(models.Model):
         for deliv in self.picking_ids:
             for i in deliv.purchase_id.order_line:
                 percent = (i.total_assessed_value/total_assessed)*100
+                percent_other = (i.sub_total_fc / total_fc) * 100
                 print(percent)
                 i.cust_duty = (percent * c_d) / 100
-                i.other_charges = (percent * other) / 100
+                i.other_charges = (percent_other * other) / 100
         # print(total_fc, total_assessed)
 
 
