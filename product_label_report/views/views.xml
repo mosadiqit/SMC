@@ -36,7 +36,7 @@
                     <!--                <table class="table table-bordered mb-0" style="border: 2px solid black;">-->
                     <table class="table mb-0" style="border:1px solid black; table-layout: fixed;font-weight:bold;">
 
-                        <tr style="border:1px solid black;white-space:wrap;">
+                        <tr style="border:1px solid black;white-space:nowrap;">
                             <!--                        <td class="table-active text-left" style="height: 4rem;">-->
                             <td class="text-left" style="border:1px solid black; border-right:none; width:30%;">
                                 <div name="left-upper-side"
@@ -117,7 +117,7 @@
                             <!--                            <td style="text-align:left; border:1px solid black; border-left:none">-->
                             <!--                            </td>-->
                         </tr>
-                        <tr style="border:1px solid black;font-size:9px; white-space:wrap; height:1px;">
+                        <tr style="border:1px solid black;font-size:9px; white-space:nowrap; height:1px;">
                             <!--                            <td style="border:1px solid black; width:2px; text-align:right;padding-top:-30px;">-->
                             <td style="border:1px solid black; width:2px; text-align:center; padding:0px; margin:0px; padding-left:1px;">
                                 <div style="display:inline-block; padding:0px; margin:0px ">
