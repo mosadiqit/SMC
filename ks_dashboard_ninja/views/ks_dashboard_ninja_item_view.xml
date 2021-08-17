@@ -106,8 +106,7 @@
                     <group attrs="{'invisible':[('ks_dashboard_item_type','!=','ks_tile'),('ks_dashboard_item_type','!=','ks_kpi')]}"
                            class="ks_qe_form_view_group">
                         <field name="ks_record_count_type"
-                               attrs="{'invisible':[('ks_model_id','=',False)],
-                                       'required':[('ks_model_id','!=',False),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
+                               attrs="{'required':[('ks_model_id','!=',False),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
                         <field name="ks_record_field" placeholder="Record Field..."
                                options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"
                                attrs="{'required':[('ks_record_count_type','!=','count'),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
