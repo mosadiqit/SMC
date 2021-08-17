@@ -109,8 +109,8 @@
                                attrs="{'invisible':[('ks_model_id','=',False)],
                                        'required':[('ks_model_id','!=',False),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
                         <field name="ks_record_field" placeholder="Record Field..."
-                               options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"
-                               attrs="{'invisible':['|',('ks_record_count_type','=','count')],
+                               options="{'no_create': True, 'no_create_edit':True, 'no_open': True}",
+                              
                                        'required':[('ks_record_count_type','!=','count'),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
                         <field name="ks_record_count" placeholder="Count..."
                                string="Record Value"/>
