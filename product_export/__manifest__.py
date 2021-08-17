@@ -27,6 +27,7 @@
         # 'security/ir.model.access.csv',
         # 'views/views.xml',
         'reports/product.xml',
+        'reports/customer_export.xml',
     ],
 
 }
