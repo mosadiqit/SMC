@@ -49,7 +49,8 @@ class SaleOrderInh(models.Model):
 class PurchaseOrderInh(models.Model):
     _inherit = 'purchase.order'
 
-    purchase_link = fields.Char()
+    purchase_link = fields.Char("Receipt Link")
+    bill_link = fields.Char("Bill Link")
     picking_type_id = fields.Many2one('stock.picking.type', 'Deliver To')
 
 
@@ -57,6 +58,7 @@ class AccountMoveInh(models.Model):
     _inherit = 'account.move'
 
     account_link = fields.Char()
+    purchase_link = fields.Char("Purchase Order")
     cus_so_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_invoice_link")
     qty_account_link = fields.Integer("Sale Order QTY", compute="_compute_the_invoice_link")
 
@@ -80,6 +82,7 @@ class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
     stock_link = fields.Char()
+    purchase_link = fields.Char("Purchase Order")
 
     cus_do_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_do_link")
     qty_do_link = fields.Integer("SO QTY", compute="_compute_the_do_link")

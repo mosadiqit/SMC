@@ -42,6 +42,7 @@
 				<xpath expr="//field[@name='picking_type_id']" position="replace">
 					<field name="picking_type_id"/>
 					<field name="purchase_link"/>
+	<field name="bill_link"/>
 				</xpath>
 
 			</field>
@@ -63,6 +64,7 @@
 
 				<xpath expr="//field[@name='invoice_incoterm_id']" position="after">
 					<field name="account_link"/>
+					<field name="purchase_link"/> 
 					<field name="cus_so_link"/>
 
 				</xpath>
@@ -91,6 +93,7 @@
 				<xpath expr="//field[@name='user_id']" position="after">
 					<field name="stock_link"/>
 					<field name="cus_do_link"/>
+	<field name="purchase_link"/> 
 				</xpath>
 
 			</field>
