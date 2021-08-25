@@ -71,9 +71,9 @@ class product_templ_inherit_stock(models.Model):
     _inherit="product.template"
 
     stock_id = fields.Many2one('stock.quant', string="stock_id", )
-    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve", store=True)
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
     reserved_qty1 = fields.Float(string="reserved quantss", related="stock_id.reserved_quantity")
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
 
     @api.depends('name')
     def cal_available_qty(self):
@@ -145,8 +145,8 @@ class product_templ_inherit_stock(models.Model):
 class product_product_inheri_stock(models.Model):
     _inherit="product.product"
 
-    reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve", store=True)
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
+    reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve")
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
 
     @api.depends('name')
     def cal_available_qty(self):
