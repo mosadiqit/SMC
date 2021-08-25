@@ -24,9 +24,10 @@ from odoo import models, fields, api
 class product_product_inherit_stock(models.Model):
     _inherit="product.product"
 
-    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve", store=True)
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
 
+    @api.depends('name')
     def cal_available_qty(self):
         for rec in self:
             total = 0
@@ -39,6 +40,7 @@ class product_product_inherit_stock(models.Model):
             print(total)
             rec.available_qty = total
 
+    @api.depends('name')
     def calc_reserve(self):
         for rec in self:
             prd_resrv_qty=0.0
@@ -69,10 +71,11 @@ class product_templ_inherit_stock(models.Model):
     _inherit="product.template"
 
     stock_id = fields.Many2one('stock.quant', string="stock_id", )
-    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve", store=True)
     reserved_qty1 = fields.Float(string="reserved quantss", related="stock_id.reserved_quantity")
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
 
+    @api.depends('name')
     def cal_available_qty(self):
         for rec in self:
             total = 0
@@ -92,6 +95,7 @@ class product_templ_inherit_stock(models.Model):
         return quant_ids
         # print(quant_ids)
 
+    @api.depends('name')
     def calc_reserve(self):
         for rec in self:
             prd_resrv_qty = 0.0
@@ -138,12 +142,13 @@ class product_templ_inherit_stock(models.Model):
     #
     #         s=''
     #     return res
-class product_product_inherit_stock(models.Model):
+class product_product_inheri_stock(models.Model):
     _inherit="product.product"
 
-    reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve")
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
+    reserved_qty= fields.Float(string='reserved quants', compute="calc_reserve", store=True)
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
 
+    @api.depends('name')
     def cal_available_qty(self):
         for rec in self:
             total = 0
@@ -163,6 +168,7 @@ class product_product_inherit_stock(models.Model):
         return quant_ids
         # print(quant_ids)
 
+    @api.depends('name')
     def calc_reserve(self):
         for rec in self:
             prd_resrv_qty=0.0
@@ -187,10 +193,6 @@ class product_product_inherit_stock(models.Model):
         action = self.env["ir.actions.actions"]._for_xml_id("stock.action_picking_tree_all")
         action['domain'] = [('product_id', '=', self.id),('picking_type_id.code', '=', 'outgoing'),('state','=','assigned')]
         return action
-
-
-
-
 
 
 # class reserved_quantity(models.Model):
