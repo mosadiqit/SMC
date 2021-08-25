@@ -24,8 +24,8 @@ from odoo import models, fields, api
 class product_product_inherit_stock(models.Model):
     _inherit="product.product"
 
-    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve", store=True)
-    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty", store=True)
+    reserved_qty = fields.Float(string='reserved quants', compute="calc_reserve")
+    available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
 
     @api.depends('name')
     def cal_available_qty(self):
