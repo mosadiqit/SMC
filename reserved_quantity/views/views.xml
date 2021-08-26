@@ -1,11 +1,36 @@
 <odoo>
   <data>
 
+       <record id="stock.stock_product_normal_action" model="ir.actions.act_window">
+        <field name="name">Product Variants</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="limit">1</field>
+        <field name="search_view_id" ref="stock.stock_product_search_form_view"/>
+    </record>
+
+      <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="limit">1</field>
+        <field name="search_view_id" ref="stock.product_template_search_form_view_stock"/>
+        <field name="context">{"search_default_consumable": 1, 'default_type': 'product'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No product found. Let's create one!
+            </p><p>
+                Track your stock quantities by creating storable products.
+            </p>
+        </field>
+    </record>
+
     <record id="view_product_template_stock_do" model="ir.ui.view">
         <field name="name">product.template.stock.view.custom</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
-
         <field name="arch" type="xml">
           <div name="button_box" position="inside">
                 <button type="object"
@@ -15,7 +40,6 @@
                     <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value" widget="statinfo">
                                     <field name="reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>
-<!--                                    <field name="uom_name"/>-->
                                 </span>
                         <span class="o_stat_text">Reserved quantity</span>
                     </div>
@@ -72,85 +96,6 @@
         </field>
     </record>
 
-
-<!--      <field name="name">stock.picking.delivery.tree.inherit.delivery.custom</field>-->
-<!--            <field name="model">stock.picking</field>-->
-<!--            <field name="inherit_id" ref="stock.vpicktree"/>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <xpath expr="//field[@name='name']" position="after">-->
-<!--                    <field name="move_type" />-->
-
-<!--                </xpath>-->
-<!--            </field>-->
-<!--     </field>-->
-
-
-
-<!--           <div name="button_box" position="inside">-->
-<!--                <button name="%(product.product_variant_action)d" type="action"-->
-<!--                    icon="fa-sitemap" class="oe_stat_button"-->
-<!--                    attrs="{'invisible': [('product_variant_count', '&lt;=', 1)]}"-->
-<!--                    groups="product.group_product_variant">-->
-<!--                    <field string="Variants" name="product_variant_count" widget="statinfo" />-->
-<!--                </button>-->
-<!--            </div>-->
-
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="erum_module.list">
-      <field name="name">erum_module list</field>
-      <field name="model">erum_module.erum_module</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
-
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="erum_module.action_window">
-      <field name="name">erum_module window</field>
-      <field name="res_model">erum_module.erum_module</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="erum_module.action_server">
-      <field name="name">erum_module server</field>
-      <field name="model_id" ref="model_erum_module_erum_module"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record>
--->
-
-    <!-- Top menu item -->
-<!--
-    <menuitem name="erum_module" id="erum_module.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="erum_module.menu_1" parent="erum_module.menu_root"/>
-    <menuitem name="Menu 2" id="erum_module.menu_2" parent="erum_module.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="erum_module.menu_1_list" parent="erum_module.menu_1"
-              action="erum_module.action_window"/>
-    <menuitem name="Server to list" id="erum_module" parent="erum_module.menu_2"
-              action="erum_module.action_server"/>
--->
   </data>
 </odoo>
 
