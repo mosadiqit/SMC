@@ -216,6 +216,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                             acc_wise_bal_lst.append({
                                 'partner_journal': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
                                 'debit': dbt,
+                                'label':rec.name
                             })
 
 
@@ -270,7 +271,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                   'name': rec_debt.account_id.name,
                                   'credit' : cre_val,
                                   'cred_acc': crdit_record.account_id.name,
-                                  'partner':  crdit_record.partner_id.name
+                                  'partner':  crdit_record.partner_id.name,
+                                  'label':crdit_record.name
                             })
     # all accounts(type 'cash and bank')'s credit vals [account wise combined]
         #     for dt in ajitem:
@@ -411,7 +413,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc':j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit':credt_val,
-                                'debit_acc':rec_debt.account_id.name
+                                'debit_acc':rec_debt.account_id.name,
+                                'label':rec.name
                             })
 
         # for sale column
@@ -450,7 +453,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name
+                                'debit_acc': rec_debt.account_id.name,
+                                'label':rec.name
                             })
 
         # for Online Payments & Cross Cheques
@@ -566,7 +570,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name
+                                'debit_acc': rec_debt.account_id.name,
+                                'label':rec_debt.name
                             })
         #end for cash transfer
 
@@ -602,7 +607,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name
+                                'debit_acc': rec_debt.account_id.name,
+                                'label':rec_debt.name
                             })
 
         #end bank sale return
@@ -649,7 +655,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                         'cre_acc': j_rec.account_id.name,
                                         'partnr': partner_name,
                                         'credit': credt_val,
-                                        'debit_acc': rec_debt.account_id.name
+                                        'debit_acc': rec_debt.account_id.name,
+                                        'label':rec_debt.name
                                     })
 
         #end bank credit card
@@ -687,7 +694,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name
+                                'debit_acc': rec_debt.account_id.name,
+                                'label':rec_debt.name
                             })
 
         #end bank transfers
@@ -783,7 +791,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     print(creditobj.name)
                     account_list.append({
                               'name': str(creditobj.partner_id.name) + ' ' + "("+str(creditobj.journal_id.name)+")",
-                        'debit': rec.debit
+                              'debit': rec.debit,
+                              'label':rec.name
                     })
         return account_list
 
@@ -808,7 +817,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     print(creditobj.name)
                     account_list.append({
                         'name': str(creditobj.partner_id.name) + ' ' + "(" + str(creditobj.journal_id.name) + ")",
-                        'debit': rec.debit
+                        'debit': rec.debit,
+                        'label':rec.name
                     })
         return account_list
 
@@ -852,14 +862,16 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                         if payment.corporate_sale == True:
                             corporate_sale_list.append({
                                 'name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
-                                'debit': dbt
+                                'debit': dbt,
+                                'label':rec.name
                             })
 
 
                         if payment.other_receipt == True:
                             other_receipt_list.append({
                                 'name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
-                                'debit': dbt
+                                'debit': dbt,
+                                'label':rec.name
                             })
 
         if(corporate == True):

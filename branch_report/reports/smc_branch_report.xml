@@ -182,7 +182,8 @@
                                                     <t t-foreach="acc_debits" t-as="ac_dbt">
                                                         <tr>
                                                             <td class="text-left pl-2" width="65.8%" style="border: 1px solid black; font-size:15.8px;">
-                                                                <span t-esc="ac_dbt['partner_journal']"/>
+                                                                <span t-esc="ac_dbt['partner_journal']" /><br/>
+                                                                <span t-esc="ac_dbt['label']" />
                                                             </td>
                                                             <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">
                                                                 <span t-esc="ac_dbt['debit']"/>
@@ -205,7 +206,8 @@
 
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(<span t-esc="acc_crdt['partner']"/>)
+                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(<span t-esc="acc_crdt['partner']"/>)<br/>
+                                                                <span t-esc="acc_crdt['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <!--                                                            <span t-esc="val3['debit']"/>-->
@@ -356,7 +358,8 @@
                                                         <t  t-foreach="cash_corporate" t-as="line">
                                                             <tr style="">
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black; user-select:none;  -moz-user-select:none;">
-                                                                    <span t-esc="line['name']"/>
+                                                                    <span t-esc="line['name']"/><br/>
+                                                                    <span t-esc="line['label']"/>
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
@@ -377,7 +380,8 @@
                                                     <t t-foreach="purchase_data" t-as="val1">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]
+                                                                (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]<br/>
+                                                                <span t-esc="val1['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="val1['credit']"/>
@@ -587,7 +591,8 @@
                                                         <t t-foreach="cash_otherReceipt" t-as="o_receipt">
                                                             <tr>
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                    <span t-esc="o_receipt['name']"/>
+                                                                    <span t-esc="o_receipt['name']"/><br/>
+                                                                    <span t-esc="o_receipt['label']"/>
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="o_receipt['debit']"/>
@@ -608,7 +613,8 @@
                                                     <t t-foreach="sale_return_data" t-as="val4">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                <span t-esc="val4['partnr']"/> &#160;[<span t-esc="val4['cre_acc']"/>]
+                                                                <span t-esc="val4['partnr']"/> &#160;[<span t-esc="val4['cre_acc']"/>]<br/>
+                                                                <span t-esc="val4['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="val4['credit']"/>
@@ -667,7 +673,8 @@
                                                     <t t-foreach="cash_transfer_data" t-as="cash_transfer">
                                                         <tr style="user-select:none;  -moz-user-select:none;">
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; user-select:none;  -moz-user-select:none;">
-                                                                (dbt:<span t-esc="cash_transfer['debit_acc']"/>)&#160;[<span t-esc="cash_transfer['cre_acc']"/>]
+                                                                (dbt:<span t-esc="cash_transfer['debit_acc']"/>)&#160;[<span t-esc="cash_transfer['cre_acc']"/>]<br/>
+                                                                <span t-esc="cash_transfer['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span>&#160;</span>
@@ -691,7 +698,8 @@
                                                     <t t-foreach="cash_transfer_data" t-as="cash_trnsfer">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                (dbt:<span t-esc="cash_trnsfer['debit_acc']"/>)&#160;[<span t-esc="cash_trnsfer['cre_acc']"/>]
+                                                                (dbt:<span t-esc="cash_trnsfer['debit_acc']"/>)&#160;[<span t-esc="cash_trnsfer['cre_acc']"/>]<br/>
+                                                                <span t-esc="cash_trnsfer['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="cash_trnsfer['credit']"/>
@@ -908,7 +916,8 @@
                                                     <t t-foreach="credit_check()" t-as="line">
                                                         <tr >
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                <span t-esc="line['name']"/>
+                                                                <span t-esc="line['name']"/><br/>
+                                                                <span t-esc="line['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
@@ -929,7 +938,8 @@
                                                     <t t-foreach="bank_sale_return" t-as="bank_sale_ret">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; ">
-                                                                 <span t-esc="bank_sale_ret['partnr']"/> (<span t-esc="bank_sale_ret['cre_acc']"/>)
+                                                                 <span t-esc="bank_sale_ret['partnr']"/> (<span t-esc="bank_sale_ret['cre_acc']"/>)<br/>
+                                                                 <span t-esc="bank_sale_ret['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="bank_sale_ret['credit']"/>
@@ -996,7 +1006,8 @@
                                                     <t t-foreach="credit_online()" t-as="line">
                                                         <tr >
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                <span t-esc="line['name']"/>
+                                                                <span t-esc="line['name']"/><br/>
+                                                                <span t-esc="line['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
@@ -1019,7 +1030,8 @@
                                                     <t t-foreach="bank_credit_card" t-as="bank_creditcard">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                                <span t-esc="bank_creditcard['partnr']"/> (<span t-esc="bank_creditcard['cre_acc']"/>)
+                                                                <span t-esc="bank_creditcard['partnr']"/> (<span t-esc="bank_creditcard['cre_acc']"/>)<br/>
+                                                                <span t-esc="bank_creditcard['label']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="bank_creditcard['credit']"/>
@@ -1080,7 +1092,8 @@
                                                         <t t-foreach="bank_corporate" t-as="line">
                                                             <tr>
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                    <span t-esc="line['name']"/>
+                                                                    <span t-esc="line['name']"/><br/>
+                                                                    <span t-esc="line['label']"/>
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
@@ -1100,7 +1113,8 @@
                                                     <t t-foreach="bank_transfer" t-as="bank_trnsfer">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
-                                                               <span t-esc="bank_trnsfer['partnr']"/> (<span t-esc="bank_trnsfer['cre_acc']"/> )
+                                                               <span t-esc="bank_trnsfer['partnr']"/> (<span t-esc="bank_trnsfer['cre_acc']"/> )<br/>
+                                                               <span t-esc="bank_trnsfer['name']"/>
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="bank_trnsfer['credit']"/>
@@ -1161,7 +1175,8 @@
                                                         <t t-foreach="bank_oreceipt" t-as="line">
                                                             <tr>
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                    <span t-esc="line['name']"/>
+                                                                    <span t-esc="line['name']"/><br/>
+                                                                    <span t-esc="line['label']"/>
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
@@ -1182,7 +1197,8 @@
                                                         <t t-foreach="bank_oreceipt" t-as="line_hidden">
                                                             <tr>
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none; color:white;">
-                                                                    <span t-esc="line_hidden['name']"/>
+                                                                    <span t-esc="line_hidden['name']"/><br/>
+                                                                     <span t-esc="line_hidden['label']"/>
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black; color:white;">
                                                                     <span t-esc="line_hidden['debit']"/>
