@@ -12,21 +12,59 @@ class StockLandedCost(models.Model):
                 c_d = c_d + res.price_unit
             if res.product_id.is_other:
                 other = other + res.price_unit
-        print(c_d, other)
-        total_assessed = 0
-        total_fc = 0
+
         for rec in self.picking_ids:
-            for line in rec.purchase_id.order_line:
-                total_assessed = total_assessed + line.total_assessed_value
-                total_fc = total_fc + line.sub_total_fc
-        for deliv in self.picking_ids:
-            for i in deliv.purchase_id.order_line:
-                percent = (i.total_assessed_value/total_assessed)*100
-                percent_other = (i.sub_total_fc / total_fc) * 100
-                print(percent)
-                i.cust_duty = (percent * c_d) / 100
-                i.other_charges = (percent_other * other) / 100
+            if rec.purchase_ids:
+                for purchase in rec.purchase_ids:
+                    total_assessed = 0
+                    total_fc = 0
+                    for line in purchase.order_line:
+                        total_assessed = total_assessed + line.total_assessed_value
+                        total_fc = total_fc + line.sub_total_fc
+
+                    for i in purchase.order_line:
+                        percent = (i.total_assessed_value / total_assessed) * 100
+                        percent_other = (i.sub_total_fc / total_fc) * 100
+                        # print(percent)
+                        i.cust_duty = (percent * c_d) / 100
+                        i.other_charges = (percent_other * other) / 100
+
+                        unit = (i.unit_pricefc * purchase.fx_rate) + (i.cust_duty / i.product_qty) + (
+                                    i.other_charges / i.product_qty)
+
+                        # i.product_id.standard_price = unit
+            rec.lc_cost_origin = self.name
+
+        # for deliv in self.picking_ids:
+        #     for i in deliv.purchase_id.order_line:
+        #         percent = (i.total_assessed_value/total_assessed)*100
+        #         percent_other = (i.sub_total_fc / total_fc) * 100
+        #         print(percent)
+        #         i.cust_duty = (percent * c_d) / 100
+        #         i.other_charges = (percent_other * other) / 100
+
+        # for rec in self.picking_ids:
+        #     for line in rec.purchase_id.order_line:
+        #         total_assessed = total_assessed + line.total_assessed_value
+        #         total_fc = total_fc + line.sub_total_fc
+        # for deliv in self.picking_ids:
+        #     for i in deliv.purchase_id.order_line:
+        #         percent = (i.total_assessed_value/total_assessed)*100
+        #         percent_other = (i.sub_total_fc / total_fc) * 100
+        #         print(percent)
+        #         i.cust_duty = (percent * c_d) / 100
+        #         i.other_charges = (percent_other * other) / 100
         # print(total_fc, total_assessed)
+
+
+class StockPickingIn(models.Model):
+    _inherit = "stock.picking"
+
+    lc_cost_origin = fields.Char("LC Origin")
+
+    def get_lc(self):
+        lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])
+        return lc
 
 
 class ProductTemplateIn(models.Model):
