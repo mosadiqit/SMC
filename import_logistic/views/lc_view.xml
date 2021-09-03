@@ -2,10 +2,10 @@
 <odoo>
     <data>
 
-        <record id="view_stock_picking_form_inherit" model="ir.ui.view">
-            <field name="name">stock.picking.inh</field>
-            <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_form"/>
+        <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.inh</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="lc_cost_origin" invisible="1"/>

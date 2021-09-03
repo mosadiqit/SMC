@@ -33,7 +33,7 @@ class StockLandedCost(models.Model):
                                     i.other_charges / i.product_qty)
 
                         # i.product_id.standard_price = unit
-            rec.lc_cost_origin = self.name
+                    purchase.lc_cost_origin = self.name
 
         # for deliv in self.picking_ids:
         #     for i in deliv.purchase_id.order_line:
@@ -57,14 +57,14 @@ class StockLandedCost(models.Model):
         # print(total_fc, total_assessed)
 
 
-class StockPickingIn(models.Model):
-    _inherit = "stock.picking"
+# class StockPickingIn(models.Model):
+#     _inherit = "stock.picking"
+#
+#     lc_cost_origin = fields.Char("LC Origin")
 
-    lc_cost_origin = fields.Char("LC Origin")
-
-    def get_lc(self):
-        lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])
-        return lc
+    # def get_lc(self):
+    #     lc = self.env['stock.landed.cost'].search([('name', '=', self.picking_ids.lc_cost_origin)])
+    #     return lc
 
 
 class ProductTemplateIn(models.Model):
@@ -96,6 +96,12 @@ class PurchaseOrder(models.Model):
     lc_ref_no = fields.Char('Contract No.')
     bank_name = fields.Many2one('account.journal', string="Bank Name")
     condition = fields.Many2one('lc.condition', "Condition")
+
+    lc_cost_origin = fields.Char("LC Origin")
+
+    def get_lc(self):
+        lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])
+        return lc
 
     # end
 
