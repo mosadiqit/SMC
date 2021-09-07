@@ -4,6 +4,15 @@ from odoo import api, fields, models
 class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
 
+    def create_assess_history(self, assess, inv, line):
+         vals = {
+             'product_tmpl_id': line.product_id.product_tmpl_id.id,
+             'assess_val': assess,
+             'inv_val': inv,
+             'date': line.order_id.date_planned,
+         }
+         rec = self.env['product.assessed.line'].create(vals)
+
     def button_validate(self):
         c_d = 0
         other = 0
@@ -25,14 +34,14 @@ class StockLandedCost(models.Model):
                     for i in purchase.order_line:
                         percent = (i.total_assessed_value / total_assessed) * 100
                         percent_other = (i.sub_total_fc / total_fc) * 100
-                        # print(percent)
                         i.cust_duty = (percent * c_d) / 100
                         i.other_charges = (percent_other * other) / 100
 
                         unit = (i.unit_pricefc * purchase.fx_rate) + (i.cust_duty / i.product_qty) + (
                                     i.other_charges / i.product_qty)
 
-                        # i.product_id.standard_price = unit
+                        i.product_id.standard_price = unit
+                        self.create_assess_history(i.assessed_value, i.unit_pricefc, i)
                     purchase.lc_cost_origin = self.name
 
         # for deliv in self.picking_ids:
@@ -72,6 +81,18 @@ class ProductTemplateIn(models.Model):
 
     is_custom_duty = fields.Boolean("Custom Duty")
     is_other = fields.Boolean("Other")
+
+    assess_line = fields.One2many('product.assessed.line', 'product_tmpl_id')
+
+
+class ProductTemplateAssessedIn(models.Model):
+    _name = "product.assessed.line"
+    _order = "create_date desc"
+
+    product_tmpl_id = fields.Many2one('product.template')
+    assess_val = fields.Float('Assess Value')
+    inv_val = fields.Float('Invoice Value')
+    date = fields.Date('Date')
 
 
 class PurchaseOrder(models.Model):
@@ -171,6 +192,13 @@ class PurchaseOrderLine(models.Model):
     total_assessed_value = fields.Float('Total Assessed value')
     cust_duty = fields.Float("C.D")
     other_charges = fields.Float("Other Charges")
+
+    @api.onchange('product_id')
+    def onchange_get_assess_val(self):
+        for rec in self:
+            if rec.product_id.assess_line:
+                rec.assessed_value = rec.product_id.assess_line[0].assess_val
+                rec.unit_pricefc = rec.product_id.assess_line[0].inv_val
 
     @api.depends('product_qty', 'price_unit', 'taxes_id')
     def _compute_amount(self):

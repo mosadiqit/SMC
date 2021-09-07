@@ -35,6 +35,18 @@
                     <field name="is_other"/>
                 </xpath>
 
+                <xpath expr="//page[@name='general_information']" position="after">
+                    <page string="Assess Values">
+                    <field name="assess_line">
+                        <tree editable="bottom">
+                            <field name="date"/>
+                            <field name="assess_val"/>
+                            <field name="inv_val"/>
+                        </tree>
+                    </field>
+                    </page>
+                </xpath>
+
             </field>
         </record>
 
