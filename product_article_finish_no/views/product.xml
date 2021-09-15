@@ -119,7 +119,7 @@
 		<field name="model">product.template</field>
 		<field name="inherit_id" ref="product.product_template_search_view"/>
 		<field name="arch" type="xml">
-            <xpath expr="//filter[@name='filter_to_purchase']" position="after">
+            <xpath expr="//field[@name='name']" position="after">
                 <field name="article_no" string="Article No" filter_domain="[('article_no', 'ilike', self)]"/>
                 <field name="finish_no" string="Finish No" filter_domain="[('finish_no', 'ilike', self)]"/>
             </xpath>
