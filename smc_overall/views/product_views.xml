@@ -11,6 +11,17 @@
         </field>
     </record>
 
+     <record model="ir.ui.view" id="smc_quant_list">
+        <field name="name">smc_project_list</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='value']" position="attributes">
+                <attribute name="groups">smc_overall.group_show_cost_price</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="smc_product_product">
         <field name="name">smc_project_list</field>
         <field name="model">product.product</field>
