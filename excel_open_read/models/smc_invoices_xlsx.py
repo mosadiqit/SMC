@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+
+from os.path import dirname, abspath
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError, Warning
 import csv
@@ -12,16 +14,17 @@ class SMCInvoicesXLSX(models.Model):
     _inherit = 'account.move'
 
     def create_invoice_xlsx(self):
-        loc = ("excel_open_read/static/smc_invoice.xlsx")
+        # loc = ("/home/musadiqfiazch/odoo-14.0/SMC-UAT-Latest/excel_open_read/static/smc_invoice.xlsx")
+        loc = abspath(dirname(dirname(dirname(__file__)))) + '/excel_open_read/static/smc_invoice.xlsx'
         wb = xlrd.open_workbook(loc)
         sheet = wb.sheet_by_index(0)
+        m = 0
         i = 0
         for line in range(sheet.nrows):
             line_val = []
             i = i + 1
             if i != 1:
                 partner_records = self.env['res.partner'].search([('name', '=', sheet.row_values(line)[7])], limit=1)
-
                 product_records = self.env['product.product'].search([('id', '=',  int(sheet.row_values(line)[13]))])
                 uom_records = self.env['uom.uom'].search([('name', '=', sheet.row_values(line)[20])], limit=1)
                 branch_records = self.env['res.branch'].search([('name', '=', sheet.row_values(line)[1])], limit=1)
@@ -46,8 +49,9 @@ class SMCInvoicesXLSX(models.Model):
                         'company_id': self.env.company.id,
                         'invoice_line_ids': line_val
                     }
-                    record = self.env['account.move'].create(vals)
-                    print('Record Created', i)
+                    record = self.env['account.move'].sudo().create(vals)
+                    m = m + 1
+                    print("record is created. ", m)
                 else:
                     line_val.append((0, 0, {
                         'product_id': product_records.id,
@@ -55,5 +59,4 @@ class SMCInvoicesXLSX(models.Model):
                         'product_uom_id': uom_records.id,
                         'price_unit': sheet.row_values(line)[16],
                     }))
-                    record.update({'invoice_line_ids': line_val})
-                    print('Record Created', i)
+                    record.sudo().update({'invoice_line_ids': line_val})
