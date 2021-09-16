@@ -12,7 +12,7 @@ class SMCInvoicesXLSX(models.Model):
     _inherit = 'account.move'
 
     def create_invoice_xlsx(self):
-        loc = ("/home/musadiqfiazch/odoo-14.0/SMC-UAT-Latest/excel_open_read/static/smc_invoice.xlsx")
+        loc = ("SMC/excel_open_read/static/smc_invoice.xlsx")
         wb = xlrd.open_workbook(loc)
         sheet = wb.sheet_by_index(0)
         i = 0
