@@ -79,18 +79,20 @@ class StockPickingInh(models.Model):
             else:
                 rec.no_enough_amount = False
 
-
     def action_reserve_do(self):
         flag = 0
         for rec in self:
-            partner = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])
-            if partner:
-                if abs(partner.total_due) >= (rec.sale_id.amount_total/2):
-                    rec.action_assign()
-                    flag = 1
+            if rec.picking_type_id.code == 'outgoing':
+                partner = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])
+                if partner:
+                    if abs(partner.total_due) >= (rec.sale_id.amount_total/2):
+                        rec.action_assign()
+                        flag = 1
 
-            if flag == 0:
-                raise UserError('There is no enough Advance Payment available to Reserve this DO.')
+                if flag == 0:
+                    raise UserError('There is no enough Advance Payment available to Reserve this DO.')
+            else:
+                rec.action_assign()
 
     def action_manager_approval(self):
         self.state = 'ceo_approval'
