@@ -173,10 +173,12 @@ class PurchaseOrder(models.Model):
             line.lc_cost = ((total_lc / totalunit_pricefc) * line.unit_pricefc)
 
             if line.qty_received > 0:
-                line.price_unit = (line.lc_cost + line.sub_total_lp) / line.qty_received
+                # line.price_unit = (line.lc_cost + line.sub_total_lp) / line.qty_received
+                line.price_unit = line.product_id.list_price
 
             elif line.product_qty != 0:
-                line.price_unit = (line.lc_cost + line.sub_total_lp) / line.product_qty
+                # line.price_unit = (line.lc_cost + line.sub_total_lp) / line.product_qty
+                line.price_unit = line.product_id.list_price
 
 
 class PurchaseOrderLine(models.Model):
@@ -199,6 +201,7 @@ class PurchaseOrderLine(models.Model):
             if rec.product_id.assess_line:
                 rec.assessed_value = rec.product_id.assess_line[0].assess_val
                 rec.unit_pricefc = rec.product_id.assess_line[0].inv_val
+            # rec.price_unit = rec.product_id.standard_price
 
     @api.depends('product_qty', 'price_unit', 'taxes_id')
     def _compute_amount(self):
@@ -220,10 +223,12 @@ class PurchaseOrderLine(models.Model):
                 })
                 line.price_subtotal = line.lc_cost + line.sub_total_lp
                 if line.qty_received > 0:
-                    line.price_unit = line.price_subtotal / line.qty_received
+                    line.price_unit = line.product_id.list_price
+                    # line.price_unit = line.price_subtotal / line.qty_received
                 else:
                     if line.product_qty >0:
-                        line.price_unit = line.price_subtotal / line.product_qty
+                        line.price_unit = line.product_id.list_price
+                        # line.price_unit = line.price_subtotal / line.product_qty
 
                 line.price_subtotal = line.lc_cost + line.sub_total_lp
 

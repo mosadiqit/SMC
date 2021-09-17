@@ -3,7 +3,7 @@
   product_sequence for Odoo
   Copyright 2004 Tiny SPRL
   Copyright 2016 Sodexis
-  The licence is in the file __openerp__.py
+  The licence is in the file __manifest__.py
 -->
  <!-- noupdate="1" -->
 <odoo>
