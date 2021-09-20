@@ -62,6 +62,10 @@ class AccountMoveInh(models.Model):
     cus_so_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_invoice_link")
     qty_account_link = fields.Integer("Sale Order QTY", compute="_compute_the_invoice_link")
 
+    return_so_ref = fields.Char("Return SO Ref")
+    return_do_ref = fields.Char("Return DO Ref")
+    return_inv_ref = fields.Char("Return Inv Ref")
+
     def _compute_the_invoice_link(self):
         for i in self:
             obj = self.env["sale.order"].search([("client_order_ref", '=', i.account_link)],limit=1)
@@ -86,6 +90,10 @@ class StockPickingInh(models.Model):
 
     cus_do_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_do_link")
     qty_do_link = fields.Integer("SO QTY", compute="_compute_the_do_link")
+
+    return_so_ref = fields.Char("Return SO Ref")
+    return_do_ref = fields.Char("Return DO Ref")
+    return_inv_ref = fields.Char("Return Inv Ref")
 
     def _compute_the_do_link(self):
         for i in self:
