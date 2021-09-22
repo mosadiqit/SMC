@@ -48,7 +48,7 @@
         </field>
     </record>
 
-      <record model="ir.ui.view" id="product_product_form_inherited">
+<!--       <record model="ir.ui.view" id="product_product_form_inherited">
             <field name="name">product.product.tree.inh</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
@@ -58,9 +58,9 @@
                     <field name="available_qty"/>
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
-      <record model="ir.ui.view" id="product_template_form_inherited">
+<!--       <record model="ir.ui.view" id="product_template_form_inherited">
             <field name="name">product.template.tree.inh</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_tree_view"/>
@@ -70,7 +70,7 @@
                     <field name="available_qty"/>
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
     <record id="vpicktree_inherit_stock_picking_batch_custom_field" model="ir.ui.view">
         <field name="name">stock.picking.tree.custom</field>
@@ -85,7 +85,7 @@
 
 
 <!-- adding field in stock.quant tree view -->
-      <record id="stock_quant_tree_customfield" model="ir.ui.view">
+<!--       <record id="stock_quant_tree_customfield" model="ir.ui.view">
         <field name="name">stock.quant.tree.customlistview</field>
         <field name="model">stock.quant</field>
         <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
@@ -94,7 +94,7 @@
                 <field name="reserved_quantity" sum="Total"/>
             </xpath>
         </field>
-    </record>
+    </record> -->
 
   </data>
 </odoo>
