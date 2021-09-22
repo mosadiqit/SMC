@@ -16,7 +16,7 @@ class SaleOrderInh(models.Model):
     qty_do_link = fields.Integer("DO QTY")
 
     def _compute_the_do_link(self):
-        rec = self.env["sale.order"].search([("bol_do_linked",'=',False)])
+        rec = self.env["sale.order"].search([("bol_do_linked",'=',False)],limit=2000)
         for i in rec:
             obj = self.env["stock.picking"].search([("carrier_tracking_ref", '=', i.do_link)], limit=1)
             if obj:
@@ -35,7 +35,7 @@ class SaleOrderInh(models.Model):
         }
 
     def _compute_the_invoice_link(self):
-        rec = self.env["sale.order"].search([("bol_invoice_linked", '=', False)])
+        rec = self.env["sale.order"].search([("bol_invoice_linked", '=', False)],limit=2000)
         for i in rec:
             print(i.name)
             obj = self.env["account.move"].search([("ref", '=', i.invoice_link)],limit=1)
@@ -74,7 +74,7 @@ class AccountMoveInh(models.Model):
     bol_sale_order_linked = fields.Boolean("Sale Order Linked")
 
     def _compute_the_invoice_link(self):
-        rec = self.env["account.move"].search([("bol_sale_order_linked", '=', False)])
+        rec = self.env["account.move"].search([("bol_sale_order_linked", '=', False)],limit=2000)
         for i in rec:
             print(i.name)
             obj = self.env["sale.order"].search([("invoice_link", '=', i.ref)],limit=1)
