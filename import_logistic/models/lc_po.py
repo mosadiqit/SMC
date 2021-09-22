@@ -4,6 +4,15 @@ from odoo import api, fields, models
 class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
 
+    def create_assess_history(self, assess, inv, line):
+         vals = {
+             'product_tmpl_id': line.product_id.product_tmpl_id.id,
+             'assess_val': assess,
+             'inv_val': inv,
+             'date': line.order_id.date_planned,
+         }
+         rec = self.env['product.assessed.line'].create(vals)
+
     def button_validate(self):
         c_d = 0
         other = 0
@@ -25,15 +34,15 @@ class StockLandedCost(models.Model):
                     for i in purchase.order_line:
                         percent = (i.total_assessed_value / total_assessed) * 100
                         percent_other = (i.sub_total_fc / total_fc) * 100
-                        # print(percent)
                         i.cust_duty = (percent * c_d) / 100
                         i.other_charges = (percent_other * other) / 100
 
                         unit = (i.unit_pricefc * purchase.fx_rate) + (i.cust_duty / i.product_qty) + (
                                     i.other_charges / i.product_qty)
 
-                        # i.product_id.standard_price = unit
-            rec.lc_cost_origin = self.name
+                        i.product_id.standard_price = unit
+                        self.create_assess_history(i.assessed_value, i.unit_pricefc, i)
+                    purchase.lc_cost_origin = self.name
 
         # for deliv in self.picking_ids:
         #     for i in deliv.purchase_id.order_line:
@@ -57,14 +66,14 @@ class StockLandedCost(models.Model):
         # print(total_fc, total_assessed)
 
 
-class StockPickingIn(models.Model):
-    _inherit = "stock.picking"
+# class StockPickingIn(models.Model):
+#     _inherit = "stock.picking"
+#
+#     lc_cost_origin = fields.Char("LC Origin")
 
-    lc_cost_origin = fields.Char("LC Origin")
-
-    def get_lc(self):
-        lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])
-        return lc
+    # def get_lc(self):
+    #     lc = self.env['stock.landed.cost'].search([('name', '=', self.picking_ids.lc_cost_origin)])
+    #     return lc
 
 
 class ProductTemplateIn(models.Model):
@@ -72,6 +81,18 @@ class ProductTemplateIn(models.Model):
 
     is_custom_duty = fields.Boolean("Custom Duty")
     is_other = fields.Boolean("Other")
+
+    assess_line = fields.One2many('product.assessed.line', 'product_tmpl_id')
+
+
+class ProductTemplateAssessedIn(models.Model):
+    _name = "product.assessed.line"
+    _order = "create_date desc"
+
+    product_tmpl_id = fields.Many2one('product.template')
+    assess_val = fields.Float('Assess Value')
+    inv_val = fields.Float('Invoice Value')
+    date = fields.Date('Date')
 
 
 class PurchaseOrder(models.Model):
@@ -96,6 +117,12 @@ class PurchaseOrder(models.Model):
     lc_ref_no = fields.Char('Contract No.')
     bank_name = fields.Many2one('account.journal', string="Bank Name")
     condition = fields.Many2one('lc.condition', "Condition")
+
+    lc_cost_origin = fields.Char("LC Origin")
+
+    def get_lc(self):
+        lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])
+        return lc
 
     # end
 
@@ -146,10 +173,12 @@ class PurchaseOrder(models.Model):
             line.lc_cost = ((total_lc / totalunit_pricefc) * line.unit_pricefc)
 
             if line.qty_received > 0:
-                line.price_unit = (line.lc_cost + line.sub_total_lp) / line.qty_received
+                # line.price_unit = (line.lc_cost + line.sub_total_lp) / line.qty_received
+                line.price_unit = line.product_id.list_price
 
             elif line.product_qty != 0:
-                line.price_unit = (line.lc_cost + line.sub_total_lp) / line.product_qty
+                # line.price_unit = (line.lc_cost + line.sub_total_lp) / line.product_qty
+                line.price_unit = line.product_id.list_price
 
 
 class PurchaseOrderLine(models.Model):
@@ -165,6 +194,14 @@ class PurchaseOrderLine(models.Model):
     total_assessed_value = fields.Float('Total Assessed value')
     cust_duty = fields.Float("C.D")
     other_charges = fields.Float("Other Charges")
+
+    @api.onchange('product_id')
+    def onchange_get_assess_val(self):
+        for rec in self:
+            if rec.product_id.assess_line:
+                rec.assessed_value = rec.product_id.assess_line[0].assess_val
+                rec.unit_pricefc = rec.product_id.assess_line[0].inv_val
+            # rec.price_unit = rec.product_id.standard_price
 
     @api.depends('product_qty', 'price_unit', 'taxes_id')
     def _compute_amount(self):
@@ -186,10 +223,12 @@ class PurchaseOrderLine(models.Model):
                 })
                 line.price_subtotal = line.lc_cost + line.sub_total_lp
                 if line.qty_received > 0:
-                    line.price_unit = line.price_subtotal / line.qty_received
+                    line.price_unit = line.product_id.list_price
+                    # line.price_unit = line.price_subtotal / line.qty_received
                 else:
                     if line.product_qty >0:
-                        line.price_unit = line.price_subtotal / line.product_qty
+                        line.price_unit = line.product_id.list_price
+                        # line.price_unit = line.price_subtotal / line.product_qty
 
                 line.price_subtotal = line.lc_cost + line.sub_total_lp
 
