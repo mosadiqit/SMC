@@ -73,7 +73,6 @@ class product_templ_inherit_stock(models.Model):
     reserved_qty1 = fields.Float(string="reserved quantss", related="stock_id.reserved_quantity")
     available_qty = fields.Float('Availbale Quantity', compute="cal_available_qty")
 
-
     def cal_available_qty(self):
         for rec in self:
             total = 0
