@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+
+
+    <record id="action_server_create_transfer" model="ir.actions.server">
+      <field name="name">Create Transfer</field>
+      <field name="type">ir.actions.server</field>
+      <field name="binding_model_id" ref="model_stock_picking"/>
+      <field name="model_id" ref="model_stock_picking"/>
+      <field name="state">code</field>
+      <field name="code"> if records: records.create_stock_picking() </field>
+    </record>
+
+  </data>
+</odoo>
