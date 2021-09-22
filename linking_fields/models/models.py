@@ -15,25 +15,28 @@ class SaleOrderInh(models.Model):
     qty_do_link = fields.Integer("DO QTY")
 
     def _compute_the_do_link(self):
-        for i in self:
-            obj = self.env["stock.picking"].search([("stock_link", '=', i.client_order_ref)], limit=1)
-            print(obj.stock_link)
+        rec = self.env["sale.order"].search([])
+        count=0
+        for i in rec:
+            obj = self.env["stock.picking"].search([("carrier_tracking_ref", '=', i.do_link)], limit=1)
             i.cus_do_link = obj.id
-            i.qty_do_link = len(self.env["stock.picking"].search([("stock_link", '=', i.client_order_ref)]))
+            i.qty_do_link = len(self.env["stock.picking"].search([("carrier_tracking_ref", '=', i.do_link)]))
 
     def smart_delivery_button(self):
         return {
             'name': _('Picking'),
             'view_mode': 'tree,form',
             'res_model': 'stock.picking',
-            'domain': [('stock_link', '=', self.client_order_ref)],
+            'domain': [('carrier_tracking_ref', '=', self.do_link)],
             'type': 'ir.actions.act_window',
         }
 
     def _compute_the_invoice_link(self):
-        for i in self:
-            obj = self.env["account.move"].search([("account_link", '=', i.client_order_ref)],limit=1)
-            i.qty_invoice_link=len(self.env["account.move"].search([("account_link", '=', i.client_order_ref)]))
+        rec = self.env["sale.order"].search([])
+        for i in rec:
+            obj = self.env["account.move"].search([("ref", '=', i.name)],limit=1)
+            print(obj)
+            i.qty_invoice_link=len(self.env["account.move"].search([("ref", '=', i.name)]))
             i.cus_invoice_link = obj.id
 
     def smart_invoice_button(self):
@@ -41,7 +44,7 @@ class SaleOrderInh(models.Model):
             'name': _('Invoices'),
             'view_mode': 'tree,form',
             'res_model': 'account.move',
-            'domain': [('account_link', '=', self.client_order_ref)],
+            'domain': [('ref', '=', self.name)],
             'type': 'ir.actions.act_window',
         }
 
@@ -64,16 +67,16 @@ class AccountMoveInh(models.Model):
 
     def _compute_the_invoice_link(self):
         for i in self:
-            obj = self.env["sale.order"].search([("client_order_ref", '=', i.account_link)],limit=1)
+            obj = self.env["sale.order"].search([("name", '=', i.ref)],limit=1)
             i.cus_so_link = obj.id
-            i.qty_account_link=len(self.env["sale.order"].search([("client_order_ref", '=', i.account_link)]))
+            i.qty_account_link=len(self.env["sale.order"].search([("name", '=', i.ref)]))
 
     def smart_sale_order_button(self):
         return {
             'name': _('Sale order'),
             'view_mode': 'tree,form',
             'res_model': 'sale.order',
-            'domain': [('client_order_ref', '=', self.account_link)],
+            'domain': [('name', '=', self.ref)],
             'type': 'ir.actions.act_window',
         }
 
@@ -89,9 +92,9 @@ class StockPickingInh(models.Model):
 
     def _compute_the_do_link(self):
         for i in self:
-            obj = self.env["sale.order"].search([("client_order_ref", '=', i.stock_link)], limit=1)
+            obj = self.env["sale.order"].search([("do_link", '=', i.carrier_tracking_ref)], limit=1)
             i.cus_do_link = obj.id
-            i.qty_do_link = len(self.env["sale.order"].search([("client_order_ref", '=', i.stock_link)]))
+            i.qty_do_link = len(self.env["sale.order"].search([("do_link", '=', i.carrier_tracking_ref)]))
 
 
 class AccountPaymentInh(models.Model):
