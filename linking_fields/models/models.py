@@ -8,11 +8,11 @@ class SaleOrderInh(models.Model):
 
     do_link = fields.Char()
     invoice_link = fields.Char("Invoice link")
-    cus_invoice_link = fields.Many2one("account.move", "Sale Order", compute="_compute_the_invoice_link")
-    qty_invoice_link = fields.Integer("Sale Order QTY", compute="_compute_the_invoice_link")
+    cus_invoice_link = fields.Many2one("account.move", "Sale Order")
+    qty_invoice_link = fields.Integer("Sale Order QTY")
 
-    cus_do_link = fields.Many2one("stock.picking", "Stock Picking", compute="_compute_the_do_link")
-    qty_do_link = fields.Integer("DO QTY", compute="_compute_the_do_link")
+    cus_do_link = fields.Many2one("stock.picking", "Stock Picking")
+    qty_do_link = fields.Integer("DO QTY")
 
     def _compute_the_do_link(self):
         for i in self:
@@ -59,8 +59,8 @@ class AccountMoveInh(models.Model):
 
     account_link = fields.Char()
     purchase_link = fields.Char("Purchase Order")
-    cus_so_link = fields.Many2one("sale.order", "Sale Order",compute="_compute_the_invoice_link")
-    qty_account_link = fields.Integer("Sale Order QTY",compute="_compute_the_invoice_link")
+    cus_so_link = fields.Many2one("sale.order", "Sale Order")
+    qty_account_link = fields.Integer("Sale Order QTY")
 
     def _compute_the_invoice_link(self):
         for i in self:
@@ -84,8 +84,8 @@ class StockPickingInh(models.Model):
     stock_link = fields.Char()
     purchase_link = fields.Char("Purchase Order")
 
-    cus_do_link = fields.Many2one("sale.order", "Sale Order", compute="_compute_the_do_link")
-    qty_do_link = fields.Integer("SO QTY", compute="_compute_the_do_link")
+    cus_do_link = fields.Many2one("sale.order", "Sale Order")
+    qty_do_link = fields.Integer("SO QTY")
 
     def _compute_the_do_link(self):
         for i in self:
