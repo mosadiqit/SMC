@@ -9,6 +9,7 @@ class AccountMove(models.Model):
     return_so_ref = fields.Char("Return SO Ref")
     return_do_ref = fields.Char("Return DO Ref")
     return_inv_ref = fields.Char("Return Inv Ref")
+    return_date = fields.Date("Return Date")
 
 
 class StockPickingInh(models.Model):
@@ -17,4 +18,5 @@ class StockPickingInh(models.Model):
     return_so_ref = fields.Char("Return SO Ref")
     return_do_ref = fields.Char("Return DO Ref")
     return_inv_ref = fields.Char("Return Inv Ref")
+    return_date = fields.Date("Return Date")
 

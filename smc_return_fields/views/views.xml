@@ -10,6 +10,7 @@
                 <field name="return_so_ref"/>
                 <field name="return_do_ref"/>
                 <field name="return_inv_ref"/>
+                  <field name="return_date"/>
             </xpath>
 
         </field>
@@ -26,6 +27,7 @@
                 <field name="return_so_ref"/>
                 <field name="return_do_ref"/>
                 <field name="return_inv_ref"/>
+                <field name="return_date"/>
 
             </xpath>
         </field>
