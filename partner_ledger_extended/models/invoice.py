@@ -23,7 +23,7 @@ class ReportPartnerLedger(models.AbstractModel):
             {'name': _('Debit'), 'class': 'number'},
             {'name': _('Credit'), 'class': 'number'}]
 
-        if self.user_has_groups('base.group_no_one"'):
+        if self.user_has_groups('base.group_no_one'):
             columns.append({'name': _('Amount Currency'), 'class': 'number'})
 
         columns.append({'name': _('Balance'), 'class': 'number'})
@@ -50,7 +50,7 @@ class ReportPartnerLedger(models.AbstractModel):
             {'name': self.format_value(aml['debit'], blank_if_zero=True), 'class': 'number'},
             {'name': self.format_value(aml['credit'], blank_if_zero=True), 'class': 'number'},
         ]
-        if self.user_has_groups('base.group_no_one"'):
+        if self.user_has_groups('base.group_no_one'):
             if aml['currency_id']:
                 currency = self.env['res.currency'].browse(aml['currency_id'])
                 formatted_amount = self.format_value(aml['amount_currency'], currency=currency, blank_if_zero=True)
