@@ -67,10 +67,6 @@
 					<field name="purchase_link"/> 
 					<field name="cus_so_link"/>
 
-					<field name="return_so_ref"/>
-					<field name="return_do_ref"/>
-					<field name="return_inv_ref"/>
-
 				</xpath>
 			</field>
 		</record>
@@ -97,11 +93,7 @@
 				<xpath expr="//field[@name='user_id']" position="after">
 					<field name="stock_link"/>
 					<field name="cus_do_link"/>
-					<field name="purchase_link"/>
-
-					<field name="return_so_ref"/>
-					<field name="return_do_ref"/>
-					<field name="return_inv_ref"/>
+	<field name="purchase_link"/> 
 				</xpath>
 
 			</field>
