@@ -6,7 +6,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.product</field>
         <field name="view_mode">tree,form,kanban</field>
-        <field name="limit">1</field>
+        <field name="limit">20</field>
         <field name="search_view_id" ref="stock.stock_product_search_form_view"/>
     </record>
 
@@ -15,7 +15,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.template</field>
         <field name="view_mode">tree,kanban,form</field>
-        <field name="limit">1</field>
+        <field name="limit">20</field>
         <field name="search_view_id" ref="stock.product_template_search_form_view_stock"/>
         <field name="context">{"search_default_consumable": 1, 'default_type': 'product'}</field>
         <field name="help" type="html">
@@ -27,50 +27,50 @@
         </field>
     </record>
 
-<!--     <record id="view_product_template_stock_do" model="ir.ui.view">
-        <field name="name">product.template.stock.view.custom</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view"/>
-        <field name="arch" type="xml">
-          <div name="button_box" position="inside">
-                <button type="object"
-                        name="action_open_quants_do"
-                        attrs="{'invisible':[('type', '!=', 'product')]}"
-                        class="oe_stat_button" icon="fa-cubes">
-                    <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value" widget="statinfo">
-                                    <field name="reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>
-                                </span>
-                        <span class="o_stat_text">Reserved quantity</span>
-                    </div>
-                </button>
-            </div>
-        </field>
-    </record> -->
+<!--    <record id="view_product_template_stock_do" model="ir.ui.view">-->
+<!--        <field name="name">product.template.stock.view.custom</field>-->
+<!--        <field name="model">product.template</field>-->
+<!--        <field name="inherit_id" ref="product.product_template_form_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--          <div name="button_box" position="inside">-->
+<!--                <button type="object"-->
+<!--                        name="action_open_quants_do"-->
+<!--                        attrs="{'invisible':[('type', '!=', 'product')]}"-->
+<!--                        class="oe_stat_button" icon="fa-cubes">-->
+<!--                    <div class="o_field_widget o_stat_info">-->
+<!--                                <span class="o_stat_value" widget="statinfo">-->
+<!--                                    <field name="reserved_qty" widget="statinfo" nolabel="1" class="mr4"/>-->
+<!--                                </span>-->
+<!--                        <span class="o_stat_text">Reserved quantity</span>-->
+<!--                    </div>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </field>-->
+<!--    </record>-->
 
-<!--       <record model="ir.ui.view" id="product_product_form_inherited">
-            <field name="name">product.product.tree.inh</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_product_tree_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='qty_available']" position="after">
-                    <field name="reserved_qty"/>
-                    <field name="available_qty"/>
-                </xpath>
-            </field>
-        </record> -->
+<!--      <record model="ir.ui.view" id="product_product_form_inherited">-->
+<!--            <field name="name">product.product.tree.inh</field>-->
+<!--            <field name="model">product.product</field>-->
+<!--            <field name="inherit_id" ref="product.product_product_tree_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='qty_available']" position="after">-->
+<!--                    <field name="reserved_qty"/>-->
+<!--                    <field name="qty_available"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
 
-<!--       <record model="ir.ui.view" id="product_template_form_inherited">
-            <field name="name">product.template.tree.inh</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_tree_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='qty_available']" position="after">
-                    <field name="reserved_qty"/>
-                    <field name="available_qty"/>
-                </xpath>
-            </field>
-        </record> -->
+<!--      <record model="ir.ui.view" id="product_template_form_inherited">-->
+<!--            <field name="name">product.template.tree.inh</field>-->
+<!--            <field name="model">product.template</field>-->
+<!--            <field name="inherit_id" ref="product.product_template_tree_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='qty_available']" position="after">-->
+<!--                    <field name="reserved_qty"/>-->
+<!--&lt;!&ndash;                    <field name="qty_available"/>&ndash;&gt;-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
 
     <record id="vpicktree_inherit_stock_picking_batch_custom_field" model="ir.ui.view">
         <field name="name">stock.picking.tree.custom</field>
@@ -85,16 +85,16 @@
 
 
 <!-- adding field in stock.quant tree view -->
-<!--       <record id="stock_quant_tree_customfield" model="ir.ui.view">
-        <field name="name">stock.quant.tree.customlistview</field>
-        <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>
-        <field name="arch" type="xml">
-            <xpath expr="//tree/field[@name='inventory_quantity']" position="after">
-                <field name="reserved_quantity" sum="Total"/>
-            </xpath>
-        </field>
-    </record> -->
+<!--      <record id="stock_quant_tree_customfield" model="ir.ui.view">-->
+<!--        <field name="name">stock.quant.tree.customlistview</field>-->
+<!--        <field name="model">stock.quant</field>-->
+<!--        <field name="inherit_id" ref="stock.view_stock_quant_tree_editable"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//tree/field[@name='inventory_quantity']" position="after">-->
+<!--                <field name="reserved_quantity" sum="Total"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
   </data>
 </odoo>
