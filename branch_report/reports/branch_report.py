@@ -201,9 +201,9 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                         acc_wise_bal_lst.append({
                             'partner_id': rec.partner_id.id,
                             'account_id' : cb_acnt.id,
-                            'acc_partner_name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + cb_acnt.name + ']',
-                            'acc_name': cb_acnt.name,
-                            'debit': dbt
+                            'acc_partner_name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + cb_acnt.name + ']'
+#                             'acc_name': cb_acnt.name,
+#                             'debit': dbt
                         })
                 # ac_total_debit=self.calc_total_dbt_crd(acc_data,True)
                 # acc_wise_bal_lst.append({
