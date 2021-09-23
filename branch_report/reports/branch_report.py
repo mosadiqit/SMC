@@ -125,11 +125,11 @@ class ReportAccountHashIntegrity(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         date_from = data['form']['date_from']
         date_to = data['form']['date_to']
-        selected_id = data['form']['branch'][-3]
         print("Data", data)
         # c = selected_id[0]
         model = self.env.context.get('active_model')
         docs = self.env[model].browse(self.env.context.get('active_id'))
+        selected_id = docs.branch.id
         all_val = self.env['account.payment'].search([])
         c = []
 
