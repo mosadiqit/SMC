@@ -9,6 +9,7 @@ class SaleOrderInh(models.Model):
 
     payment_count = fields.Integer(compute='compute_payments')
 
+    @api.depends('name')
     def compute_payments(self):
         for rec in self:
             count = self.env['account.payment'].search_count([('ref', '=', rec.name)])
@@ -68,6 +69,7 @@ class StockPickingInh(models.Model):
              " * Cancelled: The transfer has been cancelled.")
     no_enough_amount = fields.Boolean(default=False, compute='compute_payment')
 
+    @api.depends('sale_id.amount_total')
     def compute_payment(self):
         for rec in self:
             partner = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])

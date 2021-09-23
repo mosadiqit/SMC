@@ -1,4 +1,4 @@
-<odoo>
+ <odoo>
     <data>
         <!--Tree View Dashboard Items-->
         <record model="ir.ui.view" id="ks_dashboard_ninja.item">
@@ -106,12 +106,10 @@
                     <group attrs="{'invisible':[('ks_dashboard_item_type','!=','ks_tile'),('ks_dashboard_item_type','!=','ks_kpi')]}"
                            class="ks_qe_form_view_group">
                         <field name="ks_record_count_type"
-                               attrs="{'invisible':[('ks_model_id','=',False)],
-                                       'required':[('ks_model_id','!=',False),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
+                               attrs="{'required':[('ks_model_id','!=',False),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
                         <field name="ks_record_field" placeholder="Record Field..."
                                options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"
-                               attrs="{'invisible':['|',('ks_record_count_type','=','count')],
-                                       'required':[('ks_record_count_type','!=','count'),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
+                               attrs="{'required':[('ks_record_count_type','!=','count'),'|',('ks_dashboard_item_type','=','ks_tile'),('ks_dashboard_item_type','=','ks_kpi')]}"/>
                         <field name="ks_record_count" placeholder="Count..."
                                string="Record Value"/>
                         <field name="ks_layout" placeholder="Layout..."

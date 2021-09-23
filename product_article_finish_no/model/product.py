@@ -12,7 +12,6 @@ class ProductProduct(models.Model):
             res.append((rec.id, '%s : %s : %s' % (rec.name, rec.article_no, rec.finish_no)))
         return res
 
-
     @api.model
     def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
         if not args:
@@ -68,10 +67,8 @@ class ProductTemplate(models.Model):
     rft_box = fields.Float('RFT/BOX')
 
 
-
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    _description = 'saleorder.customization'
 
     address = fields.Char("Address", related="partner_id.street")
     mobile_no = fields.Char("Mobile No", related="partner_id.mobile")
@@ -82,15 +79,13 @@ class SaleOrder(models.Model):
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-    _description = 'saleorder.customization'
 
     article_no = fields.Char("Article#", related="product_id.article_no")
     finish_no = fields.Char("Finish", related="product_id.finish_no")
-    total_sqm = fields.Float(string="Total Box", compute="_compute_product_uom_qty")
-    total_pcs = fields.Float(string="Total Pcs", compute="_compute_product_uom_qty")
+    total_sqm = fields.Float(string="Total Box")
+    total_pcs = fields.Float(string="Total Pcs")
 
-    @api.depends('product_uom_qty')
+    @api.onchange('product_uom_qty')
     def _compute_product_uom_qty(self):
-        for i in self:
-                i.total_sqm = i.product_uom_qty / (i.product_id.sqm_box or 1)
-                i.total_pcs = i.total_sqm * i.product_id.pcs_box
+        self.total_sqm = self.product_uom_qty / (self.product_id.sqm_box or 1)
+        self.total_pcs = self.total_sqm * self.product_id.pcs_box

@@ -10,8 +10,9 @@ from lxml import etree
 class SMC(models.Model):
     _inherit = 'product.template'
 
-    sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand")
+    sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand", store=True)
 
+    @api.depends('qty_available', 'purchase_ok')
     def _compute_on_hand(self):
         for i in self:
             if i.type == 'product':
@@ -164,7 +165,7 @@ class SaleOrder(models.Model):
         ('cancel', 'Cancelled'),
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
 
-    max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0)
+    max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0, store=True)
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
 
@@ -194,19 +195,17 @@ class SaleOrder(models.Model):
 
         return super(SaleOrder, self).action_confirm()
 
-    @api.onchange("order_line.discount")
+    @api.depends("order_line.discount")
     def compute_max_disccount(self):
-        record = self.env['sale.order'].search([])
-        for i in record:
+        # record = self.env['sale.order'].search([])
+        for i in self:
             maximum = []
             diss = 0.0
             for rec in i.order_line:
                 maximum.append(rec.discount)
             if maximum:
                 diss = max(maximum)
-                i.max_discount = diss
-            else:
-                i.max_discount = 0
+            i.max_discount = diss
 
 
 class users_inherit(models.Model):
@@ -234,6 +233,7 @@ class StockPicking(models.Model):
     #         report.unlink_action()
     #     return result
 
+    @api.depends('sale_id', 'purchase_id')
     def compute_show_origin(self):
         for rec in self:
             if rec.purchase_id:
