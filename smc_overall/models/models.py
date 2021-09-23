@@ -53,7 +53,7 @@ class ResPartnerInh(models.Model):
     #     for rec in self:
     #         res.append((rec.id, '%s : %s : %s' % (rec.customer_code, rec.name, str(rec.total_due))))
     #     return res
-    #
+
     @api.model
     def create(self, vals):
         if vals.get('customer_code', _('New')) == _('New'):
