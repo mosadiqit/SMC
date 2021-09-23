@@ -21,7 +21,7 @@ class ProductTemplateInh(models.Model):
     _inherit = 'product.template'
 
     def remove_duplicate_products(self):
-        all = self.env['product.template'].search([])
+        all = self.env['product.template'].search([("active","=",True)],limit=500)
         for i in all:
            i.active=False
 
