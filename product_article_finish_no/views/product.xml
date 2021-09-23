@@ -120,7 +120,7 @@
 		<field name="model">product.template</field>
 		<field name="inherit_id" ref="product.product_template_search_view"/>
 		<field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <xpath expr="//field[@name='name']" position="before">
                 <field name="article_no" string="Article No" filter_domain="[('article_no', 'ilike', self)]"/>
                 <field name="finish_no" string="Finish No" filter_domain="[('finish_no', 'ilike', self)]"/>
             </xpath>
@@ -145,7 +145,7 @@
 		<field name="model">purchase.order</field>
 		<field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
 		<field name="arch" type="xml">
-            <xpath expr="//filter[@name='activities_overdue']" position="after">
+            <xpath expr="//field[@name='name']" position="before">
                 <field name="order_line" string="Article No" filter_domain="[('order_line.product_id.article_no', 'ilike', self)]"/>
                 <field name="order_line" string="Finish No" filter_domain="[('order_line.product_id.finish_no', 'ilike', self)]"/>
             </xpath>
