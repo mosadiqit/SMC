@@ -99,6 +99,7 @@
                     <field name="address" />
                     <field name="mobile_no" />
                     <field name="email_id" />
+                    <field name="comments" />
                 </field>
                 <field name="payment_term_id" position="after">
                     <field name="architect" />
@@ -107,8 +108,8 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
                     <field name="article_no" />
                     <field name="finish_no" />
-                    <field name="total_sqm"/>
-                    <field name="total_pcs"/>
+                    <field name="total_sqm" force_save="1" readonly="1"/>
+                    <field name="total_pcs" force_save="1" readonly="1"/>
                 </xpath>
             </field>
         </record>

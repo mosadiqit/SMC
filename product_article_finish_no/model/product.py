@@ -75,6 +75,7 @@ class SaleOrder(models.Model):
     email_id = fields.Char(string="Email Id", related="partner_id.email")
     architect = fields.Char(string="Architect")
     project_description = fields.Text("Project Description")
+    comments = fields.Char("Comments")
 
 
 class SaleOrderLine(models.Model):
