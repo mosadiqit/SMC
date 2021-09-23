@@ -206,8 +206,7 @@
 
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
-                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]&#160;&#160;(<span t-esc="acc_crdt['partner']"/>)<br/>
-                                                                <span t-esc="acc_crdt['label']"/>
+                                                                <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <!--                                                            <span t-esc="val3['debit']"/>-->
