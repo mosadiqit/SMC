@@ -183,7 +183,7 @@
                                                         <tr>
                                                             <td class="text-left pl-2" width="65.8%" style="border: 1px solid black; font-size:15.8px;">
                                                                 <span t-esc="ac_dbt['partner_journal']" /><br/>
-                                                                <span t-esc="ac_dbt['label']" />
+                                                                <!-- <span t-esc="ac_dbt['label']" /> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="33.2%" style="border: 1px solid black;">
                                                                 <span t-esc="ac_dbt['debit']"/>
@@ -358,7 +358,7 @@
                                                             <tr style="">
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black; user-select:none;  -moz-user-select:none;">
                                                                     <span t-esc="line['name']"/><br/>
-                                                                    <span t-esc="line['label']"/>
+                                                                    <!-- <span t-esc="line['label']"/> -->
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="line['debit']"/>
@@ -380,7 +380,7 @@
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 (dbt:<span t-esc="val1['debit_acc']"/>)&#160;<span t-esc="val1['partnr']"/>&#160;[<span t-esc="val1['cre_acc']"/>]<br/>
-                                                                <span t-esc="val1['label']"/>
+                                                                <!-- <span t-esc="val1['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="val1['credit']"/>
@@ -591,7 +591,7 @@
                                                             <tr>
                                                                 <td class="pl-2" width="66.9%" style="border: 1px solid black;">
                                                                     <span t-esc="o_receipt['name']"/><br/>
-                                                                    <span t-esc="o_receipt['label']"/>
+                                                                    <!-- <span t-esc="o_receipt['label']"/> -->
                                                                 </td>
                                                                 <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                     <span t-esc="o_receipt['debit']"/>
@@ -613,7 +613,7 @@
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 <span t-esc="val4['partnr']"/> &#160;[<span t-esc="val4['cre_acc']"/>]<br/>
-                                                                <span t-esc="val4['label']"/>
+                                                                <!-- <span t-esc="val4['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="val4['credit']"/>
@@ -673,7 +673,7 @@
                                                         <tr style="user-select:none;  -moz-user-select:none;">
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; user-select:none;  -moz-user-select:none;">
                                                                 (dbt:<span t-esc="cash_transfer['debit_acc']"/>)&#160;[<span t-esc="cash_transfer['cre_acc']"/>]<br/>
-                                                                <span t-esc="cash_transfer['label']"/>
+                                                                <!-- <span t-esc="cash_transfer['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span>&#160;</span>
@@ -916,7 +916,7 @@
                                                         <tr >
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
                                                                 <span t-esc="line['name']"/><br/>
-                                                                <span t-esc="line['label']"/>
+                                                                <!-- <span t-esc="line['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>
@@ -1006,7 +1006,7 @@
                                                         <tr >
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black;">
                                                                 <span t-esc="line['name']"/><br/>
-                                                                <span t-esc="line['label']"/>
+                                                                <!-- <span t-esc="line['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <t t-set="total_bank_debit" t-value="total_bank_debit + int(line['debit'])"/>

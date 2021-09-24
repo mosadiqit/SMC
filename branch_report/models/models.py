@@ -21,19 +21,35 @@ class BrachReport(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals['other_receipt'] or vals['corporate_sale'] or vals['online_credit_payment'] or vals['cheques_payment']:
-            return super(BrachReport, self).create(vals)
-        else:
-            raise UserError('Must Select at least One Option')
-
+#         if vals['other_receipt'] or vals['corporate_sale'] or vals['online_credit_payment'] or vals['cheques_payment']:
+        return super(BrachReport, self).create(vals)
+#         else:
+#             raise UserError('Must Select at least One Option')
+#     
+    
+    @api.onchange('journal_id')
+    def _onchange_journal_type(self):
+        s=''
+        if self.journal_id:
+            if self.journal_id.type == 'cash':
+                if self.cheques_payment == True:
+                    self.cheques_payment = False
+               
+                if self.online_credit_payment == True:
+                    self.online_credit_payment = False
+    
+    
+    
+    
+    
     @api.onchange('cheques_payment')
     def onchange_cheque_only(self):
         if self.cheques_payment:
             if self.journal_id.type == 'cash':
                 self.online_credit_payment = False
             if self.journal_id.type == 'bank':
-                self.other_receipt = False
-                self.corporate_sale = False
+#                 self.other_receipt = False
+#                 self.corporate_sale = False
                 self.online_credit_payment = False
 
     @api.onchange('online_credit_payment')
@@ -42,9 +58,9 @@ class BrachReport(models.Model):
             if self.journal_id.type == 'cash':
                 self.cheques_payment = False
             if self.journal_id.type == 'bank':
-                self.other_receipt = False
+#                 self.other_receipt = False
                 self.cheques_payment = False
-                self.corporate_sale = False
+#                 self.corporate_sale = False
 
     @api.onchange('corporate_sale')
     def corporate_only(self):
@@ -53,8 +69,8 @@ class BrachReport(models.Model):
                 self.other_receipt = False
             if self.journal_id.type == 'bank':
                 self.other_receipt = False
-                self.cheques_payment = False
-                self.online_credit_payment = False
+#                 self.cheques_payment = False
+#                 self.online_credit_payment = False
 
     @api.onchange('other_receipt')
     def otherReceipt_only(self):
@@ -63,8 +79,8 @@ class BrachReport(models.Model):
                 self.corporate_sale = False
             if self.journal_id.type == 'bank':
                 self.corporate_sale = False
-                self.cheques_payment = False
-                self.online_credit_payment = False
+#                 self.cheques_payment = False
+#                 self.online_credit_payment = False
 
     @api.onchange('partner_id')
     def curr_note_check(self):
