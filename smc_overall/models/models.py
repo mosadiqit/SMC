@@ -53,13 +53,13 @@ class ResPartnerInh(models.Model):
     #     for rec in self:
     #         res.append((rec.id, '%s : %s : %s' % (rec.customer_code, rec.name, str(rec.total_due))))
     #     return res
-    #
+
     @api.model
     def create(self, vals):
         if vals.get('customer_code', _('New')) == _('New'):
             vals['customer_code'] = self.env['ir.sequence'].next_by_code('res.partner.sequence') or _('New')
         branch = self.env['res.branch'].browse([vals.get('branch_id')])
-        vals['customer_code'] = str(1) + '-' + str(self.env.user.agent_code) + '-' + str(branch.branch_code) + vals['customer_code']
+        vals['customer_code'] = str(1) + '-' + str(self.env.user.agent_code) + '-' + str(branch.branch_code)
         result = super(ResPartnerInh, self).create(vals)
         return result
 
