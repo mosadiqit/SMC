@@ -161,6 +161,20 @@
 
                             <t t-set="empty_lines" t-value="len(acc_debits) -len(acc_credits)" />
                             <table width="100%" style="margin-left: -15px;">
+                            
+                                 <t t-set="right_side" t-value="acc_credits"/>
+                                 <t t-set="left_side"   t-value="acc_debits"/>
+                                 <t t-if="len(left_side) > len(right_side) " > 
+                                       <t t-set="report_right_blank" t-value="len(left_side) - len(right_side) "/>
+                                 </t>
+                                 
+                                  <t t-if="len(right_side) > len(left_side) " > 
+                                       <t t-set="report_left_blank" t-value="len(right_side) - len(left_side)"/>
+                                 </t>
+                            
+                            
+                            
+                            
                                 <tbody>
                                     <tr>
                                         <td width="50%">
@@ -193,6 +207,39 @@
                                                         <t t-set="total_receipt" t-value="(total_receipt + ac_dbt['debit'])"/>
                                                         <!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
                                                     </t>
+                                                    <!-- test case for blank line in retail sale section -->
+                                                    <!-- <t t-set="break_done_retail_sale_side" t-value="False" />
+                                                    
+                                                    
+                                                    <t t-foreach="acc_credits" t-as="acc_crdt">
+                                                            <t t-if="break_done_retail_sale_side == False">
+                                                                <t t-foreach ="range(report_left_blank)" t-as="rlb">
+                                                           
+                                                                    <tr>
+                                                                        <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white;">
+                                                                            <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]
+                                                                        </td>
+                                                                        <td class="text-right pr-2" width="37.1%" style="border: 1px solid black; color: white;">
+                                                                            
+                                                                            <span t-esc="acc_crdt['credit']"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                 </t> 
+                                                                 <t t-set="break_done_retail_sale_side" t-value="True" />
+                                                            </t>          
+                                                    </t> -->
+                                                       <!--end  test case for blank line in retail sale section -->
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                
+                                                    
+                                                  
+                                                    
+                                                    
                                                 </tbody>
                                             </table>
                                         </td>
@@ -698,7 +745,7 @@
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none;">
                                                                 (dbt:<span t-esc="cash_trnsfer['debit_acc']"/>)&#160;[<span t-esc="cash_trnsfer['cre_acc']"/>]<br/>
-                                                                <span t-esc="cash_trnsfer['label']"/>
+                                                                <!-- <span t-esc="cash_trnsfer['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black;">
                                                                 <span t-esc="cash_trnsfer['credit']"/>
