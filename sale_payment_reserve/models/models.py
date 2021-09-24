@@ -86,11 +86,20 @@ class StockPickingInh(models.Model):
         for rec in self:
             if rec.picking_type_id.code == 'outgoing':
                 partner = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])
+                partner_ledger = self.env['account.move.line'].search(
+                    [('partner_id', '=', partner.id),
+                     ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                     ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False),'|',('account_id.internal_type', '=', 'payable'),('account_id.internal_type', '=', 'receivable')])
+                print('-----------------------------', len(partner_ledger))
+                # print(partner_ledger)
+                bal = 0
+                for par_rec in partner_ledger:
+                    bal = bal + (par_rec.debit - par_rec.credit)
+                print(bal)
                 if partner:
-                    if abs(partner.total_due) >= (rec.sale_id.amount_total/2):
+                    if -(bal) >= (rec.sale_id.amount_total/2):
                         rec.action_assign()
                         flag = 1
-
                 if flag == 0:
                     raise UserError('There is no enough Advance Payment available to Reserve this DO.')
             else:
