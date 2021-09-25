@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//button[@name='action_confirm']" position="replace">
-                    <button name="action_confirm" states="manager,ceo,draft" string="Confirm Sale"
+                    <button name="action_confirm" states="draft" string="Confirm Sale"
                             class="btn-primary o_sale_confirm" type="object"/>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="replace">
@@ -25,11 +25,22 @@
                     <field name="allowed_discount"/>
                     <field name="create_user"/>
                 </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="manager_discount" groups="smc_project_latest.group_sale_discount_manager"/>
+                    <field name="ceo_discount" groups="smc_project_latest.group_sale_discount_ceo"/>
+                </xpath>
+
                   <xpath expr="//button[@name='action_confirm'][2]" position="after">
                         <button name="from_manager_approval" states="draft,sent" type="object" class="oe_highlight"
-                                string="Approval From Manager"/>
+                                string="Get Approval From Manager"/>
                         <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
-                                string="Approval From CEO"/>
+                                string="Get Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
+                      <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"
+                                string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>
+                      <button name="action_confirm" states="manager" type="object" class="oe_highlight"
+                                string="Confirm Sale"  groups="smc_project_latest.group_sale_discount_manager"/>
+                      <button name="action_confirm" states="ceo" type="object" class="oe_highlight"
+                                string="Confirm Sale" groups="smc_project_latest.group_sale_discount_ceo"/>
                   </xpath>
            </field>
         </record>

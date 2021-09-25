@@ -159,7 +159,8 @@ class SaleOrder(models.Model):
     state = fields.Selection([
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
-        ('manager', 'Approval from Manager'), ('ceo', 'Approval from CEO'),
+        ('manager', 'Approval from Manager'),
+        ('ceo', 'Approval from CEO'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
@@ -167,7 +168,16 @@ class SaleOrder(models.Model):
 
     max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0, store=True)
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
-    create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
+    create_user = fields.Many2one('res.users', string='User', default=lambda self:self.env.user.id, compute='compute_self_id')
+    manager_discount = fields.Float('Manager Discount')
+    ceo_discount = fields.Float('CEO Discount')
+    sent_for_manager_approval = fields.Boolean()
+    sent_for_ceo_approval = fields.Boolean()
+
+    @api.onchange('manager_discount')
+    def onchange_discount(self):
+        if self.manager_discount > self.allowed_discount:
+            raise UserError('You Cannot Add Discount more than your allowed discount.')
 
     def compute_self_id(self):
         for i in self:
@@ -206,6 +216,24 @@ class SaleOrder(models.Model):
             if maximum:
                 diss = max(maximum)
             i.max_discount = diss
+
+    def add_discount(self):
+        if self.env.user.has_group('smc_project_latest.group_sale_discount_manager'):
+            # discount = self.order_line[0].discount
+            for line in self.order_line:
+                line.discount = self.manager_discount
+        if self.env.user.has_group('smc_project_latest.group_sale_discount_ceo'):
+            for line in self.order_line:
+                line.discount = self.ceo_discount
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.onchange('discount')
+    def onchange_discount(self):
+        if self.discount > self.order_id.allowed_discount:
+            raise UserError('You Cannot Add Discount more than your allowed discount.')
 
 
 class users_inherit(models.Model):
