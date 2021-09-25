@@ -2,13 +2,13 @@
 <odoo>
     <data>
 
-		<record id="view_product_template_article" model="ir.ui.view">
+        <record id="view_product_template_article" model="ir.ui.view">
             <field name="name">product.template.volume</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='uom_id']" position="attributes">
-				    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <field name="categ_id" position="after">
                     <field name="article_no" />
@@ -20,28 +20,31 @@
                     <field name="pcs_box" />
                 </field>
                 <xpath expr="//field[@name='barcode']" position="after">
-				    <field name="system_code" />
+                    <field name="system_code" />
                 </xpath>
 
             </field>
         </record>
 
-    <record id="view_product_tree_inh" model="ir.ui.view">
-		<field name="name">product.template.form</field>
-		<field name="model">product.template</field>
-		<field name="inherit_id" ref="product.product_template_tree_view"/>
-		<field name="arch" type="xml">
+        <record id="view_product_tree_inh" model="ir.ui.view">
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
 
-			<xpath expr="//field[@name='name']" position="after">
-				<field name="article_no" />
-                <field name="finish_no" />
-            </xpath>
-            <xpath expr="//field[@name='default_code']" position="attributes">
-				<attribute name="invisible">1</attribute>
-            </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="article_no" />
+                    <field name="finish_no" />
+                </xpath>
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                 <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </xpath>
 
-		</field>
-	</record>
+            </field>
+        </record>
 
         <record id="view_product_product" model="ir.ui.view">
             <field name="name">product.product</field>
@@ -64,28 +67,47 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='uom_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='qty_available']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='lst_price']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='virtual_available']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <!--                <xpath expr="//field[@name='last_purchase_price']" position="attributes">-->
+                <!--				    <attribute name="invisible">1</attribute>-->
+                <!--                </xpath>-->
                 <field name="name" position="after">
                     <field name="article_no" />
                     <field name="finish_no" />
-                    <field name="sqm_box" />
-                    <field name="sqft_box" />
-                    <field name="rft_box" />
+                    <field name="qty_available" />
+                    <field name="uom_id" string="UOM"/>
+                    <field name="lst_price" string="Sale Price"/>
+                    <field name="sqm_box" string="UOM/BOX"/>
+<!--                    <field name="sqft_box" />-->
+<!--                    <field name="rft_box" />-->
                     <field name="pcs_box" />
+                    <field name="virtual_available" />
                 </field>
                 <xpath expr="//field[@name='default_code']" position="attributes">
-				    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//field[@name='product_template_attribute_value_ids']" position="attributes">
-				    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">1</attribute>
                 </xpath>
-<!--                <xpath expr="//field[@name='qty_available']" position="attributes">-->
-<!--				    <attribute name="invisible">1</attribute>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//field[@name='virtual_available']" position="attributes">-->
-<!--				    <attribute name="invisible">1</attribute>-->
-<!--                </xpath>-->
+                <!--                <xpath expr="//field[@name='qty_available']" position="attributes">-->
+                <!--				    <attribute name="invisible">1</attribute>-->
+                <!--                </xpath>-->
+                <!--                <xpath expr="//field[@name='virtual_available']" position="attributes">-->
+                <!--				    <attribute name="invisible">1</attribute>-->
+                <!--                </xpath>-->
                 <xpath expr="//field[@name='standard_price']" position="attributes">
-				    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">1</attribute>
                 </xpath>
             </field>
         </record>
@@ -115,54 +137,58 @@
         </record>
 
 
-	<record id="product_template_view_search_inherit" model="ir.ui.view">
-		<field name="name">product.template.search.inherit.sale</field>
-		<field name="model">product.template</field>
-		<field name="inherit_id" ref="product.product_template_search_view"/>
-		<field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="before">
-                <field name="article_no" string="Article No" filter_domain="[('article_no', 'ilike', self)]"/>
-                <field name="finish_no" string="Finish No" filter_domain="[('finish_no', 'ilike', self)]"/>
-            </xpath>
-		</field>
-	</record>
+        <record id="product_template_view_search_inherit" model="ir.ui.view">
+            <field name="name">product.template.search.inherit.sale</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="article_no" string="Article No" filter_domain="[('article_no', 'ilike', self)]"/>
+                    <!--                <field name="finish_no" string="Finish No" filter_domain="[('finish_no', 'ilike', self)]"/>-->
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <!--                <field name="article_no" string="Article No" filter_domain="[('article_no', 'ilike', self)]"/>-->
+                    <field name="finish_no" string="Finish No" filter_domain="[('finish_no', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
 
-	<record id="account_move_view_search_inherit" model="ir.ui.view">
-		<field name="name">account.move.search.inherit.sale</field>
-		<field name="model">account.move</field>
-		<field name="inherit_id" ref="account.view_account_invoice_filter"/>
-		<field name="arch" type="xml">
-            <xpath expr="//filter[@name='in_payment']" position="after">
-                <field name="invoice_line_ids" string="Article No" filter_domain="[('invoice_line_ids.product_id.article_no', 'ilike', self)]"/>
-                <field name="invoice_line_ids" string="Finish No" filter_domain="[('invoice_line_ids.product_id.finish_no', 'ilike', self)]"/>
-                <field name="invoice_line_ids" string="Product ID" filter_domain="[('invoice_line_ids.product_id', 'ilike', self)]"/>
-            </xpath>
-		</field>
-	</record>
+        <record id="account_move_view_search_inherit" model="ir.ui.view">
+            <field name="name">account.move.search.inherit.sale</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='in_payment']" position="after">
+                    <field name="invoice_line_ids" string="Article No" filter_domain="[('invoice_line_ids.product_id.article_no', 'ilike', self)]"/>
+                    <field name="invoice_line_ids" string="Finish No" filter_domain="[('invoice_line_ids.product_id.finish_no', 'ilike', self)]"/>
+                    <field name="invoice_line_ids" string="Product ID" filter_domain="[('invoice_line_ids.product_id', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
 
-	<record id="purchase_order_view_search_inherit" model="ir.ui.view">
-		<field name="name">purchase.order.search.inherit.sale</field>
-		<field name="model">purchase.order</field>
-		<field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
-		<field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="before">
-                <field name="order_line" string="Article No" filter_domain="[('order_line.product_id.article_no', 'ilike', self)]"/>
-                <field name="order_line" string="Finish No" filter_domain="[('order_line.product_id.finish_no', 'ilike', self)]"/>
-            </xpath>
-		</field>
-	</record>
+        <record id="purchase_order_view_search_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.search.inherit.sale</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="order_line" string="Article No" filter_domain="[('order_line.product_id.article_no', 'ilike', self)]"/>
+                    <field name="order_line" string="Finish No" filter_domain="[('order_line.product_id.finish_no', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
 
-	<record id="sale_order_view_search_inherit" model="ir.ui.view">
-		<field name="name">sale.order.search.inherit.sale</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="sale.view_sales_order_filter"/>
-		<field name="arch" type="xml">
-            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
-                <field name="order_line" string="Article No" filter_domain="[('order_line.article_no', 'ilike', self)]"/>
-                <field name="order_line" string="Finish No" filter_domain="[('order_line.finish_no', 'ilike', self)]"/>
-            </xpath>
-		</field>
-	</record>
+        <record id="sale_order_view_search_inherit" model="ir.ui.view">
+            <field name="name">sale.order.search.inherit.sale</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                    <field name="order_line" string="Article No" filter_domain="[('order_line.article_no', 'ilike', self)]"/>
+                    <field name="order_line" string="Finish No" filter_domain="[('order_line.finish_no', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
 
     </data>
 </odoo>
