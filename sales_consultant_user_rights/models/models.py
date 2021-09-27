@@ -100,7 +100,6 @@ class StockPickingInh(models.Model):
             temp.set('create', '0')
             temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
-
         return result
 
     def check_date(self):
@@ -129,7 +128,7 @@ class StockPickingInh(models.Model):
         #     userObj = self.env['res.users'].browse([i])
         act_type_xmlid = 'mail.mail_activity_data_todo'
         summary = 'Reserved DO Notification'
-        note = '25 Days passed.In 5 days left DO will be unreserved Automatically.'
+        note = '25 Days passed.In 5 days left, DO no: ' + self.name + ' will be unreserved Automatically.'
         if act_type_xmlid:
             activity_type = self.sudo().env.ref(act_type_xmlid)
         model_id = self.env['ir.model']._get(self._name).id

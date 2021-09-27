@@ -16,6 +16,11 @@
         <field name="category_id" ref="base.module_category_sales_sales"/>
     </record>
 
+    <record id="group_show_validate_button_user" model="res.groups">
+        <field name="name">Show Validate Button</field>
+        <field name="category_id" ref="base.module_category_sales_sales"/>
+    </record>
+
     <record id="group_show_invoice_buttons_user" model="res.groups">
         <field name="name">Show Invoice Buttons</field>
         <field name="category_id" ref="base.module_category_sales_sales"/>
