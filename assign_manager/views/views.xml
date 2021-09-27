@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+
+        <record id="res_users_form_inh" model="ir.ui.view">
+            <field name="name">res.users.form.inh</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title']" position="inside">
+                    <group><field name="manager_id"/></group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_order_form_inh" model="ir.ui.view">
+            <field name="name">sale.order.form.inh</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="manager_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
