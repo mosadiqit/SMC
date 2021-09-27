@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 from odoo.osv import expression
 import re
 
@@ -65,6 +66,12 @@ class ProductTemplate(models.Model):
     system_code = fields.Char(string="System Code")
     sqft_box = fields.Float('SQFT/BOX')
     rft_box = fields.Float('RFT/BOX')
+
+    @api.constrains('system_code')
+    def unique_system_code(self):
+        product = self.env['product.template'].search([('system_code', '=', self.system_code)])
+        if len(product) > 1:
+            raise UserError('System Code Already Exist')
 
 
 class SaleOrder(models.Model):
