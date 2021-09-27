@@ -13,6 +13,11 @@
                         <field name="payment_count" string="Payments" widget="statinfo"/>
                     </button>
                 </xpath>
+
+                <xpath expr="//field[@name='commitment_date']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
             </field>
         </record>
 
@@ -26,12 +31,19 @@
                     <button string="Get Approval" type="object" class="oe_highlight" name="action_get_approvals" attrs="{'invisible': ['|',('state', '!=', 'confirmed'), ('no_enough_amount', '=', False)]}"/>
                     <button string="Approve From Manager" type="object" class="oe_highlight" groups="sale_payment_reserve.group_manager_approval" name="action_manager_approval" attrs="{'invisible': [('state', '!=', 'manager_approval')]}"/>
                     <button string="Approve From CEO" type="object" class="oe_highlight" groups="sale_payment_reserve.group_ceo_approval" name="action_ceo_approval" attrs="{'invisible': [('state', '!=', 'ceo_approval')]}"/>
+<!--                    <button string="Get Approval" type="object" class="oe_highlight" name="action_get_approvals" attrs="{'invisible': ['|',('state', '!=', 'confirmed'), ('no_enough_amount', '=', False)]}"/>-->
+                    <button string="Approve to Reserve From Manager" type="object" states="duration_manager_approvals" class="oe_highlight" name="action_duration_manager_approval" groups="sale_payment_reserve.group_manager_approval_reserve"/>
+                    <button string="Approve to Reserve From CEO" type="object" states="duration_ceo_approval" class="oe_highlight" name="action_duration_ceo_approval" groups="sale_payment_reserve.group_ceo_approval_reserve"/>
                 </xpath>
                 <xpath expr="//button[@name='action_assign']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//field[@name='origin']" position="after">
                     <field name="no_enough_amount" invisible="1"/>
+                    <field name="is_approved_by_manager" invisible="1"/>
+                    <field name="is_approved_by_ceo" invisible="1"/>
+                    <field name="is_approved_by_manager_credit" invisible="1"/>
+                    <field name="is_approved_by_ceo_credit" invisible="1"/>
                 </xpath>
             </field>
         </record>

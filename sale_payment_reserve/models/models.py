@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -56,6 +57,8 @@ class StockPickingInh(models.Model):
         ('ceo_approval', 'Credit Approval from CEO'),
         ('reserve_manager_approvals', 'Reserve Approval from Manager'),
         ('reserve_ceo_approval', 'Reserve Approval from CEO'),
+        ('duration_manager_approvals', 'Duration Approval from Manager'),
+        ('duration_ceo_approval', 'Duration Approval from CEO'),
         ('assigned', 'Ready'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
@@ -68,6 +71,19 @@ class StockPickingInh(models.Model):
              " * Done: The transfer has been processed.\n"
              " * Cancelled: The transfer has been cancelled.")
     no_enough_amount = fields.Boolean(default=False, compute='compute_payment')
+    is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
+    is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
+
+    is_approved_by_manager_credit = fields.Boolean('Credit Approved By Manager')
+    is_approved_by_ceo_credit = fields.Boolean('Credit Approved By CEO')
+
+    def action_duration_manager_approval(self):
+        self.is_approved_by_manager = True
+        self.state = 'duration_ceo_approval'
+
+    def action_duration_ceo_approval(self):
+        self.is_approved_by_ceo = True
+        self.action_assign()
 
     @api.depends('sale_id.amount_total')
     def compute_payment(self):
@@ -97,25 +113,31 @@ class StockPickingInh(models.Model):
                 partner_ledger = self.env['account.move.line'].search(
                     [('partner_id', '=', partner.id),
                      ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-                     ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False),'|',('account_id.internal_type', '=', 'payable'),('account_id.internal_type', '=', 'receivable')])
-                print('-----------------------------', len(partner_ledger))
-                # print(partner_ledger)
+                     ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|', ('account_id.internal_type', '=', 'payable'),('account_id.internal_type', '=', 'receivable')])
                 bal = 0
                 for par_rec in partner_ledger:
                     bal = bal + (par_rec.debit - par_rec.credit)
                 if partner:
                     if -(bal) >= (rec.sale_id.amount_total/2):
-                        rec.action_assign()
-                        flag = 1
-                if flag == 0:
+                        # print(abs((rec.sale_id.commitment_date.date() - datetime.date.today()).days))
+                        if abs((rec.sale_id.commitment_date.date() - datetime.date.today()).days) <= 7:
+                            rec.action_assign()
+                            flag = 1
+                        else:
+                            rec.state = 'duration_manager_approvals'
+                    else:
+                        raise UserError('There is no enough Advance Payment available to Reserve this DO.')
+                else:
                     raise UserError('There is no enough Advance Payment available to Reserve this DO.')
             else:
                 rec.action_assign()
 
     def action_manager_approval(self):
+        self.is_approved_by_manager_credit = True
         self.state = 'ceo_approval'
 
     def action_ceo_approval(self):
+        self.is_approved_by_ceo_credit = True
         self.action_assign()
 
     def action_get_approvals(self):
