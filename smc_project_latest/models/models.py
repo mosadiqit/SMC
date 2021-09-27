@@ -172,8 +172,9 @@ class SaleOrder(models.Model):
     manager_discount = fields.Float('Manager Discount')
     ceo_discount = fields.Float('CEO Discount')
     requested_discount = fields.Float('Requested Discount')
-    sent_for_manager_approval = fields.Boolean()
-    sent_for_ceo_approval = fields.Boolean()
+
+    is_approved_by_manager_discount = fields.Boolean('Discount Approved By Manager')
+    is_approved_by_ceo_discount = fields.Boolean('Discount Approved By CEO')
 
     @api.onchange('manager_discount')
     def onchange_discount(self):
@@ -185,9 +186,11 @@ class SaleOrder(models.Model):
             i.create_user = i.env.user.id
 
     def from_manager_approval(self):
+        self.is_approved_by_manager_discount = True
         self.state = 'manager'
 
     def from_ceo_approval(self):
+        self.is_approved_by_ceo_discount = True
         self.state = 'ceo'
 
     def action_confirm(self):

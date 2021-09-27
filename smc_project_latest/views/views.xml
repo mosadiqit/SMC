@@ -28,6 +28,8 @@
                     <field name="manager_discount" groups="smc_project_latest.group_sale_discount_manager"/>
                     <field name="ceo_discount" groups="smc_project_latest.group_sale_discount_ceo"/>
                     <field name="requested_discount"/>
+                    <field name="is_approved_by_manager_discount" invisible="1"/>
+                    <field name="is_approved_by_ceo_discount" invisible="1"/>
                 </xpath>
 
                 <xpath expr="//button[@name='action_confirm'][2]" position="after">
