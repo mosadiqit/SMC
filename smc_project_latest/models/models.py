@@ -171,6 +171,7 @@ class SaleOrder(models.Model):
     create_user = fields.Many2one('res.users', string='User', default=lambda self:self.env.user.id, compute='compute_self_id')
     manager_discount = fields.Float('Manager Discount')
     ceo_discount = fields.Float('CEO Discount')
+    requested_discount = fields.Float('Requested Discount')
     sent_for_manager_approval = fields.Boolean()
     sent_for_ceo_approval = fields.Boolean()
 
