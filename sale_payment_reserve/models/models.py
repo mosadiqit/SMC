@@ -52,8 +52,8 @@ class StockPickingInh(models.Model):
         ('draft', 'Draft'),
         ('waiting', 'Waiting Another Operation'),
         ('confirmed', 'Waiting'),
-        ('manager_approval', 'Approval from Manager'),
-        ('ceo_approval', 'Approval from CEO'),
+        ('manager_approval', 'Credit Approval from Manager'),
+        ('ceo_approval', 'Credit Approval from CEO'),
         ('reserve_manager_approvals', 'Reserve Approval from Manager'),
         ('reserve_ceo_approval', 'Reserve Approval from CEO'),
         ('assigned', 'Ready'),
@@ -73,8 +73,16 @@ class StockPickingInh(models.Model):
     def compute_payment(self):
         for rec in self:
             partner = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])
+            partner_ledger = self.env['account.move.line'].search(
+                [('partner_id', '=', partner.id),
+                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+            bal = 0
+            for par_rec in partner_ledger:
+                bal = bal + (par_rec.debit - par_rec.credit)
             if partner:
-                if abs(partner.total_due) >= (rec.sale_id.amount_total / 2):
+                if -(bal) >= (rec.sale_id.amount_total / 2):
                     rec.no_enough_amount = False
                 else:
                     rec.no_enough_amount = True
@@ -95,7 +103,6 @@ class StockPickingInh(models.Model):
                 bal = 0
                 for par_rec in partner_ledger:
                     bal = bal + (par_rec.debit - par_rec.credit)
-                print(bal)
                 if partner:
                     if -(bal) >= (rec.sale_id.amount_total/2):
                         rec.action_assign()
