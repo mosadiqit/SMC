@@ -26,6 +26,7 @@ class ReturnRequest(models.Model):
     is_sent_for_second_approval = fields.Boolean(default=False)
     is_second_approved = fields.Boolean(default=False)
 
+    # @api.depends('request_lines')
     def compute_check_quantity(self):
         if self.request_lines:
             for rec in self.request_lines:
@@ -69,36 +70,11 @@ class ReturnRequest(models.Model):
                 for line in self.request_lines:
                     if line.invoice_id.id == inv:
                         products_list.append(line.product_id.id)
-            # products_list = list(dict.fromkeys(products_list))
             self.create_delivery(invoices_list)
             self.create_invoice(invoices_list)
-            # self.create_scrap(products_list)
             self.state = 'done'
         else:
             raise UserError("Please Get Approval From Manager.")
-
-    # def create_scrap(self, products_list):
-    #     products = self.env['product.product'].browse(products_list)
-    #     picking_incoming = self.env['stock.picking.type'].search([('code', '=', 'incoming')], limit=1)
-    #     for rec in products:
-    #         lines = self.env['request.line'].search([('product_id', '=', rec.id), ('request_order_id', '=', self.id)])
-    #         qty = 0
-    #         vals = {}
-    #         for line in lines:
-    #             # if line.product_id.name == rec.name:
-    #             qty = qty + line.recieved_qty
-    #             sale_order = line.invoice_id.invoice_origin
-    #             delivery = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id), ('picking_type_id', '=', picking_incoming.id)])
-    #             vals = {
-    #                 'product_id': line.product_id.id,
-    #                 'origin': sale_order,
-    #                 'picking_id': delivery[0].id,
-    #                 'date_done': datetime.today().date(),
-    #                 'scrap_qty': qty,
-    #                 'product_uom_id': line.product_id.uom_id.id,
-    #             }
-    #         scrap = self.env['stock.scrap'].create(vals)
-    #         scrap.do_scrap()
 
     def create_invoice(self, invoices_list):
         record = self.env['account.account'].search([])[0]
@@ -218,7 +194,6 @@ class ReturnRequested(models.Model):
         [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),
          ('done', 'Validate'),
          ('rejected', 'Rejected')], string="State", readonly=True, default="user", related='request_order_id.state')
-
 
     @api.onchange('return_quantity')
     def verify_return_quantity(self):
