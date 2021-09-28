@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import datetime
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -9,6 +9,12 @@ class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
     payment_count = fields.Integer(compute='compute_payments')
+    # delivery_date = fields.Date('Delivery Date')
+    commitment_date = fields.Datetime('Delivery Date', copy=False,
+                                      states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
+                                      help="This is the delivery date promised to the customer. "
+                                           "If set, the delivery order will be scheduled based on "
+                                           "this date rather than product lead times.", default=lambda self:fields.Date.today())
 
     @api.depends('name')
     def compute_payments(self):
@@ -77,6 +83,7 @@ class StockPickingInh(models.Model):
     is_approved_by_ceo = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
+
     # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
     # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
 
@@ -89,6 +96,9 @@ class StockPickingInh(models.Model):
     is_approved_by_ceo_credit = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Credit Approved By CEO'), ], string='Credit Approved By CEO', default='none')
+
+    def action_reject(self):
+        self.state = 'confirmed'
 
     def action_duration_manager_approval(self):
         self.is_approved_by_manager = 'manager'
