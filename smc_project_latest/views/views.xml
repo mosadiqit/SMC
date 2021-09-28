@@ -7,6 +7,13 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
 
+                 <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                    <field name="is_above" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree" position="attributes">
+                    <attribute name="decoration-danger">is_above==True</attribute>
+                </xpath>
+
                 <xpath expr="//button[@name='action_confirm']" position="replace">
                     <button name="action_confirm" states="draft" string="Confirm Sale"
                             class="btn-primary o_sale_confirm" type="object"/>
@@ -25,9 +32,9 @@
                     <field name="create_user"/>
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="manager_discount" groups="smc_project_latest.group_sale_discount_manager"/>
-                    <field name="ceo_discount" groups="smc_project_latest.group_sale_discount_ceo"/>
-                    <field name="requested_discount"/>
+<!--                    <field name="manager_discount" groups="smc_project_latest.group_sale_discount_manager"/>-->
+<!--                    <field name="ceo_discount" groups="smc_project_latest.group_sale_discount_ceo"/>-->
+<!--                    <field name="requested_discount"/>-->
                     <field name="is_approved_by_manager_discount" invisible="1"/>
                     <field name="is_approved_by_ceo_discount" invisible="1"/>
                 </xpath>
@@ -37,8 +44,8 @@
                             string="Get Approval From Manager"/>
                     <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
                             string="Get Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
-                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"
-                            string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>
+<!--                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"-->
+<!--                            string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>-->
                     <button name="action_confirm" states="manager" type="object" class="oe_highlight"
                             string="Confirm Sale"  groups="smc_project_latest.group_sale_discount_manager"/>
                     <button name="action_confirm" states="ceo" type="object" class="oe_highlight"
@@ -56,6 +63,7 @@
                 <xpath expr="//field[@name='note']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
+
             </field>
         </record>
 
@@ -82,6 +90,7 @@
                 <xpath expr="//field[@name='order_line']//tree//field[@name='discount_amount']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+
 
             </field>
         </record>
