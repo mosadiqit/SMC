@@ -3,6 +3,8 @@ from datetime import datetime
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from dateutil.relativedelta import relativedelta
+
 
 
 class SaleOrderInh(models.Model):
@@ -14,7 +16,11 @@ class SaleOrderInh(models.Model):
                                       states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
                                       help="This is the delivery date promised to the customer. "
                                            "If set, the delivery order will be scheduled based on "
-                                           "this date rather than product lead times.", default=lambda self:fields.Date.today())
+                                           "this date rather than product lead times.")
+
+    def _compute_delivery_date(self):
+        for rec in self:
+            rec.commitment_date = datetime.today().date() + relativedelta(days=3)
 
     @api.depends('name')
     def compute_payments(self):
@@ -142,8 +148,9 @@ class StockPickingInh(models.Model):
                     bal = bal + (par_rec.debit - par_rec.credit)
                 if partner:
                     if -(bal) >= (rec.sale_id.amount_total/2):
-                        # print(abs((rec.sale_id.commitment_date.date() - datetime.date.today()).days))
-                        if abs((rec.sale_id.commitment_date.date() - datetime.date.today()).days) <= 7:
+                        if not rec.sale_id.commitment_date:
+                            rec.sale_id.commitment_date = datetime.today() + relativedelta(days=3)
+                        if abs((rec.sale_id.commitment_date.date() - datetime.today().date()).days) <= 7:
                             rec.action_assign()
                             flag = 1
                         else:
