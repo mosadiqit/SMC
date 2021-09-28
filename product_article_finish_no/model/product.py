@@ -92,8 +92,15 @@ class SaleOrderLine(models.Model):
     finish_no = fields.Char("Finish", related="product_id.finish_no")
     total_sqm = fields.Float(string="Total Box")
     total_pcs = fields.Float(string="Total Pcs")
+    sqm_box = fields.Float(string="SQM/Box", related='product_id.sqm_box')
 
     @api.onchange('product_uom_qty')
     def _compute_product_uom_qty(self):
         self.total_sqm = self.product_uom_qty / (self.product_id.sqm_box or 1)
         self.total_pcs = self.total_sqm * self.product_id.pcs_box
+
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    sqm_box = fields.Float(string="SQM/Box", related='product_id.sqm_box')

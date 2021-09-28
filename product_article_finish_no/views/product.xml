@@ -130,6 +130,7 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
                     <field name="article_no" />
                     <field name="finish_no" />
+                    <field name="sqm_box" />
                     <field name="total_sqm" force_save="1" readonly="1"/>
                     <field name="total_pcs" force_save="1" readonly="1"/>
                 </xpath>
@@ -186,6 +187,17 @@
                 <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
                     <field name="order_line" string="Article No" filter_domain="[('order_line.article_no', 'ilike', self)]"/>
                     <field name="order_line" string="Finish No" filter_domain="[('order_line.finish_no', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_move_view_form_inherit" model="ir.ui.view">
+            <field name="name">stock.move.line.inherit.sale</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="arch" type="xml">
+              <xpath expr="//tree/field[@name='product_uom_qty']" position="after">
+                    <field name="sqm_box" />
                 </xpath>
             </field>
         </record>
