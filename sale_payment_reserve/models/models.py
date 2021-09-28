@@ -71,18 +71,31 @@ class StockPickingInh(models.Model):
              " * Done: The transfer has been processed.\n"
              " * Cancelled: The transfer has been cancelled.")
     no_enough_amount = fields.Boolean(default=False, compute='compute_payment')
-    is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
-    is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
+    is_approved_by_manager = fields.Selection([
+        ('none', 'None'),
+        ('manager', 'Reserve Approved By Manager'), ], string='Reserve Approved By Manager', default='none')
+    is_approved_by_ceo = fields.Selection([
+        ('none', 'None'),
+        ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
+    # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
+    # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
 
-    is_approved_by_manager_credit = fields.Boolean('Credit Approved By Manager')
-    is_approved_by_ceo_credit = fields.Boolean('Credit Approved By CEO')
+    # is_approved_by_manager_credit = fields.Boolean('Credit Approved By Manager')
+    # is_approved_by_ceo_credit = fields.Boolean('Credit Approved By CEO')
+
+    is_approved_by_manager_credit = fields.Selection([
+        ('none', 'None'),
+        ('manager', 'Credit Approved By Manager'), ], string='Credit Approved By Manager', default='none')
+    is_approved_by_ceo_credit = fields.Selection([
+        ('none', 'None'),
+        ('ceo', 'Credit Approved By CEO'), ], string='Credit Approved By CEO', default='none')
 
     def action_duration_manager_approval(self):
-        self.is_approved_by_manager = True
+        self.is_approved_by_manager = 'manager'
         self.state = 'duration_ceo_approval'
 
     def action_duration_ceo_approval(self):
-        self.is_approved_by_ceo = True
+        self.is_approved_by_ceo = 'ceo'
         self.action_assign()
 
     @api.depends('sale_id.amount_total')
@@ -133,11 +146,11 @@ class StockPickingInh(models.Model):
                 rec.action_assign()
 
     def action_manager_approval(self):
-        self.is_approved_by_manager_credit = True
+        self.is_approved_by_manager_credit = 'manager'
         self.state = 'ceo_approval'
 
     def action_ceo_approval(self):
-        self.is_approved_by_ceo_credit = True
+        self.is_approved_by_ceo_credit = 'ceo'
         self.action_assign()
 
     def action_get_approvals(self):
