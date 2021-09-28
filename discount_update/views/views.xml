@@ -10,6 +10,12 @@
 				<field name="line_discount" widget="monetary"/>
 				<field name="second_discount" widget="monetary"/>
             </xpath>
+			<xpath expr="//field[@name='amount_tax']" position="before">
+				<field name="gross_total" widget="monetary"/>
+            </xpath>
+			<xpath expr="//field[@name='amount_untaxed']" position="attributes">
+				<attribute name="invisible">1</attribute>
+            </xpath>
 		</field>
 	</record>
 
