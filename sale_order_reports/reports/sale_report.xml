@@ -22,8 +22,8 @@
             </div>
             <t t-raw="0"/>
         </div>
-        <div t-attf-class="footer o_standard_footer o_company_#{res_company.id}_layout">
-            <div class="text-center" style="border-top: 1px solid black;">
+        <div t-attf-class="footer o_standard_footer o_company_#{res_company.id}_layout"  style="margin-top:15px; padding-top:20px;">
+            <div class="text-center" style="border-top: 1px solid black; margin-top:15px; padding-top:15px;">
                 <ul class="list-inline mb4">
                     <!-- using the list-inline-item class from bootstrap causes weird behaviours in pdf report
                          adding d-inline class fixes the problem-->

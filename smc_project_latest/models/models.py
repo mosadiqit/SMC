@@ -159,7 +159,8 @@ class SaleOrder(models.Model):
     state = fields.Selection([
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
-        ('manager', 'Approval from Manager'), ('ceo', 'Approval from CEO'),
+        ('manager', 'Approval from Manager'),
+        ('ceo', 'Approval from CEO'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
@@ -167,16 +168,35 @@ class SaleOrder(models.Model):
 
     max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0, store=True)
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
-    create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
+    create_user = fields.Many2one('res.users', string='User', default=lambda self:self.env.user.id, compute='compute_self_id')
+    # manager_discount = fields.Float('Manager Discount')
+    # ceo_discount = fields.Float('CEO Discount')
+    # requested_discount = fields.Float('Requested Discount')
+
+    # is_approved_by_manager_discount = fields.Boolean('Discount Approved By Manager')
+    is_approved_by_manager_discount = fields.Selection([
+        ('none', 'None'),
+        ('manager', 'Discount Approved By Manager'),], string='Discount Approved By Manager', default='none')
+    is_approved_by_ceo_discount = fields.Selection([
+        ('none', 'None'),
+        ('ceo', 'Discount Approved By CEO'), ], string='Discount Approved By CEO', default='none')
+    # is_approved_by_ceo_discount = fields.Boolean('Discount Approved By CEO')
+
+    # @api.onchange('manager_discount')
+    # def onchange_discount(self):
+    #     if self.manager_discount > self.allowed_discount:
+    #         raise UserError('You Cannot Add Discount more than your allowed discount.')
 
     def compute_self_id(self):
         for i in self:
-            i.create_user = i.user_id.id
+            i.create_user = i.env.user.id
 
     def from_manager_approval(self):
+        self.is_approved_by_manager_discount = 'manager'
         self.state = 'manager'
 
     def from_ceo_approval(self):
+        self.is_approved_by_ceo_discount = 'ceo'
         self.state = 'ceo'
 
     def action_confirm(self):
@@ -206,6 +226,30 @@ class SaleOrder(models.Model):
             if maximum:
                 diss = max(maximum)
             i.max_discount = diss
+
+    # def add_discount(self):
+    #     if self.env.user.has_group('smc_project_latest.group_sale_discount_manager'):
+    #         # discount = self.order_line[0].discount
+    #         for line in self.order_line:
+    #             line.discount = self.manager_discount
+    #     if self.env.user.has_group('smc_project_latest.group_sale_discount_ceo'):
+    #         for line in self.order_line:
+    #             line.discount = self.ceo_discount
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    is_above = fields.Boolean('Above Discount')
+
+    @api.onchange('discount')
+    def onchange_discount(self):
+        for rec in self:
+            if rec.discount > rec.order_id.allowed_discount:
+                # raise UserError('You Cannot Add Discount more than your allowed discount.')
+                rec.is_above = True
+            else:
+                rec.is_above = False
 
 
 class users_inherit(models.Model):

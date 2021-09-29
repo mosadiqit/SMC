@@ -17,6 +17,15 @@ class SaleOrderInh(models.Model):
         duplicate = self.env['sale.order'].search([('id', 'in', dup_list)]).unlink()
 
 
+class ProductTemplateInh(models.Model):
+    _inherit = 'product.template'
+
+    def remove_duplicate_products(self):
+        all = self.env['product.template'].search([("active","=",True)],limit=500)
+        for i in all:
+           i.active=False
+
+
 class AccountMoveInh(models.Model):
     _inherit = 'account.move'
 

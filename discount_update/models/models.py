@@ -6,10 +6,18 @@ from odoo import models, fields, api
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
+    gross_total = fields.Float('Gross Total', compute='_compute_gross_total')
     line_discount = fields.Float('Discount', compute='get_discount')
     second_discount = fields.Float('Second Discount', compute='get_discount')
 
-    @api.onchange('global_order_discount', 'global_discount_type')
+    @api.depends('order_line.price_unit', 'order_line.product_uom_qty')
+    def _compute_gross_total(self):
+        total = 0
+        for line in self.order_line:
+            total = total + line.product_uom_qty * line.price_unit
+        self.gross_total = total
+
+    @api.depends('global_order_discount', 'global_discount_type', 'order_line.discount')
     def get_discount(self):
         untaxed = 0
         taxed = 0
@@ -32,7 +40,7 @@ class AccountMoveInh(models.Model):
     line_discount = fields.Float('Discount', compute='get_discount')
     second_discount = fields.Float('Second Discount', compute='get_discount')
 
-    @api.onchange('global_order_discount', 'global_discount_type')
+    @api.depends('global_order_discount', 'global_discount_type')
     def get_discount(self):
         untaxed = 0
         taxed = 0

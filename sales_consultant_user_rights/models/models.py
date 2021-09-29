@@ -69,8 +69,8 @@ class StockPickingInh(models.Model):
         ('confirmed', 'Waiting'),
         ('manager_approval', 'Approval from Manager'),
         ('ceo_approval', 'Approval from CEO'),
-        ('reserve_manager_approvals', 'Reserve Approval from Manager'),
-        ('reserve_ceo_approval', 'Reserve Approval from CEO'),
+        ('reserve_manager_approvals', 'Reserve Extension Approval from Manager'),
+        ('reserve_ceo_approval', 'Reserve Extension Approval from CEO'),
         ('assigned', 'Ready'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
@@ -100,7 +100,6 @@ class StockPickingInh(models.Model):
             temp.set('create', '0')
             temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
-
         return result
 
     def check_date(self):
@@ -129,7 +128,7 @@ class StockPickingInh(models.Model):
         #     userObj = self.env['res.users'].browse([i])
         act_type_xmlid = 'mail.mail_activity_data_todo'
         summary = 'Reserved DO Notification'
-        note = '25 Days passed.In 5 days left DO will be unreserved Automatically.'
+        note = '25 Days passed.In 5 days left, DO no: ' + self.name + ' will be unreserved Automatically.'
         if act_type_xmlid:
             activity_type = self.sudo().env.ref(act_type_xmlid)
         model_id = self.env['ir.model']._get(self._name).id
@@ -151,7 +150,7 @@ class StockPickingInh(models.Model):
     def action_reserve_approval_ceo(self):
         for rec in self:
             rec.is_reserve_approved = True
-            rec.state = 'assigned'
+            rec.action_assign()
 
     def action_send_for_approvals(self):
         for rec in self:

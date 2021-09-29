@@ -1,15 +1,21 @@
 <odoo>
     <data>
 
-
-      <record model="ir.ui.view" id="stock_sale__status">
+        <record model="ir.ui.view" id="stock_sale__status">
             <field name="name">sale_invoice_status</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
 
+                 <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                    <field name="is_above" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree" position="attributes">
+                    <attribute name="decoration-danger">is_above==True</attribute>
+                </xpath>
+
                 <xpath expr="//button[@name='action_confirm']" position="replace">
-                    <button name="action_confirm" states="manager,ceo,draft" string="Confirm Sale"
+                    <button name="action_confirm" states="draft" string="Confirm Sale"
                             class="btn-primary o_sale_confirm" type="object"/>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="replace">
@@ -25,13 +31,27 @@
                     <field name="allowed_discount"/>
                     <field name="create_user"/>
                 </xpath>
-                  <xpath expr="//button[@name='action_confirm'][2]" position="after">
-                        <button name="from_manager_approval" states="draft,sent" type="object" class="oe_highlight"
-                                string="Approval From Manager"/>
-                        <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
-                                string="Approval From CEO"/>
-                  </xpath>
-           </field>
+                <xpath expr="//field[@name='partner_id']" position="after">
+<!--                    <field name="manager_discount" groups="smc_project_latest.group_sale_discount_manager"/>-->
+<!--                    <field name="ceo_discount" groups="smc_project_latest.group_sale_discount_ceo"/>-->
+<!--                    <field name="requested_discount"/>-->
+                    <field name="is_approved_by_manager_discount" invisible="1"/>
+                    <field name="is_approved_by_ceo_discount" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//button[@name='action_confirm'][2]" position="after">
+                    <button name="from_manager_approval" states="draft,sent" type="object" class="oe_highlight"
+                            string="Get Approval From Manager"/>
+                    <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
+                            string="Get Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
+<!--                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"-->
+<!--                            string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>-->
+                    <button name="action_confirm" states="manager" type="object" class="oe_highlight"
+                            string="Confirm Sale"  groups="smc_project_latest.group_sale_discount_manager"/>
+                    <button name="action_confirm" states="ceo" type="object" class="oe_highlight"
+                            string="Approve Sale" groups="smc_project_latest.group_sale_discount_ceo"/>
+                </xpath>
+            </field>
         </record>
 
         <record model="ir.ui.view" id="sale_note_readonly_inh">
@@ -43,6 +63,7 @@
                 <xpath expr="//field[@name='note']" position="attributes">
                     <attribute name="readonly">1</attribute>
                 </xpath>
+
             </field>
         </record>
 
@@ -70,6 +91,7 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
+
             </field>
         </record>
 
@@ -79,9 +101,9 @@
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='edi_state']" position="after">
-<!--                    <field name="delivery_order" string="Receipt"/>-->
-<!--                    <field name="sale_origin" attrs="{'invisible': [('move_type' ,'=', 'in_invoice')]}"/>-->
-<!--                    <field name="purchase_origin" attrs="{'invisible': [('move_type' ,'=', 'out_invoice')]}"/>-->
+                    <!--                    <field name="delivery_order" string="Receipt"/>-->
+                    <!--                    <field name="sale_origin" attrs="{'invisible': [('move_type' ,'=', 'in_invoice')]}"/>-->
+                    <!--                    <field name="purchase_origin" attrs="{'invisible': [('move_type' ,'=', 'out_invoice')]}"/>-->
                     <field name="create_user" />
                 </xpath>
             </field>
@@ -115,10 +137,10 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="shipping_address"/>
                     <field name="create_user"/>
-<!--                    <field name="purchase_id" attrs="{'invisible': [('show_origin' ,'=', False)]}"/>-->
-<!--                    <field name="sale_id" attrs="{'invisible': [('show_origin' ,'=', True)]}"/>-->
-<!--                    <field name="invoice_origin"/>-->
-<!--                    <field name="show_origin" invisible="1"/>-->
+                    <!--                    <field name="purchase_id" attrs="{'invisible': [('show_origin' ,'=', False)]}"/>-->
+                    <!--                    <field name="sale_id" attrs="{'invisible': [('show_origin' ,'=', True)]}"/>-->
+                    <!--                    <field name="invoice_origin"/>-->
+                    <!--                    <field name="show_origin" invisible="1"/>-->
                 </xpath>
             </field>
         </record>

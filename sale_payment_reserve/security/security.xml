@@ -5,6 +5,21 @@
         <field name="category_id" ref="base.module_category_sales_sales"/>
     </record>
 
+     <record model="ir.module.category" id="reserve_approvals_groups_root">
+        <field name="name">Reserve Approvals</field>
+        <field name="description">Manage Reserve Approvals Security</field>
+    </record>
+
+    <record id="group_ceo_approval_reserve" model="res.groups">
+        <field name="name">Reserve Approval for CEO</field>
+        <field name="category_id" ref="reserve_approvals_groups_root"/>
+    </record>
+
+    <record id="group_manager_approval_reserve" model="res.groups">
+        <field name="name">Reserve Approval for Manager</field>
+        <field name="category_id" ref="reserve_approvals_groups_root"/>
+    </record>
+
     <record model="ir.module.category" id="accounting_approvals_groups_root">
         <field name="name">Accounting Approvals</field>
         <field name="description">Manage Account Approvals Security</field>

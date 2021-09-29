@@ -30,6 +30,7 @@
 			<xpath expr="//button[@name='button_cancel']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_invoice_buttons_user</attribute>
             </xpath>
+
 		</field>
 	</record>
 
@@ -56,12 +57,6 @@
 		<field name="inherit_id" ref="sale.view_order_form"/>
 		<field name="arch" type="xml">
 
-<!--			<xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">-->
-<!--				<field name="is_service_product"/>-->
-<!--			</xpath>-->
-<!--			<xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">-->
-<!--				<attribute name="attrs">{'readonly': [('is_service_product', '=', False)]}</attribute>-->
-<!--			</xpath>-->
 			<xpath expr="//field[@name='partner_id']" position="attributes">
 				<attribute name="domain">[('user_id', '=', uid)]</attribute>
             </xpath>
@@ -91,10 +86,10 @@
 		<field name="arch" type="xml">
 
 			<xpath expr="//header/button[@name='action_assign']" position="after">
-				<button type="object" string="Reserve Approval From Manager" class="oe_highlight" attrs="{'invisible':[('state', 'not in', 'reserve_manager_approvals')]}" name="action_reserve_approval_manager" groups="sales_consultant_user_rights.group_show_reserve_approval_manager_button"/>
+				<button type="object" string="Reserve Approval From Manager" class="oe_highlight" states="reserve_manager_approvals" name="action_reserve_approval_manager" groups="sales_consultant_user_rights.group_show_reserve_approval_manager_button"/>
             </xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
-				<button type="object" string="Reserve Approval From CEO" class="oe_highlight" name="action_reserve_approval_ceo" attrs="{'invisible':[('state', 'not in', 'reserve_ceo_approval')]}" groups="sales_consultant_user_rights.group_show_reserve_approval_ceo_button"/>
+				<button type="object" string="Reserve Approval From CEO" class="oe_highlight" name="action_reserve_approval_ceo" states="reserve_ceo_approval" groups="sales_consultant_user_rights.group_show_reserve_approval_ceo_button"/>
             </xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
 				<button type="object" string="Send for Approval From CEO and Manager" class="oe_highlight" attrs="{'invisible':['|','|','|',('is_reserve_approved', '=', True),('is_sent_for_approval', '=', True), ('is_notified', '=', False), ('state', '!=', 'assigned')]}" name="action_send_for_approvals"/>
@@ -103,10 +98,10 @@
 				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
             </xpath>
 			<xpath expr="//button[@name='button_validate']" position="attributes">
-				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
+				<attribute name="groups">sales_consultant_user_rights.group_show_validate_button_user</attribute>
             </xpath>
 			<xpath expr="//button[4]" position="attributes">
-				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
+				<attribute name="groups">sales_consultant_user_rights.group_show_validate_button_user</attribute>
             </xpath>
 			<xpath expr="//button[@name='button_scrap']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
@@ -123,7 +118,6 @@
 			<xpath expr="//button[@name='do_print_picking']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
             </xpath>
-
 			<xpath expr="//field[@name='origin']" position="after">
 				<field name="is_reserve_approved" invisible="1"/>
 				<field name="is_notified" invisible="1"/>
