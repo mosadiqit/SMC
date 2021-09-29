@@ -132,7 +132,7 @@
                     <field name="finish_no" />
                     <field name="sqm_box" />
                     <field name="total_sqm" force_save="1" readonly="1"/>
-<!--                    <field name="total_pcs" force_save="1" readonly="1"/>-->
+                    <field name="total_pcs" force_save="1" readonly="1"/>
                 </xpath>
             </field>
         </record>
@@ -197,8 +197,7 @@
             <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
             <field name="arch" type="xml">
               <xpath expr="//tree/field[@name='product_uom_qty']" position="after">
-                    <field name="sqm_box" force_save="1"/>
-                    <field name="total_sqm" force_save="1"/>
+                    <field name="sqm_box" />
                 </xpath>
             </field>
         </record>
