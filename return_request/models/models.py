@@ -120,7 +120,12 @@ class ReturnRequest(models.Model):
             line_vals = []
             for line in request_lines:
                 sale_order = line.invoice_id.invoice_origin
+                if not sale_order:
+                    sale_order = line.invoice_id.account_link
                 delivery = self.env['stock.picking'].search([('origin', '=', sale_order)])
+                if not delivery:
+                    delivery = self.env['stock.picking'].search([('stock_link', '=', sale_order)])
+                print('Dell',delivery)
                 if len(delivery) > 1:
                     delivery = delivery[0]
                 sale_order = self.env['procurement.group'].search([('name', '=', sale_order)])
@@ -144,6 +149,7 @@ class ReturnRequest(models.Model):
                 'location_dest_id': delivery.location_id.id,
                 'group_id': sale_order.id
             })
+            print('Picking',new_picking)
             new_picking.write({
                 'move_lines': line_vals,
             })
@@ -227,7 +233,8 @@ class ReturnRequested(models.Model):
             price_unit = ''
             discount = ''
             for line in rec.invoice_id.invoice_line_ids:
-                if line.product_id.id == rec.product_id.id:
+                new = self.env['product.product'].search([('system_code', '=', int(float(line.product_id.system_code)))])
+                if new.id == rec.product_id.id:
                     qty = line.quantity
                     price_unit = line.price_unit
                     discount = line.discount
@@ -247,5 +254,6 @@ class ReturnRequested(models.Model):
         product_list = []
         for rec in self.invoice_id.invoice_line_ids:
             if rec.product_id.type == 'product':
-                product_list.append(rec.product_id.id)
+                new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
+                product_list.append(new.id)
         return {'domain': {'product_id': [('id', 'in', product_list)]}}
