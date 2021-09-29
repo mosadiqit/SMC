@@ -6,7 +6,6 @@ from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 
 
-
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
@@ -17,10 +16,6 @@ class SaleOrderInh(models.Model):
                                       help="This is the delivery date promised to the customer. "
                                            "If set, the delivery order will be scheduled based on "
                                            "this date rather than product lead times.")
-
-    def _compute_delivery_date(self):
-        for rec in self:
-            rec.commitment_date = datetime.today().date() + relativedelta(days=3)
 
     @api.depends('name')
     def compute_payments(self):
@@ -67,8 +62,8 @@ class StockPickingInh(models.Model):
         ('confirmed', 'Waiting'),
         ('manager_approval', 'Credit Approval from Manager'),
         ('ceo_approval', 'Credit Approval from CEO'),
-        ('reserve_manager_approvals', 'Reserve Approval from Manager'),
-        ('reserve_ceo_approval', 'Reserve Approval from CEO'),
+        ('reserve_manager_approvals', 'Reserve Extension Approval from Manager'),
+        ('reserve_ceo_approval', 'Reserve Extension Approval from CEO'),
         ('duration_manager_approvals', 'Duration Approval from Manager'),
         ('duration_ceo_approval', 'Duration Approval from CEO'),
         ('assigned', 'Ready'),
@@ -89,6 +84,10 @@ class StockPickingInh(models.Model):
     is_approved_by_ceo = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
+
+    def action_test(self):
+        self.is_approved_by_ceo = 'ceo'
+        self.action_assign()
 
     # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
     # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
