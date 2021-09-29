@@ -64,6 +64,7 @@ class StockPickingInh(models.Model):
         ('ceo_approval', 'Credit Approval from CEO'),
         ('reserve_manager_approvals', 'Reserve Extension Approval from Manager'),
         ('reserve_ceo_approval', 'Reserve Extension Approval from CEO'),
+        ('reserve_ext_ceo_approval', 'Reserve Extension Approval from CEO'),
         ('duration_manager_approvals', 'Duration Approval from Manager'),
         ('duration_ceo_approval', 'Duration Approval from CEO'),
         ('assigned', 'Ready'),
@@ -85,7 +86,7 @@ class StockPickingInh(models.Model):
         ('none', 'None'),
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
 
-    def action_testss(self):
+    def action_testsss(self):
         self.is_approved_by_manager = 'manager'
         self.state = 'duration_ceo_approval'
 
