@@ -145,7 +145,7 @@ class StockPickingInh(models.Model):
         activities = self.env['mail.activity'].create(create_vals)
 
     def action_reserve_approval_manager(self):
-        self.state = 'reserve_ext_ceo_approval'
+        self.state = 'reserve_ceo_approval'
 
     def action_reserve_approval_ceo(self):
         for rec in self:
@@ -155,7 +155,7 @@ class StockPickingInh(models.Model):
     def action_send_for_approvals(self):
         for rec in self:
             rec.is_sent_for_approval = True
-            rec.state = 'reserve_ext_manager_approvals'
+            rec.state = 'reserve_manager_approvals'
 
 
 class AccountMoveInh(models.Model):
