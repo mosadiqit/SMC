@@ -8,6 +8,8 @@ class ResUserInh(models.Model):
 
     manager_id = fields.Many2one('res.users')
 
+    
+    
 
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
