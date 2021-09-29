@@ -86,10 +86,10 @@
 		<field name="arch" type="xml">
 
 			<xpath expr="//header/button[@name='action_assign']" position="after">
-				<button type="object" string="Reserve Approval From Manager" class="oe_highlight" attrs="{'invisible':[('state', 'not in', 'reserve_manager_approvals')]}" name="action_reserve_approval_manager" groups="sales_consultant_user_rights.group_show_reserve_approval_manager_button"/>
+				<button type="object" string="Reserve Approval From Manager" class="oe_highlight" attrs="{'invisible':[('state', 'not in', 'reserve_ext_manager_approvals')]}" name="action_reserve_approval_manager" groups="sales_consultant_user_rights.group_show_reserve_approval_manager_button"/>
             </xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
-				<button type="object" string="Reserve Approval From CEO" class="oe_highlight" name="action_reserve_approval_ceo" attrs="{'invisible':[('state', 'not in', 'reserve_ceo_approval')]}" groups="sales_consultant_user_rights.group_show_reserve_approval_ceo_button"/>
+				<button type="object" string="Reserve Approval From CEO" class="oe_highlight" name="action_reserve_approval_ceo" attrs="{'invisible':[('state', 'not in', 'reserve_ext_ceo_approval')]}" groups="sales_consultant_user_rights.group_show_reserve_approval_ceo_button"/>
             </xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
 				<button type="object" string="Send for Approval From CEO and Manager" class="oe_highlight" attrs="{'invisible':['|','|','|',('is_reserve_approved', '=', True),('is_sent_for_approval', '=', True), ('is_notified', '=', False), ('state', '!=', 'assigned')]}" name="action_send_for_approvals"/>
