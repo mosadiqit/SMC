@@ -37,7 +37,7 @@
                 <button string="Approve From CEO" type="object" class="oe_highlight" groups="sale_payment_reserve.group_ceo_approval" name="action_ceo_approval" attrs="{'invisible': [('state', '!=', 'ceo_approval')]}"/>
                 <button name="action_reject" states="ceo_approval,manager_approval" type="object" class="oe_highlight"
                         string="Reject" groups="sale_payment_reserve.group_ceo_approval,sale_payment_reserve.group_manager_approval"/>
-                                    <button name="action_test" type="object" string="test"/>
+                                    <button name="action_testss" type="object" string="test"/>
                 <!--                    <button string="Get Approval" type="object" class="oe_highlight" name="action_get_approvals" attrs="{'invisible': ['|',('state', '!=', 'confirmed'), ('no_enough_amount', '=', False)]}"/>-->
                 <button string="Approve to Reserve From Manager" type="object" states="duration_manager_approvals" class="oe_highlight" name="action_duration_manager_approval" groups="sale_payment_reserve.group_manager_approval_reserve"/>
                 <button string="Approve to Reserve From CEO" type="object" states="duration_ceo_approval" class="oe_highlight" name="action_duration_ceo_approval" groups="sale_payment_reserve.group_ceo_approval_reserve"/>
