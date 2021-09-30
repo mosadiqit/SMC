@@ -29,6 +29,7 @@
         'data/sequence.xml',
         'views/product_views.xml',
         'views/account_views.xml',
+        'views/sale_views.xml',
         'reports/ledger_report.xml',
     ],
 }
