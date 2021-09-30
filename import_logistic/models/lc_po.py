@@ -1,6 +1,11 @@
 from odoo import api, fields, models
 
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    is_import_vendor = fields.Boolean('Is import Vendor?')
+
 class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
 
