@@ -186,8 +186,6 @@ class SaleOrder(models.Model):
     # def onchange_discount(self):
     #     if self.manager_discount > self.allowed_discount:
     #         raise UserError('You Cannot Add Discount more than your allowed discount.')
-    def action_reject(self):
-        self.state = 'draft'
 
     def compute_self_id(self):
         for i in self:
@@ -264,8 +262,7 @@ class users_inherit(models.Model):
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
-    shipping_address = fields.Char(string='Shipping Address', related='partner_id.street')
-    partner_mobile = fields.Char(string='Mobile', related='partner_id.mobile')
+    shipping_address = fields.Char(string='Shipping Address')
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
     invoice_origin = fields.Many2one('account.move', compute='_compute_invoice_origin')
     show_origin = fields.Boolean('Show Origin', compute='compute_show_origin')
