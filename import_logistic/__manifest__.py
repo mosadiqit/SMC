@@ -11,7 +11,7 @@
         'account',
         'purchase',
         'stock_landed_costs',
-        #                 'obro_workflows',
+        'import_vendor_field',
     ],
     'data': [
         'security/ir.model.access.csv',
