@@ -87,8 +87,7 @@ class StockPickingInh(models.Model):
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
 
     def action_testsss(self):
-        self.is_approved_by_manager = 'manager'
-        self.state = 'duration_ceo_approval'
+        self.state = 'reserve_ceo_approval'
 
     # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
     # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
