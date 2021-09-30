@@ -8,12 +8,12 @@
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Landscape</field>
-        <field name="margin_top">20</field>
+        <field name="margin_top">45</field>
         <field name="margin_bottom">5</field>
         <field name="margin_left">2</field>
         <field name="margin_right">2</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">15</field>
+        <field name="header_spacing">43</field>
         <field name="dpi">90</field>
     </record>
     <!-- QWeb Reports -->
@@ -43,10 +43,8 @@
                     <!--                <t t-call="web.external_layout_standard">-->
                     <!--                <t t-call="web.internal_layout">-->
                     <!--                    <t t-call="purchase_order_report.your_custom_layout_header">-->
-
                     <div class="page">
                         <!--                        <t t-call="web.external_layout_standard">-->
-
                         <div class="row">
                             <div class="col-8">
                             </div>
@@ -77,27 +75,24 @@
                                     <th name="th_price_unit" class="text-center"  style="border:1px solid black;"><strong>UOM</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>INV Value</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>INV Total</strong></th>
-                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Ass Val</strong></th>
-                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Assessed Total Value</strong></th>
+                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Unit Ass Val</strong></th>
+                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Assd Total</strong></th>
 <!--                                    <th name="th_amount" class="text-center"><strong>Val in PKR</strong></th>-->
 <!--                                    <th name="th_amount" class="text-center"><strong>Per unit in PKR</strong></th>-->
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Unit C.D</strong></th>
-                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>C.D</strong></th>
+                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Total C.D</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Other Unit Cost</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Other Total</strong></th>
 
-                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Unit Cost Total</strong></th>
+                                    <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Unit Cost</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Total Cost</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Sale Rate</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Sale Total</strong></th>
                                     <th name="th_amount" class="text-center"  style="border:1px solid black;"><strong>Margin(%)</strong></th>
 <!--                                    <th name="th_amount" class="text-right"><strong>Picture</strong></th>-->
-
                                 </tr>
                             </thead>
                             <tbody>
-
-
                                 <t t-foreach="o.picking_ids.purchase_ids" t-as="purchase">
                                     <t t-set="current_total" t-value="0"/>
                                     <t t-set="total_qty" t-value="0"/>
@@ -214,14 +209,16 @@
                                         <td style="border:1px solid black;"></td>
                                         <td style="border:1px solid black;"></td>
                                         <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="total_fc" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
-                                        <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="assess_val" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
+<!--                                        <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="assess_val" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>-->
+                                        <td style="border:1px solid black;"></td>
                                         <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="total_assess_val" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
 <!--                                        <td></td>-->
                                         <td style="border:1px solid black;"></td>
                                         <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="total_cd" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
                                         <td style="border:1px solid black;"></td>
                                         <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="total_other_charges" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
-                                        <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="unit_cost_total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
+<!--                                        <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="unit_cost_total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>-->
+                                        <td style="border:1px solid black;"></td>
                                         <td style="font-size:18px;border:1px solid black;font-weight:bold;" class="text-right"><strong><span t-esc="total_cost" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></strong></td>
 <!--                                        <td></td>-->
 <!--                                        <td></td>-->
