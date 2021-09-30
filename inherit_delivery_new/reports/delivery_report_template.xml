@@ -126,12 +126,14 @@
                             <table class="mt-3" width="100%">
                                 <thead class="data_table_heading">
                                     <tr>
-                                        <th width="5%" class="vertical_middle">Sr</th>
+                                        <th width="5%" class="text-center">Sr</th>
                                         <th width="30%">Item Description</th>
-                                        <th width="15%">Article</th>
-                                        <th width="15%">Finish</th>
-                                        <th width="15%" class="text-left pl-2">Unit</th>
-                                        <th width="15%" class="text-left pl-2">Quantity</th>
+                                        <th width="15%" class="text-center">Article</th>
+                                        <th width="15%" class="text-center">Finish</th>
+<!--                                        <th width="10%" class="text-center">SQM/Box</th>-->
+                                        <th width="10%" class="text-center">Total Box</th>
+                                        <th width="10%" class="text-center">Unit</th>
+                                        <th width="10%" class="text-center">Quantity</th>
                                     </tr>
                                 </thead>
 
@@ -145,10 +147,12 @@
                                         <tr>
                                             <td class="vertical_middle"> <t t-esc="count_id"/> </td>
                                             <td><span t-field="line.product_id.name"/></td>
-                                            <td><span t-field="line.product_id.article_no"/></td>
-                                            <td><span t-field="line.product_id.finish_no"/></td>
-                                            <td><span t-field="line.product_uom_id"/></td>
-                                            <td class="text-left pl-2"><span t-field="line.qty_done"/></td>
+                                            <td class="text-center"><span t-field="line.product_id.article_no"/></td>
+                                            <td class="text-center"><span t-field="line.product_id.finish_no"/></td>
+<!--                                            <td class="text-center"><span t-field="line.sqm_box"/></td>-->
+                                            <td class="text-center"><span t-field="line.total_sqm"/></td>
+                                            <td class="text-center"><span t-field="line.product_uom_id"/></td>
+                                            <td class="text-center"><span t-field="line.qty_done"/></td>
                                         <t t-set="total_quantity" t-value="total_quantity+line.qty_done"/>
                                         </tr>
                                     </t>
