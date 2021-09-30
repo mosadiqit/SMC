@@ -7,13 +7,15 @@
     'author': 'Itech Reosurces',
     'company': 'ItechResources',
     'depends': [
+        'base',
         'account',
         'purchase',
         'stock_landed_costs',
-        #                 'obro_workflows',
+        'import_vendor_field',
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
         'data/lc_sequence.xml',
         # 'views/account_invoice.xml',
         'views/lc_view.xml',
