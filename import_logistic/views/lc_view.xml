@@ -71,7 +71,7 @@
                     <button name="compute"  attrs="{'invisible':[('s_for','!=','import')]}" string="Compute" type="object"  class="oe_highlight"/>
                 </xpath>
                 <xpath expr="//field[@name='date_order']" position="after">
-                    <field name="s_for"/>
+                    <field name="s_for" groups="import_logistic.import_purchase_group"/>
                     <field name="lc_account" attrs="{'invisible':[('s_for','=','local')],'required':[('s_for','=','import')]}"/>
                     <field name="is_lc" attrs="{'invisible':['|',('s_for','=','local'),('is_tt','=',True)],'required':[('s_for','=','import')]}"/>
                     <field name="is_tt" attrs="{'invisible':['|',('s_for','=','local'),('is_lc','=',True)],'required':[('s_for','=','import')]}"/>
