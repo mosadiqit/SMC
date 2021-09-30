@@ -111,6 +111,7 @@ class StockPickingInh(models.Model):
 
     def action_duration_ceo_approval(self):
         self.is_approved_by_ceo = 'ceo'
+        self.do_unreserve()
         self.action_assign()
 
     @api.depends('sale_id.amount_total')
