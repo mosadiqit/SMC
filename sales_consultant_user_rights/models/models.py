@@ -106,7 +106,7 @@ class StockPickingInh(models.Model):
         transfers = self.env['stock.picking'].search([('state', 'in', ['assigned'])])
         for rec in transfers:
             if rec.scheduled_date:
-                diff = datetime.today() - rec.scheduled_date
+                diff = datetime.today() - rec.create_date
                 if abs(diff.days) > 25:
                     rec._create_notification()
                     rec.is_notified = True
