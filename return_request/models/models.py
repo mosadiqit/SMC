@@ -210,6 +210,7 @@ class ReturnRequested(models.Model):
     reason_of_return = fields.Char("Reason Of Return")
     finish_no = fields.Char('Finish No', related='product_id.finish_no')
     recieved_qty = fields.Float('Received Qty')
+    sqm_box = fields.Float('SQM/Box', related='product_id.sqm_box')
     state = fields.Selection(
         [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),
          ('done', 'Validate'),
@@ -266,9 +267,10 @@ class ReturnRequested(models.Model):
                         if new.id == rec.product_id.id:
                             if line.product_id.uom_id.name == 'BOX':
                                 qty = line.quantity * rec.product_id.sqm_box
+                                price_unit = line.price_unit / rec.product_id.sqm_box
                             else:
                                 qty = line.quantity
-                            price_unit = line.price_unit
+                                price_unit = line.price_unit
                             discount = line.discount
                     else:
                         if line.product_id.id == rec.product_id.id:
