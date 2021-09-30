@@ -94,8 +94,12 @@
 			<xpath expr="//header/button[@name='action_assign']" position="after">
 				<button type="object" string="Send for Approval From CEO and Manager" class="oe_highlight" attrs="{'invisible':['|','|','|',('is_reserve_approved', '=', True),('is_sent_for_approval', '=', True), ('is_notified', '=', False), ('state', '!=', 'assigned')]}" name="action_send_for_approvals"/>
             </xpath>
+<!--			action_report_delivery-->
 			<xpath expr="//header/button[@name='action_assign']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
+            </xpath>
+			<xpath expr="//button[@name='%(stock.action_report_delivery)d']" position="attributes">
+				<attribute name="groups">sales_consultant_user_rights.group_show_validate_button_user</attribute>
             </xpath>
 			<xpath expr="//button[@name='button_validate']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_validate_button_user</attribute>
