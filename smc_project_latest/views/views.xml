@@ -41,9 +41,11 @@
 
                 <xpath expr="//button[@name='action_confirm'][2]" position="after">
                     <button name="from_manager_approval" states="draft,sent" type="object" class="oe_highlight"
-                            string="Get Approval From Manager"/>
+                            string="Get Discount Approval"/>
                     <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
-                            string="Get Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
+                            string="Get Discount Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
+                    <button name="action_reject" states="manager,ceo" type="object" class="oe_highlight"
+                            string="Reject" groups="smc_project_latest.group_sale_discount_manager,smc_project_latest.group_sale_discount_ceo"/>
 <!--                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"-->
 <!--                            string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>-->
                     <button name="action_confirm" states="manager" type="object" class="oe_highlight"
@@ -66,7 +68,6 @@
 
             </field>
         </record>
-
 
         <record model="ir.ui.view" id="sale_discount_inh">
             <field name="name">sale.order.discount.inh</field>
@@ -136,6 +137,7 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="shipping_address"/>
+                    <field name="partner_mobile"/>
                     <field name="create_user"/>
                     <!--                    <field name="purchase_id" attrs="{'invisible': [('show_origin' ,'=', False)]}"/>-->
                     <!--                    <field name="sale_id" attrs="{'invisible': [('show_origin' ,'=', True)]}"/>-->
