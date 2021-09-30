@@ -2,6 +2,52 @@
 <odoo>
     <data>
 
+        <record id="view_partner_form_branch" model="ir.ui.view">
+            <field name="name">res.partner.form.inh</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="phone" position="after">
+                    <field name="is_import_vendor"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="action_import_customer_view" model="ir.actions.act_window">
+            <field name="name">Import Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('is_import_vendor', '=', True)]</field>
+            <field name="context">{'search_default_supplier': 1,'default_is_company': True, 'default_supplier_rank': 1, 'default_is_import_vendor': True}</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Record Found. Let's Create..........
+                </p>
+            </field>
+        </record>
+
+        <record id="action_local_customer_view" model="ir.actions.act_window">
+            <field name="name">Import Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('is_import_vendor', '=', False)]</field>
+            <field name="context">{'search_default_supplier': 1, 'default_is_company': True, 'default_supplier_rank': 1, 'default_is_import_vendor': False}</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Record Found. Let's Create..........
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_account_local_supplier" name="Local Vendors" groups="import_logistic.local_purchase_group" parent="purchase.menu_procurement_management" action="import_logistic.action_import_customer_view" sequence="100"/>
+
+        <menuitem id="menu_account_import_supplier" name="Import Vendors" groups="import_logistic.import_purchase_group" parent="purchase.menu_procurement_management" action="import_logistic.action_import_customer_view" sequence="200"/>
+
+
         <record id="view_purchase_order_form_inherit" model="ir.ui.view">
             <field name="name">purchase.order.inh</field>
             <field name="model">purchase.order</field>
@@ -37,13 +83,13 @@
 
                 <xpath expr="//page[@name='general_information']" position="after">
                     <page string="Assess Values">
-                    <field name="assess_line">
-                        <tree editable="bottom">
-                            <field name="date"/>
-                            <field name="assess_val"/>
-                            <field name="inv_val"/>
-                        </tree>
-                    </field>
+                        <field name="assess_line">
+                            <tree editable="bottom">
+                                <field name="date"/>
+                                <field name="assess_val"/>
+                                <field name="inv_val"/>
+                            </tree>
+                        </field>
                     </page>
                 </xpath>
 
@@ -71,7 +117,7 @@
                     <button name="compute"  attrs="{'invisible':[('s_for','!=','import')]}" string="Compute" type="object"  class="oe_highlight"/>
                 </xpath>
                 <xpath expr="//field[@name='date_order']" position="after">
-                    <field name="s_for"/>
+                    <field name="s_for" groups="import_logistic.import_purchase_group"/>
                     <field name="lc_account" attrs="{'invisible':[('s_for','=','local')],'required':[('s_for','=','import')]}"/>
                     <field name="is_lc" attrs="{'invisible':['|',('s_for','=','local'),('is_tt','=',True)],'required':[('s_for','=','import')]}"/>
                     <field name="is_tt" attrs="{'invisible':['|',('s_for','=','local'),('is_lc','=',True)],'required':[('s_for','=','import')]}"/>
@@ -126,12 +172,12 @@
                     </page>
                 </xpath>
 
-<!--                <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="before">-->
-<!--                    <field name="article_no" />-->
-<!--                    <field name="finish_no" />-->
-<!--                    &lt;!&ndash;                    <field name="total_sqm"/>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    <field name="total_pcs"/>&ndash;&gt;-->
-<!--                </xpath>-->
+                <!--                <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="before">-->
+                <!--                    <field name="article_no" />-->
+                <!--                    <field name="finish_no" />-->
+                <!--                    &lt;!&ndash;                    <field name="total_sqm"/>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    <field name="total_pcs"/>&ndash;&gt;-->
+                <!--                </xpath>-->
             </field>
         </record>
 
