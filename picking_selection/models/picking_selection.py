@@ -40,7 +40,7 @@ class StockPickingInherit(models.Model):
                                           ('delivery_from_rwnd', 'Delivery From RWND'),
                                           ('hold_material', 'Hold Material'),
                                           ('none', '')],
-                                         string='User Picking Type', default='none', tracking=True)
+                                         string='User Picking Type', default='none', tracking=True, related='sale_id.user_picking_type')
 
 
 class AccountMoveInherit(models.Model):
