@@ -1,0 +1,33 @@
+<odoo>
+
+    <record model="ir.ui.view" id="sale_order_form_inh">
+        <field name="name">sale.order.form.inh</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="partner_balance"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="action_stock_picking_view" model="ir.actions.act_window">
+            <field name="name">Delivery Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('user_id', '=', uid)]</field>
+<!--            <field name="context">{'search_default_supplier': 1, 'default_is_company': True, 'default_supplier_rank': 1, 'default_is_import_vendor': False}</field>-->
+            <field name="view_id" ref="stock.vpicktree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Record Found. Let's Create..........
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_sales_deliveries_new" name="Delivery Order" parent="sale.sale_menu_root" action="smc_overall.action_stock_picking_view" sequence="150"/>
+
+
+</odoo>

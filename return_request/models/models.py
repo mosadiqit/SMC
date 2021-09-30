@@ -26,34 +26,8 @@ class ReturnRequest(models.Model):
     is_sent_for_second_approval = fields.Boolean(default=False)
     is_second_approved = fields.Boolean(default=False)
     dest_location_id = fields.Many2one('stock.location')
-    invoice_id = fields.Many2one('account.move')
-    picking_id = fields.Many2one('stock.picking')
-    select_invoice_id = fields.Many2one('account.move')
-    invoice_ids = fields.Many2many('account.move', compute='onchange_get_invoices')
-
-    @api.depends('partner_id')
-    def onchange_get_invoices(self):
-        invoices = self.env['account.move'].search(
-            [('partner_id', '=', self.partner_id.id), ('move_type', '=', 'out_invoice')])
-        self.invoice_ids = invoices.ids
-
-    def action_add_products(self):
-        vals_list = []
-        for rec in self.select_invoice_id.invoice_line_ids:
-            if rec.product_id.type == 'product':
-                if rec.product_id.active == False:
-                    new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
-                    vals_list.append([0, 0, {
-                        'invoice_id': self.select_invoice_id.id,
-                        'product_id': new.id,
-                    }])
-                else:
-                    # product_list.append(rec.product_id.id)
-                    vals_list.append([0, 0, {
-                        'invoice_id': self.select_invoice_id.id,
-                        'product_id': rec.product_id.id,
-                    }])
-        self.request_lines = vals_list
+    invoice_id = fields.Many2many('account.move')
+    picking_id = fields.Many2many('stock.picking')
 
     # @api.depends('request_lines')
     def compute_check_quantity(self):
@@ -138,8 +112,12 @@ class ReturnRequest(models.Model):
             }
             move = self.env['account.move'].create(vals)
             move.action_post()
-
-            self.invoice_id = move.id
+            inv_list = []
+            if self.invoice_id:
+                for pre_inv in self.invoice_id:
+                    inv_list.append(pre_inv.id)
+            inv_list.append(move.id)
+            self.invoice_id = inv_list
             print("Invoice Generated!!!!!!")
 
     def create_delivery(self, invoices_list):
@@ -185,7 +163,12 @@ class ReturnRequest(models.Model):
             })
             new_picking.action_confirm()
             new_picking.button_validate()
-            self.picking_id = new_picking.id
+            picking_list = []
+            if self.picking_id:
+                for pre_pick in self.picking_id:
+                    picking_list.append(pre_pick.id)
+            picking_list.append(new_picking.id)
+            self.picking_id = picking_list
             return new_picking
 
     def action_confirmed(self):
@@ -217,7 +200,6 @@ class ReturnRequested(models.Model):
     invoice_date = fields.Date("Invoice Date", readonly=True, related='invoice_id.invoice_date')
     invoice_id = fields.Many2one("account.move")
     product_id = fields.Many2one("product.product", string="Item Description")
-    uom_id = fields.Many2one("uom.uom", related='product_id.uom_id')
     art = fields.Char("Art", related='product_id.article_no')
     sold_quantity = fields.Float("Sold Qty", compute='compute_sold_quantity')
     previous_return_quantity = fields.Float("Previous Return Qty")
@@ -229,7 +211,6 @@ class ReturnRequested(models.Model):
     finish_no = fields.Char('Finish No', related='product_id.finish_no')
     recieved_qty = fields.Float('Received Qty')
     sqm_box = fields.Float('SQM/Box', related='product_id.sqm_box')
-    # invoice_id = fields.Many2one('account.move')
     state = fields.Selection(
         [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),
          ('done', 'Validate'),

@@ -41,9 +41,9 @@
 
                 <xpath expr="//button[@name='action_confirm'][2]" position="after">
                     <button name="from_manager_approval" states="draft,sent" type="object" class="oe_highlight"
-                            string="Get Approval From Manager"/>
+                            string="Get Discount Approval"/>
                     <button name="from_ceo_approval" states="manager" type="object" class="oe_highlight"
-                            string="Get Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
+                            string="Get Discount Approval From CEO" groups="smc_project_latest.group_sale_discount_manager"/>
                     <button name="action_reject" states="manager,ceo" type="object" class="oe_highlight"
                             string="Reject" groups="smc_project_latest.group_sale_discount_manager,smc_project_latest.group_sale_discount_ceo"/>
 <!--                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"-->

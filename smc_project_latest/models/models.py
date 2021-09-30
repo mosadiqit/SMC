@@ -159,8 +159,8 @@ class SaleOrder(models.Model):
     state = fields.Selection([
         ('draft', 'Quotation'),
         ('sent', 'Quotation Sent'),
-        ('manager', 'Approval from Manager'),
-        ('ceo', 'Approval from CEO'),
+        ('manager', 'Discount Approval from Manager'),
+        ('ceo', 'Discount Approval from CEO'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),

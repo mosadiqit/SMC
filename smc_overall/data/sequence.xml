@@ -3,7 +3,7 @@
     <data noupdate="1">
 
         <record id="seq_num_view" model="ir.sequence">
-            <field name="name">Contact</field>
+            <field name="name">Customer Code</field>
             <field name="code">res.partner.sequence</field>
             <field name="prefix">-</field>
             <field name="padding">4</field>
