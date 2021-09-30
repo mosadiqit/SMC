@@ -270,7 +270,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     if rec_debt:
                         if rec_debt[0].account_id.user_type_id.name == 'Expenses':
                             acc_crd_list.append({
-                                  'name': rec_debt.account_id.name,
+                                  'name': rec_debt[0].account_id.name,
                                   'credit' : cre_val,
                                   'cred_acc': crdit_record.account_id.name,
                                   'partner':  crdit_record.partner_id.name,
