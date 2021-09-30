@@ -25,6 +25,9 @@ class ReturnRequest(models.Model):
     is_check_qty = fields.Boolean(default=False, compute='compute_check_quantity')
     is_sent_for_second_approval = fields.Boolean(default=False)
     is_second_approved = fields.Boolean(default=False)
+    dest_location_id = fields.Many2one('stock.location')
+    invoice_id = fields.Many2many('account.move')
+    picking_id = fields.Many2many('stock.picking')
 
     # @api.depends('request_lines')
     def compute_check_quantity(self):
@@ -109,6 +112,12 @@ class ReturnRequest(models.Model):
             }
             move = self.env['account.move'].create(vals)
             move.action_post()
+            inv_list = []
+            if self.invoice_id:
+                for pre_inv in self.invoice_id:
+                    inv_list.append(pre_inv.id)
+            inv_list.append(move.id)
+            self.invoice_id = inv_list
             print("Invoice Generated!!!!!!")
 
     def create_delivery(self, invoices_list):
@@ -125,7 +134,7 @@ class ReturnRequest(models.Model):
                 delivery = self.env['stock.picking'].search([('origin', '=', sale_order)])
                 if not delivery:
                     delivery = self.env['stock.picking'].search([('stock_link', '=', sale_order)])
-                print('Dell',delivery)
+                # print('Dell',delivery)
                 if len(delivery) > 1:
                     delivery = delivery[0]
                 sale_order = self.env['procurement.group'].search([('name', '=', sale_order)])
@@ -135,7 +144,7 @@ class ReturnRequest(models.Model):
                         'name': 'Transfer In',
                         'product_uom': line.product_id.uom_id.id,
                         'location_id': delivery.location_dest_id.id,
-                        'location_dest_id': delivery.location_id.id,
+                        'location_dest_id': self.dest_location_id.id,
                         'product_uom_qty': line.return_quantity,
                         'quantity_done': line.return_quantity,
                         'group_id': sale_order.id
@@ -146,15 +155,20 @@ class ReturnRequest(models.Model):
                 'state': 'done',
                 'origin': _("Return of %s", delivery.name),
                 'location_id': delivery.location_dest_id.id,
-                'location_dest_id': delivery.location_id.id,
+                'location_dest_id': self.dest_location_id.id,
                 'group_id': sale_order.id
             })
-            print('Picking',new_picking)
             new_picking.write({
                 'move_lines': line_vals,
             })
             new_picking.action_confirm()
             new_picking.button_validate()
+            picking_list = []
+            if self.picking_id:
+                for pre_pick in self.picking_id:
+                    picking_list.append(pre_pick.id)
+            picking_list.append(new_picking.id)
+            self.picking_id = picking_list
             return new_picking
 
     def action_confirmed(self):
@@ -187,15 +201,15 @@ class ReturnRequested(models.Model):
     invoice_id = fields.Many2one("account.move")
     product_id = fields.Many2one("product.product", string="Item Description")
     art = fields.Char("Art", related='product_id.article_no')
-    sold_quantity = fields.Integer("Sold Qty", compute='compute_sold_quantity')
-    previous_return_quantity = fields.Integer("Previous Return Qty")
-    return_quantity = fields.Integer("Return Qty")
+    sold_quantity = fields.Float("Sold Qty", compute='compute_sold_quantity')
+    previous_return_quantity = fields.Float("Previous Return Qty")
+    return_quantity = fields.Float("Return Qty")
     discount_qty = fields.Float("Discount")
-    unit_price = fields.Integer("Unit Price")
+    unit_price = fields.Float("Unit Price")
     total = fields.Float("Total", compute='compute_total')
     reason_of_return = fields.Char("Reason Of Return")
     finish_no = fields.Char('Finish No', related='product_id.finish_no')
-    recieved_qty = fields.Integer('Received Qty')
+    recieved_qty = fields.Float('Received Qty')
     state = fields.Selection(
         [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),
          ('done', 'Validate'),
@@ -206,16 +220,29 @@ class ReturnRequested(models.Model):
         for rec in self:
             if rec.return_quantity:
                 sale_order = rec.invoice_id.invoice_origin
-                group_id = self.env['procurement.group'].search([('name', '=', sale_order)])
+                if not sale_order:
+                    sale_order = rec.invoice_id.account_link
+                sale_id = self.env['sale.order'].search([('name', '=', sale_order)])
                 picking_incoming = self.env['stock.picking.type'].search([('code', '=', 'incoming')], limit=1)
                 deliveries = self.env['stock.picking'].search([('partner_id', '=', rec.request_order_id.partner_id.id),
                                                                ('picking_type_id', '=', picking_incoming.id),
-                                                               ('group_id', '=', group_id.id)])
+                                                               ('sale_id', '=', sale_id.id)])
+                if not deliveries:
+                    deliveries = self.env['stock.picking'].search(
+                        [('partner_id', '=', rec.request_order_id.partner_id.id),
+                         ('picking_type_id', '=', picking_incoming.id),
+                         ('stock_link', '=', sale_order)])
+                print('del',deliveries)
                 delivered_quantity = 0
                 if deliveries:
                     for delivery in deliveries:
                         for line in delivery.move_ids_without_package:
-                            delivered_quantity = delivered_quantity + line.quantity_done
+                            if line.product_id.uom_id.name == 'BOX':
+                                delivered_quantity = delivered_quantity + (line.quantity_done * rec.product_id.sqm_box)
+                                # delivered_quantity = delivered_quantity + line.quantity_done
+                            else:
+                                # delivered_quantity = delivered_quantity + (line.quantity_done * rec.product_id.sqm_box)
+                                delivered_quantity = delivered_quantity + line.quantity_done
                     rec.previous_return_quantity = delivered_quantity
                     total_returned = rec.previous_return_quantity + rec.return_quantity
                     if total_returned > rec.sold_quantity:
@@ -233,11 +260,21 @@ class ReturnRequested(models.Model):
             price_unit = ''
             discount = ''
             for line in rec.invoice_id.invoice_line_ids:
-                new = self.env['product.product'].search([('system_code', '=', int(float(line.product_id.system_code)))])
-                if new.id == rec.product_id.id:
-                    qty = line.quantity
-                    price_unit = line.price_unit
-                    discount = line.discount
+                if line.product_id.type == 'product':
+                    if not line.product_id.active:
+                        new = self.env['product.product'].search([('system_code', '=', int(float(line.product_id.system_code)))])
+                        if new.id == rec.product_id.id:
+                            if line.product_id.uom_id.name == 'BOX':
+                                qty = line.quantity * rec.product_id.sqm_box
+                            else:
+                                qty = line.quantity
+                            price_unit = line.price_unit
+                            discount = line.discount
+                    else:
+                        if line.product_id.id == rec.product_id.id:
+                            qty = line.quantity
+                            price_unit = line.price_unit
+                            discount = line.discount
             rec.sold_quantity = qty
             rec.unit_price = price_unit
             rec.discount_qty = discount
@@ -254,6 +291,10 @@ class ReturnRequested(models.Model):
         product_list = []
         for rec in self.invoice_id.invoice_line_ids:
             if rec.product_id.type == 'product':
-                new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
-                product_list.append(new.id)
+                # print(rec.product_id.active)
+                if rec.product_id.active == False:
+                    new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
+                    product_list.append(new.id)
+                else:
+                    product_list.append(rec.product_id.id)
         return {'domain': {'product_id': [('id', 'in', product_list)]}}
