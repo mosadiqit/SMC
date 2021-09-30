@@ -167,8 +167,12 @@ class StockPickingInh(models.Model):
         self.state = 'ceo_approval'
 
     def action_ceo_approval(self):
-        self.is_approved_by_ceo_credit = 'ceo'
-        self.action_assign()
+        # self.action_assign()
+        for rec in self:
+            rec.is_approved_by_ceo_credit = 'ceo'
+            for line in rec.move_line_ids_without_package:
+                line.action_assign()
+            rec.action_assign()
 
     def action_get_approvals(self):
         self.state = 'manager_approval'
