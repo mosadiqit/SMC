@@ -8,6 +8,9 @@
 			<xpath expr="//field[@name='warehouse_id']" position="attributes">
 				<attribute name="invisible">1</attribute>
             </xpath>
+			<xpath expr="//field[@name='warehouse_id']" position="attributes">
+				<attribute name="domain">[('is_active', '=', True)]</attribute>
+            </xpath>
 		</field>
 	</record>
 
@@ -17,7 +20,8 @@
 		<field name="inherit_id" ref="sale.view_order_form"/>
 		<field name="arch" type="xml">
 			<xpath expr="//field[@name='payment_term_id']" position="after">
-                    <field name="warehouse_id"/>
+                    <field name="warehouse_id" />
+                    <field name="warehouse_ids" widget="many2many_tags"/>
                     <field name="branch_id" readonly="1"/>
                 </xpath>
 		</field>

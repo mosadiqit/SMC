@@ -7,6 +7,12 @@ class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
     partner_balance = fields.Float('Balance', compute='compute_balance')
+    warehouse_ids = fields.Many2many('stock.warehouse', compute='compute_warehouse')
+
+    @api.depends('warehouse_id')
+    def compute_warehouse(self):
+        rec = self.env['stock.warehouse'].search([('is_active', '=', True)])
+        self.warehouse_ids = rec.ids
 
     def compute_balance(self):
         print('Hello')

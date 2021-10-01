@@ -11,13 +11,46 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="stock_picking_form_inh">
+        <field name="name">stock.picking.form.inh</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="manager_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_warehouse_form_inh">
+        <field name="name">stock.warehouse.form.inh</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_active"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_location_form_inh">
+        <field name="name">stock.location.form.inh</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='return_location']" position="after">
+                <field name="is_active"/>
+            </xpath>
+        </field>
+    </record>
+
 
     <record id="action_stock_picking_view" model="ir.actions.act_window">
             <field name="name">Delivery Orders</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">stock.picking</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain">[('user_id', '=', uid)]</field>
+            <field name="domain">['|',('user_id', '=', uid),('manager_id','=',uid)]</field>
 <!--            <field name="context">{'search_default_supplier': 1, 'default_is_company': True, 'default_supplier_rank': 1, 'default_is_import_vendor': False}</field>-->
             <field name="view_id" ref="stock.vpicktree"/>
             <field name="help" type="html">

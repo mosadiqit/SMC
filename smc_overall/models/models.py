@@ -68,7 +68,19 @@ class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
     user_id = fields.Many2one('res.users', related='sale_id.user_id')
+    manager_id = fields.Many2one('res.users', related='sale_id.manager_id')
 
+
+class StockWarehouseInh(models.Model):
+    _inherit = 'stock.warehouse'
+
+    is_active = fields.Boolean('Active')
+
+
+class StockLocationInh(models.Model):
+    _inherit = 'stock.location'
+
+    is_active = fields.Boolean('Active')
 
 
 
