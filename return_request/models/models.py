@@ -10,7 +10,7 @@ class ReturnRequest(models.Model):
     _name = 'returns.bash'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Return Request'
-    _rec_name = 'partner_id'
+    _rec_name = 'name'
     _order = 'id desc'
 
     partner_id = fields.Many2one("res.partner", string="Customer Name")
@@ -30,6 +30,16 @@ class ReturnRequest(models.Model):
     picking_id = fields.Many2one('stock.picking')
     select_invoice_id = fields.Many2one('account.move')
     invoice_ids = fields.Many2many('account.move', compute='onchange_get_invoices')
+    name = fields.Char('Return Request', required=True, copy=False, readonly=True,
+                       index=True, default=lambda self: _('New'))
+
+    @api.model
+    def create(self, vals):
+        print('Hello')
+        if vals.get('name', _('New')) == _('New'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('return.bash.sequence') or _('New')
+        result = super(ReturnRequest, self).create(vals)
+        return result
 
     @api.depends('partner_id')
     def onchange_get_invoices(self):
@@ -196,9 +206,9 @@ class ReturnRequest(models.Model):
         for i in self:
             i.state = 'director'
 
-    @api.onchange("name")
-    def onchange_partner_id(self):
-        self.address = self.name.street
+    # @api.onchange("name")
+    # def onchange_partner_id(self):
+    #     self.address = self.name.street
 
     @api.depends("request_lines.total")
     def compute_total_invoice(self):

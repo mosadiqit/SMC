@@ -15,12 +15,13 @@
     'version': '0.3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'product', 'product_article_finish_no'],
+    'depends': ['base', 'account', 'product', 'product_article_finish_no', 'smc_overall'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'security/security.xml',
+        'data/data.xml',
         'views/views.xml',
         'views/templates.xml',
         'reports/return_request_report.xml',

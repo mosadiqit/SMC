@@ -1,0 +1,11 @@
+<odoo>
+
+        <record id="request_seq_view" model="ir.sequence">
+                <field name="name">Return Request</field>
+                <field name="code">return.bash.sequence</field>
+                <field name="prefix">SRN</field>
+                <field name="padding">4</field>
+                <field name="company_id" eval="False"/>
+        </record>
+
+</odoo>
