@@ -90,7 +90,8 @@
             </xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
 				<button type="object" string="Reserve Approval From CEO" class="oe_highlight" name="action_reserve_approval_ceo" states="reserve_ceo_approval" groups="sales_consultant_user_rights.group_show_reserve_approval_ceo_button"/>
-            </xpath>
+<!--            <button name="test_action" type="object" string="New Test"/>-->
+			</xpath>
 			<xpath expr="//header/button[@name='action_assign']" position="after">
 				<button type="object" string="Send for Approval From CEO and Manager" class="oe_highlight" attrs="{'invisible':['|','|','|',('is_reserve_approved', '=', True),('is_sent_for_approval', '=', True), ('is_notified', '=', False), ('state', '!=', 'assigned')]}" name="action_send_for_approvals"/>
             </xpath>

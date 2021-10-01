@@ -102,6 +102,9 @@ class StockPickingInh(models.Model):
             result['arch'] = etree.tostring(temp)
         return result
 
+    def test_action(self):
+        print(self.state)
+
     def check_date(self):
         transfers = self.env['stock.picking'].search([('state', 'in', ['assigned'])])
         for rec in transfers:
@@ -148,9 +151,9 @@ class StockPickingInh(models.Model):
         self.state = 'reserve_ceo_approval'
 
     def action_reserve_approval_ceo(self):
-        for rec in self:
-            rec.is_reserve_approved = True
-            rec.action_assign()
+        # for rec in self:
+        self.is_reserve_approved = True
+        self.action_assign()
 
     def action_send_for_approvals(self):
         for rec in self:
