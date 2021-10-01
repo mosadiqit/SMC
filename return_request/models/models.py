@@ -16,12 +16,15 @@ class ReturnRequest(models.Model):
     partner_id = fields.Many2one("res.partner", string="Customer Name")
     contact_person_id = fields.Many2one("res.partner", string="Contact Person",
                                         domain="[('id', 'child_of',partner_id)]")
-    address = fields.Char(string="Address")
+    user_id = fields.Many2one('res.users', default=lambda self: self.env.user.id)
+    address = fields.Char(string="Comments")
     date = fields.Datetime(string="Date", default=lambda self: fields.Datetime.now())
     net_total = fields.Integer("Net Total", compute="compute_total_invoice")
     request_lines = fields.One2many("request.line", "request_order_id")
-    state = fields.Selection([('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'), ('done', 'Validated'),
-                              ('rejected', 'Rejected')], string="State", readonly=True, default="user", tracking=1)
+    state = fields.Selection(
+        [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),
+         ('done', 'Validated'),
+         ('rejected', 'Rejected')], string="State", readonly=True, default="user", tracking=1)
     is_check_qty = fields.Boolean(default=False, compute='compute_check_quantity')
     is_sent_for_second_approval = fields.Boolean(default=False)
     is_second_approved = fields.Boolean(default=False)
@@ -32,6 +35,11 @@ class ReturnRequest(models.Model):
     invoice_ids = fields.Many2many('account.move', compute='onchange_get_invoices')
     name = fields.Char('Return Request', required=True, copy=False, readonly=True,
                        index=True, default=lambda self: _('New'))
+
+    @api.onchange('select_invoice_id')
+    def onchange_invoice_id(self):
+        for line in self.request_lines:
+            line.unlink()
 
     @api.model
     def create(self, vals):
@@ -52,7 +60,8 @@ class ReturnRequest(models.Model):
         for rec in self.select_invoice_id.invoice_line_ids:
             if rec.product_id.type == 'product':
                 if rec.product_id.active == False:
-                    new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
+                    new = self.env['product.product'].search(
+                        [('system_code', '=', int(float(rec.product_id.system_code)))])
                     vals_list.append([0, 0, {
                         'invoice_id': self.select_invoice_id.id,
                         'product_id': new.id,
@@ -262,7 +271,7 @@ class ReturnRequested(models.Model):
                         [('partner_id', '=', rec.request_order_id.partner_id.id),
                          ('picking_type_id', '=', picking_incoming.id),
                          ('stock_link', '=', sale_order)])
-                print('del',deliveries)
+                print('del', deliveries)
                 delivered_quantity = 0
                 if deliveries:
                     for delivery in deliveries:
@@ -292,7 +301,8 @@ class ReturnRequested(models.Model):
             for line in rec.invoice_id.invoice_line_ids:
                 if line.product_id.type == 'product':
                     if not line.product_id.active:
-                        new = self.env['product.product'].search([('system_code', '=', int(float(line.product_id.system_code)))])
+                        new = self.env['product.product'].search(
+                            [('system_code', '=', int(float(line.product_id.system_code)))])
                         if new.id == rec.product_id.id:
                             if line.product_id.uom_id.name == 'BOX':
                                 qty = line.quantity * rec.product_id.sqm_box
@@ -324,7 +334,8 @@ class ReturnRequested(models.Model):
             if rec.product_id.type == 'product':
                 # print(rec.product_id.active)
                 if rec.product_id.active == False:
-                    new = self.env['product.product'].search([('system_code', '=', int(float(rec.product_id.system_code)))])
+                    new = self.env['product.product'].search(
+                        [('system_code', '=', int(float(rec.product_id.system_code)))])
                     product_list.append(new.id)
                 else:
                     product_list.append(rec.product_id.id)
