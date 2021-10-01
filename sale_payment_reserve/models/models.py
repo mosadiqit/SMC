@@ -87,7 +87,8 @@ class StockPickingInh(models.Model):
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
 
     def action_testsss(self):
-        self.state = 'reserve_ceo_approval'
+        self.is_approved_by_manager = 'manager'
+        self.state = 'duration_ceo_approval'
 
     # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
     # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
@@ -111,7 +112,6 @@ class StockPickingInh(models.Model):
 
     def action_duration_ceo_approval(self):
         self.is_approved_by_ceo = 'ceo'
-        self.do_unreserve()
         self.action_assign()
 
     @api.depends('sale_id.amount_total')
@@ -167,12 +167,12 @@ class StockPickingInh(models.Model):
         self.state = 'ceo_approval'
 
     def action_ceo_approval(self):
-        # self.action_assign()
-        for rec in self:
-            rec.is_approved_by_ceo_credit = 'ceo'
-            for line in rec.move_line_ids_without_package:
-                line.action_assign()
-            rec.action_assign()
+        self.action_assign()
+        # for rec in self:
+        #     rec.is_approved_by_ceo_credit = 'ceo'
+        #     for line in rec.move_line_ids_without_package:
+        #         line.action_assign()
+        #     rec.action_assign()
 
     def action_get_approvals(self):
         self.state = 'manager_approval'
