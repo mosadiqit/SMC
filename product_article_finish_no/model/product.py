@@ -146,7 +146,10 @@ class StockMoveLine(models.Model):
     sqm_box = fields.Float(string="SQM/Box", related='product_id.sqm_box')
     total_sqm = fields.Float(string="Total Box", compute='_compute_product_uom_qty')
 
-    @api.depends('product_uom_qty')
+    @api.depends('product_uom_qty', 'qty_done')
     def _compute_product_uom_qty(self):
         for rec in self:
-            rec.total_sqm = rec.product_uom_qty / (rec.sqm_box or 1)
+            if rec.state not in ['done']:
+                rec.total_sqm = rec.product_uom_qty / (rec.sqm_box or 1)
+            else:
+                rec.total_sqm = rec.qty_done / (rec.sqm_box or 1)
