@@ -86,6 +86,26 @@ class ProductTemplate(models.Model):
     system_code = fields.Char(string="System Code")
     sqft_box = fields.Float('SQFT/BOX')
     rft_box = fields.Float('RFT/BOX')
+    forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
+    free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
+
+    @api.depends('qty_available')
+    def compute_free_sold_qty(self):
+        for rec in self:
+            rec.free_sold_qty = rec.qty_available - rec.sales_count
+
+    def compute_forecasted_qty(self):
+        for rec in self:
+            products = self.env['stock.move'].search(
+                [('picking_type_id.code', '=', 'incoming'), ('product_id', '=', rec.id),
+                 ('picking_id.state', '=', 'assigned')])
+            qty = 0
+            so_list = []
+            for line in products:
+                qty = qty + line.product_uom_qty
+                # so_list.append('(' + line.picking_id.purchase_id.name + ':' + str(qty) + ')' )
+            # joined_string = ",".join(so_list)
+            rec.forecasted_qty = qty
 
     @api.constrains('system_code')
     def unique_system_code(self):
