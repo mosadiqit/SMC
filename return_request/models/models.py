@@ -290,7 +290,7 @@ class ReturnRequested(models.Model):
     @api.onchange('return_quantity')
     def compute_total(self):
         for rec in self:
-            rec.total = (rec.return_quantity * rec.unit_price) - rec.discount_qty
+            rec.total = ((rec.return_quantity * rec.unit_price) * (rec.discount_qty/100)) - (rec.return_quantity * rec.unit_price)
 
     @api.onchange('product_id')
     def compute_sold_quantity(self):
