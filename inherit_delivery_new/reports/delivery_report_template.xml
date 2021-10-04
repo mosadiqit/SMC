@@ -38,7 +38,6 @@
                             .bold {
                             font-weight:bold;
                             }
-
                         </style>
                         <div class="page">
                             <div class="oe_structure"/>
@@ -81,6 +80,7 @@
                                     </span>
                                 </div>
 				            </div>
+
                             <div class="row col-12" style="font-size:13px;">
                                     <strong>Shipping Address:</strong>
                                     <span class="m-0" t-field="o.shipping_address"/>
@@ -123,6 +123,19 @@
                                 </div>
 
 				            </div>
+                            <div class="row" style="font-size:13px;">
+                                <div class="col-6">
+                                    <strong>Picking Type:</strong>
+                                    <span class="m-0" t-field="o.user_picking_type"/>
+                                </div>
+                                <div class="col-5">
+                                    <span>
+                                        <strong>Comments:</strong>
+                                        <span class="m-0" t-field="o.comments"/>
+                                    </span>
+                                </div>
+				            </div>
+
                             <table class="mt-3" width="100%">
                                 <thead class="data_table_heading">
                                     <tr>
@@ -204,7 +217,6 @@
 
                             <table width="100%" class="mt-5">
                                 <tbody>
-
                                     <tr>
                                         <td width="50%"><span t-field="o.create_user.name"/></td>
                                         <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">
@@ -218,7 +230,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td width="50%" class="text-left font-weight-bold">Sales Consultant</td>
+<!--                                        <td width="50%" class="text-left font-weight-bold">Sales Consultant</td>-->
                                         <td width="50%" class="text-left font-weight-bold"></td>
                                     </tr>
                                     <tr>
@@ -232,7 +244,7 @@
                         Create On:
                         <span t-field="o.create_date" style="font-size:15px"/>
                         Create By:
-                        <span t-field="o.create_uid.name" style="font-size:15px"/>
+                        <span t-field="o.create_user.name" style="font-size:15px"/>
                         Modified on
                         <span t-field="o.write_date" style="font-size:15px"/>
                         Modified By:
