@@ -20,7 +20,7 @@ class ProductProduct(models.Model):
             products = self.env['stock.move'].search([('picking_type_id.code', '=', 'incoming'), ('product_id','=', rec.id),
                                                       ('picking_id.state', '=', 'assigned')])
             qty = 0
-            so_list = []
+            # so_list = []
             for line in products:
                 qty = qty + line.product_uom_qty
                 # so_list.append('(' + line.picking_id.purchase_id.name + ':' + str(qty) + ')' )
@@ -97,7 +97,7 @@ class ProductTemplate(models.Model):
     def compute_forecasted_qty(self):
         for rec in self:
             products = self.env['stock.move'].search(
-                [('picking_type_id.code', '=', 'incoming'), ('product_id', '=', rec.id),
+                [('picking_type_id.code', '=', 'incoming'), ('product_id.product_tmpl_id', '=', rec.id),
                  ('picking_id.state', '=', 'assigned')])
             qty = 0
             so_list = []
