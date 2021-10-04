@@ -31,5 +31,6 @@
         'views/account_views.xml',
         'views/sale_views.xml',
         'reports/ledger_report.xml',
+        'reports/purchase_report.xml',
     ],
 }
