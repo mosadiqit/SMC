@@ -7,6 +7,26 @@ import re
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
+    forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
+    free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
+
+    @api.depends('qty_available')
+    def compute_free_sold_qty(self):
+        for rec in self:
+            rec.free_sold_qty = rec.qty_available - rec.sales_count
+
+    def compute_forecasted_qty(self):
+        for rec in self:
+            products = self.env['stock.move'].search([('picking_type_id.code', '=', 'incoming'), ('product_id','=', rec.id),
+                                                      ('picking_id.state', '=', 'assigned')])
+            qty = 0
+            so_list = []
+            for line in products:
+                qty = qty + line.product_uom_qty
+                # so_list.append('(' + line.picking_id.purchase_id.name + ':' + str(qty) + ')' )
+            # joined_string = ",".join(so_list)
+            rec.forecasted_qty = qty
+
     def name_get(self):
         res = []
         for rec in self:
