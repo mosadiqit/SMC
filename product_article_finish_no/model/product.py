@@ -13,7 +13,11 @@ class ProductProduct(models.Model):
     @api.depends('qty_available')
     def compute_free_sold_qty(self):
         for rec in self:
-            rec.free_sold_qty = rec.qty_available - rec.sales_count
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            prd_resrv_qty = 0
+            for rsrvqt in quants:
+                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     def compute_forecasted_qty(self):
         for rec in self:
