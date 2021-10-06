@@ -14,7 +14,7 @@
                     <field name="article_no" />
                     <field name="finish_no" />
                     <field name="uom_id" />
-                    <field name="sqm_box" />
+                    <field name="sqm_box"  t-options='{"widget": "float", "precision": 4}'/>
                     <field name="sqft_box" />
                     <field name="rft_box" />
                     <field name="pcs_box" />

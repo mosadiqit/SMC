@@ -85,7 +85,7 @@ class ProductTemplate(models.Model):
 
     article_no = fields.Char()
     finish_no = fields.Char()
-    sqm_box = fields.Float(string="SQM/Box")
+    sqm_box = fields.Float(string="SQM/Box", digits=(12, 4))
     pcs_box = fields.Integer(string="PCS/Box")
     system_code = fields.Char(string="System Code")
     sqft_box = fields.Float('SQFT/BOX')
