@@ -4,7 +4,6 @@
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
-
                         <style>
                             .top_general_head {
                             font-weight:bold;
@@ -140,13 +139,14 @@
                                 <thead class="data_table_heading">
                                     <tr>
                                         <th width="5%" class="text-center">Sr</th>
-                                        <th width="30%">Item Description</th>
-                                        <th width="15%" class="text-center">Article</th>
-                                        <th width="15%" class="text-center">Finish</th>
-<!--                                        <th width="10%" class="text-center">SQM/Box</th>-->
+                                        <th width="25%">Item Description</th>
+                                        <th width="10%" class="text-center">Article</th>
+                                        <th width="10%" class="text-center">Finish</th>
+                                        <th width="10%" class="text-center">SQM/Box</th>
                                         <th width="10%" class="text-center">Total Box</th>
-                                        <th width="10%" class="text-center">Unit</th>
-                                        <th width="10%" class="text-center">Quantity</th>
+                                        <th width="5%" class="text-center">Unit</th>
+                                        <th width="10%" class="text-center">Reserved Qty</th>
+                                        <th width="10%" class="text-center">Done Qty</th>
                                     </tr>
                                 </thead>
 
@@ -162,11 +162,12 @@
                                             <td><span t-field="line.product_id.name"/></td>
                                             <td class="text-center"><span t-field="line.product_id.article_no"/></td>
                                             <td class="text-center"><span t-field="line.product_id.finish_no"/></td>
-<!--                                            <td class="text-center"><span t-field="line.sqm_box"/></td>-->
+                                            <td class="text-center"><span t-field="line.sqm_box"/></td>
                                             <td class="text-center"><span t-field="line.total_sqm"/></td>
                                             <td class="text-center"><span t-field="line.product_uom_id"/></td>
                                             <td class="text-center"><span t-field="line.qty_done"/></td>
-                                        <t t-set="total_quantity" t-value="total_quantity+line.qty_done"/>
+                                            <td class="text-center"><span t-field="line.qty_done"/></td>
+                                           <t t-set="total_quantity" t-value="total_quantity + line.qty_done"/>
                                         </tr>
                                     </t>
                                 </tbody>
