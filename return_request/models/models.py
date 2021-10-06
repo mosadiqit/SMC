@@ -137,6 +137,7 @@ class ReturnRequest(models.Model):
                         'product_id': line.product_id.id,
                         'price_unit': line.unit_price,
                         'quantity': line.return_quantity,
+                        'discount': line.discount_qty,
                         'account_id': record.id
                     }))
                     ref = line.invoice_id.name
@@ -214,10 +215,6 @@ class ReturnRequest(models.Model):
     def action_done(self):
         for i in self:
             i.state = 'director'
-
-    # @api.onchange("name")
-    # def onchange_partner_id(self):
-    #     self.address = self.name.street
 
     @api.depends("request_lines.total")
     def compute_total_invoice(self):
