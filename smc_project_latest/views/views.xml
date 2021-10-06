@@ -92,7 +92,6 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
-
             </field>
         </record>
 
@@ -179,7 +178,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//button[@name='action_product_tmpl_forecast_report']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="groups">smc_project_latest.group_show_forecasted_qty</attribute>
                 </xpath>
             </field>
         </record>
@@ -191,9 +190,8 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//button[@name='action_product_forecast_report']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="groups">smc_project_latest.group_show_forecasted_qty</attribute>
                 </xpath>
-<!--                action_product_tmpl_forecast_report-->
             </field>
         </record>
 
