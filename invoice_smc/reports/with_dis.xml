@@ -56,13 +56,10 @@
                             }
                             table tr{
                             }
-
                         </style>
                         <div style="font-size:30px; font-weight: bold;" align="center">
                             <strong>INVOICE</strong>
                         </div>
-
-
                         <div class="container">
                             <div class="container">
                                 <div class="row">
@@ -203,11 +200,11 @@
                                                 <td class="all_border">
                                                     <t t-set="amount_price" t-value="(line.price_unit * line.quantity)"/>
                                                     <!--                                                    <t t-if="line.product_id.type != 'service'">-->
-                                                    <span t-esc="amount_price" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
+                                                    <span t-esc="amount_price" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/>
                                                     <!--                                                    </t>-->
                                                 </td>
                                                 <td class="all_border">
-                                                    <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>
+                                                    <span t-field="line.price_subtotal" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/>
                                                 </td>
                                                 <t t-if="line.product_id.type != 'service'">
                                                     <t t-set="total_quantity" t-value="total_quantity+line.quantity"/>
@@ -248,7 +245,7 @@
 
                                                             <td style="text-align:center">
                                                                 <t t-if="current_qty != 0">
-                                                                    <b><t t-esc="current_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></b>
+                                                                    <b><t t-esc="current_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></b>
                                                                 </t>
                                                             </td>
                                                             <td/>
@@ -258,10 +255,9 @@
                                                             <td/>
 
                                                             <td style="text-align:center; border-right:1px solid black;">
-                                                                <b><t t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></b>
+                                                                <b><t t-esc="current_subtotal" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></b>
                                                             </td>
                                                         </tr>
-
                                                     </tr>
                                                 </t>
                                             </div>
@@ -271,52 +267,25 @@
                                             <td/>
                                             <td/>
                                             <td/>
-
-
                                             <td class="font-weight-bold" style="text-align:right;"><strong style="font-size:15px;">Total :
                                             </strong></td>
-
-
                                             <td style="text-align:center;" class="font-weight-bold">
-
                                                 <strong><span style="text-align:center;" t-esc="total_quantity" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></strong>
                                             </td>
                                             <td/>
                                             <td/>
                                             <td style="text-align:center;" class="font-weight-bold">
-                                                <strong> <span style="text-align:center;" t-esc="total_amount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></strong>
+                                                <strong> <span style="text-align:center;" t-esc="total_amount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></strong>
                                             </td>
                                             <td style="text-align:center; border-right:1px solid black;" class="font-weight-bold">
-                                                <strong>  <span style="text-align:center;" t-esc="after_dic" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/></strong>
+                                                <strong>  <span style="text-align:center;" t-esc="after_dic" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 1}"/></strong>
                                             </td>
                                         </tr>
 
 
                                     </tbody>
                                 </table>
-                                <!--<table class="table table-bordered table-sm">-->
-                                <!--    <tbody>-->
-                                <!--        <tr>-->
 
-
-                                <!--          <td><strong style="font-size:15px;">Total :-->
-                                <!--                </strong></td>-->
-                                <!--                   <td></td>-->
-
-                                <!--            <td style="text-align:center">-->
-
-                                <!--                <span  t-esc="total_quantity" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>-->
-                                <!--            </td>-->
-                                <!--               <td></td>-->
-                                <!--            <td style="text-align:center">-->
-                                <!--                <span  t-esc="total_amount" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>-->
-                                <!--             </td>-->
-                                <!--             <td style="text-align:center">-->
-                                <!--                <span  t-esc="after_dic" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 0}"/>-->
-                                <!--            </td>-->
-                                <!--        </tr>-->
-                                <!--    </tbody>-->
-                                <!--</table>-->
                                 <div class="container" style="margin-top:20px;">
                                     <div class="row justify-content-end" style="height:11px;margin-bottom:13px;">
                                         <div class="col-6" style="font-size:14px;text-align:right; ">
@@ -324,7 +293,7 @@
                                         </div>
                                         <div class="col-3" style="margin-top:-7px;">
                                             <p style="text-align:right;">
-                                                <span t-esc="total_amount_gross"/>
+                                                <span t-esc="total_amount_gross" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                             </p>
                                         </div>
                                     </div>
@@ -337,7 +306,7 @@
                                         </div>
                                         <div class="col-3" style="margin-top:-7px;">
                                             <p style="text-align:right;">
-                                                <span t-esc="total_discount_amount"/>
+                                                <span t-esc="total_discount_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                             </p>
                                         </div>
                                     </div>
@@ -376,8 +345,7 @@
                                         </div>
                                         <div class="col-3" style="margin-top:-7px;">
                                             <p style="text-align:right;">
-                                                <span t-raw="o.second_discount"/>
-
+                                                <span t-raw="o.second_discount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                             </p>
                                         </div>
                                     </div>
@@ -395,7 +363,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="container" style="margin-top:-22px;">
+                                <div class="container" style="margin-top:-22px;border:none;">
                                     <div class="row justify-content-end" style="height:11px;margin-bottom:15px;">
                                         <div class="col-2" style="font-size:13px;text-align:right; padding-right:110px; ">
                                             <p style="font-weight:bold;"/>
@@ -418,18 +386,16 @@
                                     <span t-field="o.narration"/>
                                 </div>
                             </div>
-
                             <div style="page-break-inside: avoid;">
-
                                 <br/>
                                 <div class="container row" style="margin-top:4em;margin-left:2em; font-size:15px;">
                                     <div class="col-4">
-                                        <t t-esc="o.create_uid.name"/>
+                                        <t t-esc="o.invoice_user_id.name"/>
                                         _________________________<br/>
 
-                                        <strong>Sales Consultant</strong><br/>
-                                        <strong> <t t-esc="o.create_uid.email"/></strong><br/>
-                                        <strong><t t-esc="o.create_uid.phone"/></strong>
+<!--                                        <strong>Sales Consultant</strong><br/>-->
+                                        <strong> <t t-esc="o.invoice_user_id.email"/></strong><br/>
+                                        <strong><t t-esc="o.invoice_user_id.phone"/></strong>
                                     </div>
                                     <div class="col-4">
                                         <br/>
@@ -442,16 +408,16 @@
                                         <strong>Customer</strong>
                                     </div>
                                 </div>
-                                <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:13px" align="center">
-                                    Create On:
-                                    <span t-field="o.create_date" style="font-size:15px"/>
-                                    Create By:
-                                    <span t-field="o.create_uid.name" style="font-size:15px"/>
-                                    Modified on
-                                    <span t-field="o.write_date" style="font-size:15px"/>
-                                    Modified By:
-                                    <span t-field="o.write_uid.name" style="font-size:15px"/>
-                                </div>
+<!--                                <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:13px" align="center">-->
+<!--                                    Create On:-->
+<!--                                    <span t-field="o.create_date" style="font-size:15px"/>-->
+<!--                                    Create By:-->
+<!--                                    <span t-field="o.invoice_user_id.name" style="font-size:15px"/>-->
+<!--                                    Modified on-->
+<!--                                    <span t-field="o.write_date" style="font-size:15px"/>-->
+<!--                                    Modified By:-->
+<!--                                    <span t-field="o.write_uid.name" style="font-size:15px"/>-->
+<!--                                </div>-->
 
                             </div>
                         </div>
