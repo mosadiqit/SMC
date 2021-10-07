@@ -153,7 +153,7 @@ class StockPickingInh(models.Model):
     def action_reserve_approval_ceo(self):
         # for rec in self:
         self.is_reserve_approved = True
-        self.action_assign()
+        self.state = 'assigned'
 
     def action_send_for_approvals(self):
         for rec in self:
