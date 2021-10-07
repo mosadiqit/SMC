@@ -81,7 +81,6 @@ class ProductProduct(models.Model):
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
-    _description = 'smc_customization.smc_customization'
 
     article_no = fields.Char()
     finish_no = fields.Char()
@@ -96,7 +95,11 @@ class ProductTemplate(models.Model):
     @api.depends('qty_available')
     def compute_free_sold_qty(self):
         for rec in self:
-            rec.free_sold_qty = rec.qty_available - rec.sales_count
+            prd_resrv_qty = 0.0
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            for rsrvqt in quants:
+                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     def compute_forecasted_qty(self):
         for rec in self:
