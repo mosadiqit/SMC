@@ -25,6 +25,12 @@
             <xpath expr="//field[@name='location_dest_id']" position="attributes">
                 <attribute name="domain">[('is_active', '=', True)]</attribute>
             </xpath>
+            <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'not in', ['draft', 'assigned'])]}</attribute>
+            </xpath>
+             <xpath expr="//field[@name='location_id']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state', 'not in', ['draft', 'assigned'])]}</attribute>
+            </xpath>
         </field>
     </record>
 
