@@ -32,6 +32,7 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_assign']" position="after">
                 <button string="Check Availability" type="object" class="oe_highlight" name="action_reserve_do" attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+                <button string="Check Availability" type="object" class="oe_highlight" name="action_assign_custom" attrs="{'invisible': [('state', '!=', 'assigned')]}"/>
                 <button string="Get Credit Approval" type="object" class="oe_highlight" name="action_get_approvals" attrs="{'invisible': ['|',('state', '!=', 'confirmed'), ('no_enough_amount', '=', False)]}"/>
                 <button string="Approve From Manager" type="object" class="oe_highlight" groups="sale_payment_reserve.group_manager_approval" name="action_manager_approval" attrs="{'invisible': [('state', '!=', 'manager_approval')]}"/>
                 <button string="Approve From CEO" type="object" class="oe_highlight" groups="sale_payment_reserve.group_ceo_approval" name="action_ceo_approval" attrs="{'invisible': [('state', '!=', 'ceo_approval')]}"/>

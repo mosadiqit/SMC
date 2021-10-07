@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from operator import itemgetter
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
+
+from odoo.tools import OrderedSet, float_is_zero, float_compare, groupby
 
 
 class SaleOrderInh(models.Model):
@@ -85,6 +88,10 @@ class StockPickingInh(models.Model):
     is_approved_by_ceo = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
+
+    def action_assign_custom(self):
+        self.do_unreserve()
+        self.action_assign()
 
     def action_testsss(self):
         self.is_approved_by_manager = 'manager'
