@@ -282,13 +282,13 @@
                                 <t t-esc="o.create_uid.name"/>
                                 _________________________<br/>
 
-                                <strong>Sales Consultant</strong>
+                                <strong> <t t-esc="o.create_user.designation"/></strong><br/>
                                 <strong> <t t-esc="o.create_uid.email"/></strong><br/>
                                 <strong><t t-esc="o.create_uid.phone"/></strong>
                             </div>
                             <div class="col-4">
                                 <br/>
-                                _________________________<br/>
+                                _________________________
                                 <strong>Approved By</strong>
                             </div>
                             <div class="col-4">

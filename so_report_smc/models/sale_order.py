@@ -25,3 +25,5 @@ class AddSection(models.Model):
 #     _name = 'section.product'
 #
 #     name = fields.Char("Section Name")
+
+

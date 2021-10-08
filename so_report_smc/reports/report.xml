@@ -16,22 +16,22 @@
         <field name="header_spacing">20</field>
         <field name="dpi">90</field>
     </record>
-    <report
-        id="report_quotation_smc"
-        model="sale.order"
-        string="SO Img With Discount"
-        report_type="qweb-pdf"
-        name="so_report_smc.quotation_smc_report"
-        file="so_report_smc.quotation_smc_report"
-        paperformat="paperformat_report_smc"/>
+<!--    <report-->
+<!--        id="report_quotation_smc"-->
+<!--        model="sale.order"-->
+<!--        string="SO Img With Discount"-->
+<!--        report_type="qweb-pdf"-->
+<!--        name="so_report_smc.quotation_smc_report"-->
+<!--        file="so_report_smc.quotation_smc_report"-->
+<!--        paperformat="paperformat_report_smc"/>-->
 
-    <report
-        id="report_quotation_smc_without_discount"
-        model="sale.order"
-        string="SO Img W/O discount"
-        report_type="qweb-pdf"
-        name="so_report_smc.quotation_smc_report_without_dis"
-        file="so_report_smc.quotation_smc_report_without_dis"
-        paperformat="paperformat_report_smc"/>
+<!--    <report-->
+<!--        id="report_quotation_smc_without_discount"-->
+<!--        model="sale.order"-->
+<!--        string="SO Img W/O discount"-->
+<!--        report_type="qweb-pdf"-->
+<!--        name="so_report_smc.quotation_smc_report_without_dis"-->
+<!--        file="so_report_smc.quotation_smc_report_without_dis"-->
+<!--        paperformat="paperformat_report_smc"/>-->
 
 </odoo>

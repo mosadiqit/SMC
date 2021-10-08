@@ -364,7 +364,8 @@
                                 <t t-esc="o.create_uid.name"/>
                                 _________________________<br/>
 
-                                <strong>Sales Consultant</strong>
+<!--                                <strong>Sales Consultant</strong>-->
+                                <strong> <span t-esc="o.create_user.designation"/></strong><br/>
                                 <strong> <t t-esc="o.create_uid.email"/></strong><br/>
                                 <strong><t t-esc="o.create_uid.phone"/></strong>
                             </div>
