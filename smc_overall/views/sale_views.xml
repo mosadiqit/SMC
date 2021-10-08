@@ -28,22 +28,11 @@
             <xpath expr="//field[@name='location_dest_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'not in', ['draft', 'assigned'])]}</attribute>
             </xpath>
-             <xpath expr="//field[@name='location_id']" position="attributes">
+            <xpath expr="//field[@name='location_id']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'not in', ['draft', 'assigned'])]}</attribute>
             </xpath>
         </field>
     </record>
-
-    <!--    <record model="ir.ui.view" id="purchase_order_form_inh">-->
-    <!--        <field name="name">purchase.order.form.inh</field>-->
-    <!--        <field name="model">purchase.order</field>-->
-    <!--        <field name="inherit_id" ref="stock.view_picking_form"/>-->
-    <!--        <field name="arch" type="xml">-->
-    <!--            <xpath expr="//field[@name='location_id']" position="attributes">-->
-    <!--                <attribute name="domain">[('is_active', '=', True)]</attribute>-->
-    <!--            </xpath>-->
-    <!--        </field>-->
-    <!--    </record>-->
 
     <record model="ir.ui.view" id="stock_warehouse_form_inh">
         <field name="name">stock.warehouse.form.inh</field>
