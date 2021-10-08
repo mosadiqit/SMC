@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'account', 'branch', 'sales_consultant_user_rights'],
+    'depends': ['base', 'sale', 'account', 'branch'],
 
     # always loaded
     'data': [
