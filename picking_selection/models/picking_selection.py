@@ -31,7 +31,7 @@ class SaleOrderInherit(models.Model):
 class StockPickingInherit(models.Model):
     _inherit = 'stock.picking'
 
-    comments = fields.Char(string='Comments', tracking=True)
+    comments = fields.Char(string='Comments', tracking=True, related='sale_id.comments')
 
     user_picking_type = fields.Selection([('deliver_at_dha', 'Deliver At DHA S.R'),
                                           ('deliver_at_clg', 'Deliver At CLG RD S.R'),
