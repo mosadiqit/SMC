@@ -40,8 +40,14 @@
                         </style>
                         <div class="page">
                             <div class="oe_structure"/>
-                            <div style="font-size:30px; font-weight: bold;" align="center">
+                            <div style="font-size:30px; font-weight: bold;" align="center" t-if="o.picking_type_id.code == 'outgoing'">
                                 <strong>Delivery Order</strong>
+                            </div>
+                            <div style="font-size:30px; font-weight: bold;" align="center" t-if="o.picking_type_id.code == 'incoming'">
+                                <strong>Receipt</strong>
+                            </div>
+                            <div style="font-size:30px; font-weight: bold;" align="center" t-if="o.picking_type_id.code == 'internal'">
+                                <strong>Internal Transfer</strong>
                             </div>
                             <br/>
                             <div class="oe_structure"/>

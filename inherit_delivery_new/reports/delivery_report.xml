@@ -18,7 +18,7 @@
     <report
             id="report_sale_delivery"
             model="stock.picking"
-            string="Delivery Note"
+            string="Report"
             report_type="qweb-pdf"
             name="inherit_delivery_new.sale_delivery_pdf"
             file="inherit_delivery_new.sale_delivery_pdf"
