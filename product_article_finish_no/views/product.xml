@@ -20,7 +20,7 @@
                     <field name="pcs_box" />
                 </field>
                 <xpath expr="//field[@name='barcode']" position="after">
-                    <field name="system_code" />
+                    <field name="system_code" readonly="1"/>
                 </xpath>
             </field>
         </record>
@@ -146,6 +146,18 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_picking_internal_search_inherit_stock_picking_article" model="ir.ui.view">
+        <field name="name">stock.picking.search</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="move_line_ids_without_package" string="Article No" filter_domain="[('move_line_ids_without_package.product_id.article_no', 'ilike', self)]"/>
+                <field name="move_line_ids_without_package" string="Finish No" filter_domain="[('move_line_ids_without_package.product_id.finish_no', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
 
         <record id="product_template_view_search_inherit" model="ir.ui.view">
             <field name="name">product.template.search.inherit.sale</field>

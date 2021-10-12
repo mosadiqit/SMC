@@ -92,6 +92,13 @@ class ProductTemplate(models.Model):
     forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
     free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
 
+    @api.model
+    def create(self, vals):
+        products = self.env['product.template'].search([], order="id desc")
+        vals['system_code'] = int(products[0].system_code) + 1
+        result = super(ProductTemplate, self).create(vals)
+        return result
+
     @api.depends('qty_available')
     def compute_free_sold_qty(self):
         for rec in self:
@@ -119,6 +126,17 @@ class ProductTemplate(models.Model):
         product = self.env['product.template'].search([('system_code', '=', self.system_code)])
         if len(product) > 1:
             raise UserError('System Code Already Exist')
+
+    @api.constrains('name')
+    def unique_product_desc(self):
+        name = self.name
+        article_no = self.article_no
+        finish_no = self.finish_no
+        product = self.env['product.template'].search([('name', '=', name)])
+        article = self.env['product.template'].search([('article_no', '=', article_no)])
+        finish = self.env['product.template'].search([('finish_no', '=', finish_no)])
+        if len(product) > 1 and len(article) > 1 and len(finish) > 1:
+            raise UserError('Product Already Exists!!!!')
 
 
 class SaleOrder(models.Model):
