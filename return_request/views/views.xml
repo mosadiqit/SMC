@@ -89,7 +89,7 @@
               <group>
                 <group>
                   <group>
-                    <field name="net_total" widget="monetary"/>
+                    <field name="net_total" widget="monetary" attrs="{'invisible': [('state', '=', 'approved')]}"/>
                   </group>
                 </group>
               </group>
