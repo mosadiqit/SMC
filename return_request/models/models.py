@@ -14,6 +14,7 @@ class ReturnRequest(models.Model):
     _order = 'id desc'
 
     partner_id = fields.Many2one("res.partner", string="Customer Name")
+    branch_id = fields.Many2one("res.branch", string="Branch", default=lambda self: self.env.user.branch_id)
     contact_person_id = fields.Many2one("res.partner", string="Contact Person",
                                         domain="[('id', 'child_of',partner_id)]")
     user_id = fields.Many2one('res.users', default=lambda self: self.env.user.id)
@@ -36,6 +37,11 @@ class ReturnRequest(models.Model):
     name = fields.Char('Return Request', required=True, copy=False, readonly=True,
                        index=True, default=lambda self: _('New'))
 
+    def action_assign_branch(self):
+        object = self.env['return.bash'].search([])
+        for rec in object:
+            rec.branch_id = rec.user_id.branch_id.id
+
     @api.onchange('select_invoice_id')
     def onchange_invoice_id(self):
         for line in self.request_lines:
@@ -43,7 +49,6 @@ class ReturnRequest(models.Model):
 
     @api.model
     def create(self, vals):
-        print('Hello')
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('return.bash.sequence') or _('New')
         result = super(ReturnRequest, self).create(vals)

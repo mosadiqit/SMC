@@ -23,6 +23,7 @@
         'security/security.xml',
         'data/data.xml',
         'views/views.xml',
+        'views/return_payment.xml',
         'views/templates.xml',
         'reports/return_request_report.xml',
         'reports/report.xml',
