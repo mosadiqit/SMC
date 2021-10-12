@@ -14,7 +14,7 @@
                         <p><strong>Date: </strong><span t-esc="data['start_date']" t-options="{'widget': 'date'}" />  <strong>- </strong><span t-esc="data['end_date']" t-options="{'widget': 'date'}" /></p>
                     </div>
                 </div>
-                <table class="table table-condensed" name="account_lines_table">
+                <table class="table table-sm" name="account_lines_table">
                     <thead>
                         <tr>
                             <th>Date</th>
