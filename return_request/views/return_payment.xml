@@ -49,9 +49,9 @@
                         <field name="partner_id" required="1"/>
                         <field name="journal_id" required="1"/>
                         <field name="amount"/>
-                        <field name="user_id"/>
+                        <field name="user_id" readonly="1"/>
                         <field name="date"/>
-                        <field name="branch_id"/>
+                        <field name="branch_id" readonly="1"/>
                         <field name="ref"/>
                         <field name="payment_id" string="Reference"/>
                     </group>
