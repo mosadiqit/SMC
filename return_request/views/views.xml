@@ -76,7 +76,7 @@
                     <field name="return_quantity" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
                     <field name="uom_id" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
                     <field name="recieved_qty" attrs="{'readonly': [('state', 'not in', 'approved')]}" />
-                    <field name="unit_price" readonly="1"/>
+                    <field name="unit_price" readonly="1" attrs="{'column_invisible': [('parent.state', '=', 'approved')]}"/>
                     <field name="discount_qty" readonly="1"/>
                     <field name="total" />
                     <field name="reason_of_return"/>

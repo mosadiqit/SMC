@@ -32,8 +32,8 @@
             <form>
                 <header>
                     <button string="Confirm" states="draft" type="object" name="action_confirm" class="oe_highlight"/>
-                    <button string="Approve" states="director" type="object" name="action_approve" class="oe_highlight"/>
-                    <button string="Reject" states="director" type="object" name="action_reject" class="oe_highlight"/>
+                    <button string="Approve" states="director" type="object" name="action_approve" class="oe_highlight" groups="return_request.group_request_director"/>
+                    <button string="Reject" states="director" type="object" name="action_reject" class="oe_highlight" groups="return_request.group_request_director"/>
                     <button string="Set To Draft" states="rejected" type="object" name="action_draft"/>
                     <button string="Cancel" type="object" name="action_cancel"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,director,approved"/>

@@ -38,7 +38,7 @@ class ReturnRequest(models.Model):
                        index=True, default=lambda self: _('New'))
 
     def action_assign_branch(self):
-        object = self.env['returns.bash'].search([])
+        object = self.env['return.bash'].search([])
         for rec in object:
             rec.branch_id = rec.user_id.branch_id.id
 
