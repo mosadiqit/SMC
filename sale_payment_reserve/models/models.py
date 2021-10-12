@@ -13,7 +13,6 @@ class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
     payment_count = fields.Integer(compute='compute_payments')
-    # delivery_date = fields.Date('Delivery Date')
     commitment_date = fields.Datetime('Delivery Date', copy=False,
                                       states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
                                       help="This is the delivery date promised to the customer. "
@@ -70,6 +69,7 @@ class StockPickingInh(models.Model):
         ('reserve_ext_ceo_approval', 'Reserve Extension Approval from CEO'),
         ('duration_manager_approvals', 'Duration Approval from Manager'),
         ('duration_ceo_approval', 'Duration Approval from CEO'),
+        ('approved', 'Approved'),
         ('assigned', 'Ready'),
         ('done', 'Done'),
         ('cancel', 'Cancelled'),
@@ -93,16 +93,6 @@ class StockPickingInh(models.Model):
         self.do_unreserve()
         self.action_assign()
 
-    def action_testsss(self):
-        self.is_approved_by_manager = 'manager'
-        self.state = 'duration_ceo_approval'
-
-    # is_approved_by_manager = fields.Boolean('Reserve Approved By Manager')
-    # is_approved_by_ceo = fields.Boolean('Reserve Approved By CEO')
-
-    # is_approved_by_manager_credit = fields.Boolean('Credit Approved By Manager')
-    # is_approved_by_ceo_credit = fields.Boolean('Credit Approved By CEO')
-
     is_approved_by_manager_credit = fields.Selection([
         ('none', 'None'),
         ('manager', 'Credit Approved By Manager'), ], string='Credit Approved By Manager', default='none')
@@ -119,7 +109,7 @@ class StockPickingInh(models.Model):
 
     def action_duration_ceo_approval(self):
         self.is_approved_by_ceo = 'ceo'
-        self.action_assign()
+        self.state = 'approved'
 
     @api.depends('sale_id.amount_total')
     def compute_payment(self):
@@ -134,7 +124,7 @@ class StockPickingInh(models.Model):
             for par_rec in partner_ledger:
                 bal = bal + (par_rec.debit - par_rec.credit)
             if partner:
-                if -(bal) >= (rec.sale_id.amount_total / 2):
+                if -(bal) >= (rec.sale_id.amount_total * 75) / 100:
                     rec.no_enough_amount = False
                 else:
                     rec.no_enough_amount = True
@@ -154,7 +144,7 @@ class StockPickingInh(models.Model):
                 for par_rec in partner_ledger:
                     bal = bal + (par_rec.debit - par_rec.credit)
                 if partner:
-                    if -(bal) >= (rec.sale_id.amount_total/2):
+                    if -(bal) >= (rec.sale_id.amount_total * 75)/100:
                         if not rec.sale_id.commitment_date:
                             rec.sale_id.commitment_date = datetime.today() + relativedelta(days=3)
                         if abs((rec.sale_id.commitment_date.date() - datetime.today().date()).days) <= 7:
@@ -174,12 +164,8 @@ class StockPickingInh(models.Model):
         self.state = 'ceo_approval'
 
     def action_ceo_approval(self):
-        self.action_assign()
-        # for rec in self:
-        #     rec.is_approved_by_ceo_credit = 'ceo'
-        #     for line in rec.move_line_ids_without_package:
-        #         line.action_assign()
-        #     rec.action_assign()
+        self.is_approved_by_ceo_credit = 'ceo'
+        self.state = 'approved'
 
     def action_get_approvals(self):
         self.state = 'manager_approval'

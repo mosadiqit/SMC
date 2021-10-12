@@ -10,6 +10,7 @@
         <field name="category_id" ref="base.module_category_sales_sales"/>
     </record>
 
+
      <record model="ir.module.category" id="reserve_approvals_groups_root">
         <field name="name">Reserve Approvals</field>
         <field name="description">Manage Reserve Approvals Security</field>
