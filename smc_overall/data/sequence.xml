@@ -10,5 +10,13 @@
 <!--            <field name="company_id" eval="False"/>-->
 	    </record>
 
+<!--        <record id="system_code_seq_view" model="ir.sequence">-->
+<!--                <field name="name">System Code</field>-->
+<!--                <field name="code">system.code.sequence</field>-->
+<!--                <field name="prefix">SYS</field>-->
+<!--                <field name="padding">7</field>-->
+<!--                <field name="company_id" eval="False"/>-->
+<!--        </record>-->
+
     </data>
 </odoo>

@@ -14,8 +14,8 @@ class SaleOrderInh(models.Model):
         rec = self.env['stock.warehouse'].search([('is_active', '=', True)])
         self.warehouse_ids = rec.ids
 
+    @api.depends('partner_id')
     def compute_balance(self):
-        print('Hello')
         partner_ledger = self.env['account.move.line'].search(
             [('partner_id', '=', self.partner_id.id),
              ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),

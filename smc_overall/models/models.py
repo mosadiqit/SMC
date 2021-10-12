@@ -4,6 +4,9 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+
+
+
 class ResBranchInh(models.Model):
     _inherit = 'res.branch'
 
@@ -81,6 +84,20 @@ class StockLocationInh(models.Model):
     _inherit = 'stock.location'
 
     is_active = fields.Boolean('Active')
+
+
+class StockMoveLineInh(models.Model):
+    _inherit = 'stock.move.line'
+
+    is_from_active = fields.Boolean('From Active')
+    is_to_active = fields.Boolean('To Active', compute='compute_to_from_active')
+
+    def compute_to_from_active(self):
+        for rec in self:
+            if rec.location_dest_id.is_active:
+                rec.is_to_active = True
+            else:
+                rec.is_to_active = False
 
 
 
