@@ -8,6 +8,7 @@ class SaleOrderInh(models.Model):
 
     partner_balance = fields.Float('Balance', compute='compute_balance')
     warehouse_ids = fields.Many2many('stock.warehouse', compute='compute_warehouse')
+    quo_date = fields.Date('Quotation Date')
 
     @api.depends('warehouse_id')
     def compute_warehouse(self):
