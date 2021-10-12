@@ -161,6 +161,7 @@ class SaleOrder(models.Model):
         ('sent', 'Quotation Sent'),
         ('manager', 'Discount Approval from Manager'),
         ('ceo', 'Discount Approval from CEO'),
+        ('confirmed', 'Approved'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
@@ -169,23 +170,45 @@ class SaleOrder(models.Model):
     max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0, store=True)
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
     create_user = fields.Many2one('res.users', string='User', default=lambda self:self.env.user.id, compute='compute_self_id')
-    # manager_discount = fields.Float('Manager Discount')
-    # ceo_discount = fields.Float('CEO Discount')
-    # requested_discount = fields.Float('Requested Discount')
-
-    # is_approved_by_manager_discount = fields.Boolean('Discount Approved By Manager')
     is_approved_by_manager_discount = fields.Selection([
         ('none', 'None'),
         ('manager', 'Discount Approved By Manager'),], string='Discount Approved By Manager', default='none')
     is_approved_by_ceo_discount = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Discount Approved By CEO'), ], string='Discount Approved By CEO', default='none')
-    # is_approved_by_ceo_discount = fields.Boolean('Discount Approved By CEO')
 
-    # @api.onchange('manager_discount')
-    # def onchange_discount(self):
-    #     if self.manager_discount > self.allowed_discount:
-    #         raise UserError('You Cannot Add Discount more than your allowed discount.')
+    def action_manager_approve(self):
+        for sale_order in self:
+            if sale_order.max_discount > sale_order.allowed_discount:
+                raise UserError(
+                    _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
+            if sale_order.global_discount_type == 'percent':
+                if sale_order.global_order_discount > sale_order.allowed_discount:
+                    raise UserError('Global Discount Should be Less than Allowed Discount')
+
+            else:
+                amount = (sale_order.allowed_discount / 100) * sale_order.amount_untaxed
+                if sale_order.global_order_discount > amount:
+                    raise UserError('Global Discount Should be Less than Allowed Discount')
+            sale_order.is_approved_by_manager_discount = 'manager'
+            sale_order.state = 'confirmed'
+
+    def action_ceo_approve(self):
+        for sale_order in self:
+            if sale_order.max_discount > sale_order.allowed_discount:
+                raise UserError(
+                    _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
+            if sale_order.global_discount_type == 'percent':
+                if sale_order.global_order_discount > sale_order.allowed_discount:
+                    raise UserError('Global Discount Should be Less than Allowed Discount')
+
+            else:
+                amount = (sale_order.allowed_discount / 100) * sale_order.amount_untaxed
+                if sale_order.global_order_discount > amount:
+                    raise UserError('Global Discount Should be Less than Allowed Discount')
+            sale_order.is_approved_by_ceo_discount = 'ceo'
+            sale_order.state = 'confirmed'
+
     def action_reject(self):
         self.state = 'draft'
 
@@ -194,11 +217,9 @@ class SaleOrder(models.Model):
             i.create_user = i.env.user.id
 
     def from_manager_approval(self):
-        self.is_approved_by_manager_discount = 'manager'
         self.state = 'manager'
 
     def from_ceo_approval(self):
-        self.is_approved_by_ceo_discount = 'ceo'
         self.state = 'ceo'
 
     def action_confirm(self):
@@ -215,11 +236,25 @@ class SaleOrder(models.Model):
                 if sale_order.global_order_discount > amount:
                     raise UserError('Global Discount Should be Less than Allowed Discount')
 
+            # partner_ledger = self.env['account.move.line'].search(
+            #     [('partner_id', '=', sale_order.partner_id.id),
+            #      ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+            #      ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+            #      ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+            # existing_deliveries = self.env['stock.picking'].search([('partner_id', '=', sale_order.partner_id.id), ('state', '=', 'assigned')])
+            # existing_bal = 0
+            # for delivery in existing_deliveries:
+            #     existing_bal = existing_bal + delivery.sale_id.amount_total
+            # acc_bal = 0
+            # for par_rec in partner_ledger:
+            #     acc_bal = acc_bal + (par_rec.debit - par_rec.credit)
+            # acc_bal = -(acc_bal) - existing_bal
+            # if acc_bal < ((sale_order.amount_total * 75) / 100):
+            #     raise UserError('No Enough Amount in Account')
         return super(SaleOrder, self).action_confirm()
 
     @api.depends("order_line.discount")
     def compute_max_disccount(self):
-        # record = self.env['sale.order'].search([])
         for i in self:
             maximum = []
             diss = 0.0
@@ -228,15 +263,6 @@ class SaleOrder(models.Model):
             if maximum:
                 diss = max(maximum)
             i.max_discount = diss
-
-    # def add_discount(self):
-    #     if self.env.user.has_group('smc_project_latest.group_sale_discount_manager'):
-    #         # discount = self.order_line[0].discount
-    #         for line in self.order_line:
-    #             line.discount = self.manager_discount
-    #     if self.env.user.has_group('smc_project_latest.group_sale_discount_ceo'):
-    #         for line in self.order_line:
-    #             line.discount = self.ceo_discount
 
 
 class SaleOrderLine(models.Model):
@@ -248,7 +274,6 @@ class SaleOrderLine(models.Model):
     def onchange_discount(self):
         for rec in self:
             if rec.discount > rec.order_id.allowed_discount:
-                # raise UserError('You Cannot Add Discount more than your allowed discount.')
                 rec.is_above = True
             else:
                 rec.is_above = False
@@ -269,16 +294,6 @@ class StockPicking(models.Model):
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
     invoice_origin = fields.Many2one('account.move', compute='_compute_invoice_origin')
     show_origin = fields.Boolean('Show Origin', compute='compute_show_origin')
-
-    # @api.model
-    # def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-    #     result = super(StockPicking, self).fields_view_get(
-    #         view_id=view_id, view_type=view_type, toolbar=toolbar,
-    #         submenu=submenu)
-    #     reports = self.env['ir.actions.report'].search([('report_name', 'in', ['stock.report_picking','stock.report_deliveryslip', 'stock.label_transfer_template_view_pdf', 'stock.label_transfer_template_view_zpl'] )])
-    #     for report in reports:
-    #         report.unlink_action()
-    #     return result
 
     @api.depends('sale_id', 'purchase_id')
     def compute_show_origin(self):

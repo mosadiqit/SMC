@@ -48,10 +48,16 @@
                             string="Reject" groups="smc_project_latest.group_sale_discount_manager,smc_project_latest.group_sale_discount_ceo"/>
                     <!--                    <button name="add_discount" states="manager,ceo" type="object" class="oe_highlight"-->
                     <!--                            string="Add Discount" groups="smc_project_latest.group_sale_discount_manager, smc_project_latest.group_sale_discount_ceo"/>-->
-                    <button name="action_confirm" states="manager" type="object" class="oe_highlight"
-                            string="Confirm Sale"  groups="smc_project_latest.group_sale_discount_manager"/>
-                    <button name="action_confirm" states="ceo" type="object" class="oe_highlight"
-                            string="Approve Sale" groups="smc_project_latest.group_sale_discount_ceo"/>
+<!--                    <button name="action_confirm" states="manager" type="object" class="oe_highlight"-->
+<!--                            string="Confirm Sale"  groups="smc_project_latest.group_sale_discount_manager"/>-->
+                    <button name="action_confirm" states="confirmed" type="object" class="oe_highlight"
+                            string="Confirm Sale"/>
+
+                    <button name="action_manager_approve" states="manager" type="object" class="oe_highlight"
+                            string="Approve" groups="smc_project_latest.group_sale_discount_manager"/>
+
+                    <button name="action_ceo_approve" states="ceo" type="object" class="oe_highlight"
+                            string="Approve" groups="smc_project_latest.group_sale_discount_ceo"/>
                 </xpath>
             </field>
         </record>
@@ -180,6 +186,47 @@
                 <xpath expr="//button[@name='action_product_tmpl_forecast_report']" position="attributes">
                     <attribute name="groups">smc_project_latest.group_show_forecasted_qty</attribute>
                 </xpath>
+
+                <xpath expr="//button[@name='action_open_quants']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
+                 <xpath expr="//button[@name='action_view_orderpoints']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_view_related_putaway_rules']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+                <xpath expr="//div[@name='button_box']/button[5]" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_product_template_purchase_buttons_from_inh" model="ir.ui.view">
+            <field name="name">product.template.from.tree.inh</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="purchase.view_product_template_purchase_buttons_from"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_view_po']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+         <record id="view_product_product_purchase_buttons_from_inh" model="ir.ui.view">
+            <field name="name">product.product.from.tree.inh</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="purchase.product_normal_form_view_inherit_purchase"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_view_po']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
             </field>
         </record>
 
@@ -191,6 +238,21 @@
 
                 <xpath expr="//button[@name='action_product_forecast_report']" position="attributes">
                     <attribute name="groups">smc_project_latest.group_show_forecasted_qty</attribute>
+                </xpath>
+
+                 <xpath expr="//button[@name='action_open_quants']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
+                 <xpath expr="//button[@name='action_view_orderpoints']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_view_related_putaway_rules']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+                <xpath expr="//div[@name='button_box']/button[5]" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
                 </xpath>
             </field>
         </record>
