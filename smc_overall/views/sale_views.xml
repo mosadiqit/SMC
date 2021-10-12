@@ -9,7 +9,7 @@
                 <field name="is_to_active" invisible="1"/>
             </xpath>
                 <xpath expr="//tree" position="attributes">
-                    <attribute name="decoration-success">is_to_active==True</attribute>
+                    <attribute name="decoration-info">is_to_active==True</attribute>
                 </xpath>
             </field>
         </record>
