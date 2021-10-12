@@ -1,14 +1,14 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError
-
+from datetime import date, datetime, timedelta
 
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
     partner_balance = fields.Float('Balance', compute='compute_balance')
     warehouse_ids = fields.Many2many('stock.warehouse', compute='compute_warehouse')
-    quo_date = fields.Date('Quotation Date')
+    quo_date = fields.Date('Quotation Date',default=fields.Date.today)
 
     @api.depends('warehouse_id')
     def compute_warehouse(self):
