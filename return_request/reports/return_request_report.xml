@@ -85,6 +85,7 @@
                                         <th >Finish</th>
                                         <th >Previous Return</th>
                                         <th >Sold Qty</th>
+                                        <th >SQM/Box</th>
                                         <th >Return Qty</th>
                                         <th >Received Qty</th>
                                         <th class="text-left pl-2">Unit</th>
@@ -110,6 +111,7 @@
                                             <td class="text-center"><span t-field="line.finish_no"/></td>
                                             <td class="text-center"><span t-field="line.previous_return_quantity"/></td>
                                             <td class="text-center"><span t-field="line.sold_quantity"/></td>
+                                            <td class="text-center"><span t-field="line.sqm_box"/></td>
                                             <td class="text-center"><span t-field="line.return_quantity"/></td>
                                             <td class="text-center"><span t-field="line.recieved_qty"/></td>
                                             <td class="text-center"><span t-field="line.unit_price"/></td>
