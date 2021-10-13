@@ -145,6 +145,18 @@
                                     <span class="m-0" t-field="o.origin"/>
                                 </div>
                             </div>
+                             <div class="row" style="font-size:13px;">
+                                <div class="col-6">
+                                    <strong>Printed By:</strong>
+                                    <span class="m-0" t-esc="user.name"/>
+                                </div>
+                                <div class="col-5">
+                                    <span>
+                                        <strong>Print Date:</strong>
+                                        <span class="m-0" t-esc="o.get_print_date()"/>
+                                    </span>
+                                </div>
+                            </div>
 
                             <table class="mt-3" width="100%">
                                 <thead class="data_table_heading">
@@ -173,7 +185,7 @@
                                             <td class="text-center"><span t-field="line.product_id.article_no"/></td>
                                             <td class="text-center"><span t-field="line.product_id.finish_no"/></td>
                                             <td class="text-center"><span t-field="line.sqm_box"/></td>
-                                            <td class="text-center"><span t-field="line.total_sqm"/></td>
+                                            <td class="text-center"><span t-field="line.total_sqm" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
                                             <td class="text-center"><span t-field="line.product_uom_id"/></td>
                                             <td class="text-center"><span t-field="line.qty_done"/></td>
                                             <td class="text-center"><span t-field="line.qty_done"/></td>
@@ -221,46 +233,64 @@
                                         <td width="25% text-center" class="pl-5  font-weight-bold">Verified By</td>
                                         <td width="25% text-center" class="pl-5  font-weight-bold">Delivered By</td>
                                         <td width="25% text-center" class="pl-5  font-weight-bold">Received By</td>
-
                                     </tr>
                                 </tbody>
                             </table>
 
-<!--                            <table width="100%" class="mt-5">-->
-<!--                                <tbody>-->
-<!--                                    <tr>-->
-<!--                                        <td width="50%"><span t-field="o.create_user.name"/></td>-->
-<!--                                        <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">-->
-<!--                                            Name: __________________-->
-<!--                                        </td>-->
+<!--                             <table width="100%" class="last_table" style="font-size:10x;">-->
+<!--&lt;!&ndash;                                <thead>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <th width="25% text-center">_______________________</th>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <th width="25% text-center">_______________________</th>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <th width="25% text-center">_______________________</th>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;                                        <th width="25% text-center">_______________________</th>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <tbody>&ndash;&gt;-->
+<!--                                    <tr class="text-center">-->
+<!--                                        <td width="100% text-center" style="font-size:10x;"><span style="font-size:10x;">Printed By: </span><span t-esc="user.name"/> <span>&#160;&#160;&#160;</span><span>Print Date: </span><span t-esc="o.get_print_date()"/> </td>-->
+<!--&lt;!&ndash;                                        <td width="25% text-center" class="pl-5  font-weight-bold">Verified By</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <td width="25% text-center" class="pl-5  font-weight-bold">Delivered By</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <td width="25% text-center" class="pl-5  font-weight-bold">Received By</td>&ndash;&gt;-->
 <!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td width="50%" class="text-left">_______________</td>-->
-<!--                                        <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">-->
-<!--                                            Mobile#: __________________-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        &lt;!&ndash;                                        <td width="50%" class="text-left font-weight-bold">Sales Consultant</td>&ndash;&gt;-->
-<!--                                        <td width="50%" class="text-left font-weight-bold"></td>-->
-<!--                                    </tr>-->
-<!--                                    <tr>-->
-<!--                                        <td width="50%" class="text-left font-weight-bold"><span t-field="o.create_user.partner_id.mobile"/></td>-->
-<!--                                        <td width="50%" class="text-left font-weight-bold"></td>-->
-<!--                                    </tr>-->
-<!--                                </tbody>-->
+<!--&lt;!&ndash;                                </tbody>&ndash;&gt;-->
 <!--                            </table>-->
+
+                            <!--                            <table width="100%" class="mt-5">-->
+                            <!--                                <tbody>-->
+                            <!--                                    <tr>-->
+                            <!--                                        <td width="50%"><span t-field="o.create_user.name"/></td>-->
+                            <!--                                        <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">-->
+                            <!--                                            Name: __________________-->
+                            <!--                                        </td>-->
+                            <!--                                    </tr>-->
+                            <!--                                    <tr>-->
+                            <!--                                        <td width="50%" class="text-left">_______________</td>-->
+                            <!--                                        <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">-->
+                            <!--                                            Mobile#: __________________-->
+                            <!--                                        </td>-->
+                            <!--                                    </tr>-->
+                            <!--                                    <tr>-->
+                            <!--                                        &lt;!&ndash;                                        <td width="50%" class="text-left font-weight-bold">Sales Consultant</td>&ndash;&gt;-->
+                            <!--                                        <td width="50%" class="text-left font-weight-bold"></td>-->
+                            <!--                                    </tr>-->
+                            <!--                                    <tr>-->
+                            <!--                                        <td width="50%" class="text-left font-weight-bold"><span t-field="o.create_user.partner_id.mobile"/></td>-->
+                            <!--                                        <td width="50%" class="text-left font-weight-bold"></td>-->
+                            <!--                                    </tr>-->
+                            <!--                                </tbody>-->
+                            <!--                            </table>-->
                         </div>
-<!--                        <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:15px">-->
-<!--                            Create On:-->
-<!--                            <span t-field="o.create_date" style="font-size:15px"/>-->
-<!--                            Create By:-->
-<!--                            <span t-field="o.create_user.name" style="font-size:15px"/>-->
-<!--                            Modified on-->
-<!--                            <span t-field="o.write_date" style="font-size:15px"/>-->
-<!--                            Modified By:-->
-<!--                            <span t-field="o.write_uid.name" style="font-size:15px"/>-->
-<!--                        </div>-->
+                                                <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:14px">
+                                                    Create On:
+                                                    <span t-field="o.create_date" style="font-size:14px"/>
+                                                    Create By:
+                                                    <span t-field="o.create_user.name" style="font-size:14px"/>
+                                                    Modified on
+                                                    <span t-field="o.write_date" style="font-size:14px"/>
+                                                    Modified By:
+                                                    <span t-field="o.write_uid.name" style="font-size:14px"/>
+                                                </div>
                     </t>
                 </t>
             </t>
