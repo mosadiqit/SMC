@@ -55,6 +55,80 @@ class SaleOrderInh(models.Model):
         return res
 
 
+class StockBackorderConfirmationInh(models.TransientModel):
+    _inherit = 'stock.backorder.confirmation'
+
+    def process(self):
+        pickings_to_do = self.env['stock.picking']
+        pickings_not_to_do = self.env['stock.picking']
+        for line in self.backorder_confirmation_line_ids:
+            if line.to_backorder is True:
+                pickings_to_do |= line.picking_id
+            else:
+                pickings_not_to_do |= line.picking_id
+
+        for pick_id in pickings_not_to_do:
+            moves_to_log = {}
+            for move in pick_id.move_lines:
+                if float_compare(move.product_uom_qty,
+                                 move.quantity_done,
+                                 precision_rounding=move.product_uom.rounding) > 0:
+                    moves_to_log[move] = (move.quantity_done, move.product_uom_qty)
+            pick_id._log_less_quantities_than_expected(moves_to_log)
+
+        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+        if pickings_to_validate:
+            pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate).with_context(
+                skip_backorder=True)
+            if pickings_not_to_do:
+                pickings_to_validate = pickings_to_validate.with_context(
+                    picking_ids_not_to_backorder=pickings_not_to_do.ids)
+
+            return pickings_to_validate.action_validate_inh()
+        return True
+
+    def process_cancel_backorder(self):
+        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+        if pickings_to_validate:
+            return self.env['stock.picking'] \
+                .browse(pickings_to_validate) \
+                .with_context(skip_backorder=True, picking_ids_not_to_backorder=self.pick_ids.ids) \
+                .action_validate_inh()
+        return True
+
+
+class StockImmediateTransferInh(models.TransientModel):
+    _inherit = 'stock.immediate.transfer'
+
+    def process(self):
+        pickings_to_do = self.env['stock.picking']
+        pickings_not_to_do = self.env['stock.picking']
+        for line in self.immediate_transfer_line_ids:
+            if line.to_immediate is True:
+                pickings_to_do |= line.picking_id
+            else:
+                pickings_not_to_do |= line.picking_id
+
+        for picking in pickings_to_do:
+            # If still in draft => confirm and assign
+            if picking.state == 'draft':
+                picking.action_confirm()
+                if picking.state != 'assigned':
+                    picking.action_assign()
+                    if picking.state != 'assigned':
+                        raise UserError(_("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+            for move in picking.move_lines.filtered(lambda m: m.state not in ['done', 'cancel']):
+                for move_line in move.move_line_ids:
+                    move_line.qty_done = move_line.product_uom_qty
+
+        pickings_to_validate = self.env.context.get('button_validate_picking_ids')
+        if pickings_to_validate:
+            pickings_to_validate = self.env['stock.picking'].browse(pickings_to_validate)
+            pickings_to_validate = pickings_to_validate - pickings_not_to_do
+            return pickings_to_validate.with_context(skip_immediate=True).action_validate_inh()
+        return True
+
+
 class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
@@ -71,7 +145,9 @@ class StockPickingInh(models.Model):
         ('duration_ceo_approval', 'Duration Approval from CEO'),
         ('approved', 'Approved'),
         ('assigned', 'Ready'),
+        ('in_transit', 'In Transit'),
         ('done', 'Done'),
+
         ('cancel', 'Cancelled'),
     ], string='Status', compute='_compute_state',
         copy=False, index=True, readonly=True, store=True, tracking=True,
@@ -99,6 +175,17 @@ class StockPickingInh(models.Model):
     is_approved_by_ceo_credit = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Credit Approved By CEO'), ], string='Credit Approved By CEO', default='none')
+
+    def button_validate(self):
+        if self.picking_type_id.code == 'outgoing':
+            self.state = 'in_transit'
+        else:
+            record = super(StockPickingInh, self).button_validate()
+            return record
+
+    def action_validate_inh(self):
+        record = super(StockPickingInh, self).button_validate()
+        return record
 
     def action_reject(self):
         self.state = 'confirmed'
