@@ -216,7 +216,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     if payment:
                         if payment.corporate_sale == False and payment.other_receipt == False and payment.cheques_payment == False and payment.online_credit_payment == False:
                             acc_wise_bal_lst.append({
-                                'partner_journal': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
+                                'partner_journal': (rec.partner_id.name if rec.partner_id.name else ""),# + '[' + rec.journal_id.name + ']',
                                 'debit': dbt,
                                 'label':rec.name
                             })
@@ -782,17 +782,18 @@ class ReportAccountHashIntegrity(models.AbstractModel):
 
         journal_items = self.env['account.move.line'].search([('journal_id.type', '=', 'bank'),
                                                               ('date', '>=', rec_model.date_from),
-                                                              ('date', '<=', rec_model.date_to)])
+                                                              ('date', '<=', rec_model.date_to),
+                                                              ('move_id.state','=','posted')])
         for rec in journal_items:
             if rec.account_id.user_type_id.name == 'Bank and Cash':
 
                 creditobj = self.env['account.move.line'].search([('move_id', '=', rec.move_id.id), ('credit', '>', 0),('branch_id', '=',rec_model.branch.id)])
                 paymentobj = self.env['account.payment'].search(
-                    [('move_id', '=', rec.move_id.id), ('online_credit_payment', '=', True)])
+                    [('move_id', '=', rec.move_id.id), ('online_credit_payment', '=', True),('corporate_sale', '=', False)])
                 if paymentobj.branch_id.id == rec_model.branch.id and rec.debit > 0:
                     print(creditobj.name)
                     account_list.append({
-                              'name': str(creditobj.partner_id.name) + ' ' + "("+str(creditobj.journal_id.name)+")",
+                              'name': str(creditobj.partner_id.name),
                               'debit': rec.debit,
                               'label':rec.name
                     })
@@ -807,7 +808,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
 
         journal_items = self.env['account.move.line'].search([('journal_id.type', '=', 'bank'),
                                                               ('date', '>=', rec_model.date_from),
-                                                              ('date', '<=', rec_model.date_to)])
+                                                              ('date', '<=', rec_model.date_to),
+                                                              ('move_id.state','=','posted')])
         for rec in journal_items:
             if rec.account_id.user_type_id.name == 'Bank and Cash':
                 print(rec.move_id.ref)
@@ -818,7 +820,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                 if paymentobj.branch_id.id == rec_model.branch.id and rec.debit > 0:
                     print(creditobj.name)
                     account_list.append({
-                        'name': str(creditobj.partner_id.name) + ' ' + "(" + str(creditobj.journal_id.name) + ")",
+                        'name': str(creditobj.partner_id.name),
                         'debit': rec.debit,
                         'label':rec.name
                     })
@@ -861,9 +863,9 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                              ])
 
                     if payment:
-                        if payment.corporate_sale == True:
+                        if payment.corporate_sale == True and payment.online_credit_payment == True:
                             corporate_sale_list.append({
-                                'name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
+                                'name': (rec.partner_id.name if rec.partner_id.name else ""),
                                 'debit': dbt,
                                 'label':rec.name
                             })
@@ -871,7 +873,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
 
                         if payment.other_receipt == True:
                             other_receipt_list.append({
-                                'name': (rec.partner_id.name if rec.partner_id.name else "") + '[' + rec.journal_id.name + ']',
+                                'name': (rec.partner_id.name if rec.partner_id.name else ""),
                                 'debit': dbt,
                                 'label':rec.name
                             })

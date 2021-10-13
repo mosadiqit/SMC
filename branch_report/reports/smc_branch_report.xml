@@ -164,11 +164,11 @@
                             
                                  <t t-set="right_side" t-value="acc_credits"/>
                                  <t t-set="left_side"   t-value="acc_debits"/>
-                                 <t t-if="len(left_side) > len(right_side) " > 
+                                 <t t-if="len(left_side) &gt; len(right_side) " > 
                                        <t t-set="report_right_blank" t-value="len(left_side) - len(right_side) "/>
                                  </t>
                                  
-                                  <t t-if="len(right_side) > len(left_side) " > 
+                                  <t t-if="len(right_side) &gt; len(left_side) " > 
                                        <t t-set="report_left_blank" t-value="len(right_side) - len(left_side)"/>
                                  </t>
                             
@@ -208,7 +208,7 @@
                                                         <!--                                                        <t t-set="total_receipt" t-value="(total_receipt + val['amount'])"/>-->
                                                     </t>
                                                     <!-- test case for blank line in retail sale section -->
-                                                    <!-- <t t-set="break_done_retail_sale_side" t-value="False" />
+                                                    <t t-set="break_done_retail_sale_side" t-value="False" />
                                                     
                                                     
                                                     <t t-foreach="acc_credits" t-as="acc_crdt">
@@ -227,7 +227,7 @@
                                                                  </t> 
                                                                  <t t-set="break_done_retail_sale_side" t-value="True" />
                                                             </t>          
-                                                    </t> -->
+                                                    </t>
                                                        <!--end  test case for blank line in retail sale section -->
                                                     
                                                     
