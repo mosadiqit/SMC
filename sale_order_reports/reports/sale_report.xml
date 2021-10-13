@@ -11,7 +11,7 @@
                     </span>
                 </div>
                 <div class="col-8">
-                    <span style="font-weight:bold;"> SMC HOME IMPROVEMENT CENTRE PVT. LTD.</span><br/>
+                    <span style="font-weight:bold;">SHAHID MAHMOOD &amp; CO. (PVT) LTD.</span><br/>
                     <span style="font-weight:bold;">Head Office:</span>&#160;<span t-field="res_company.street"/><br/><span t-field="res_company.email"/>&#160;&#160;&#160;<span>Customer Services:&#160;</span><span t-field="res_company.cs"/>
                 </div>
             </div>
