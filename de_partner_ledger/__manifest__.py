@@ -15,7 +15,7 @@
     'company': 'Hunain AK',
     'website': 'https://www.Hunain AK.com',
     'depends': [
-		'base', 'account',
+		'base', 'account','contacts',
 		],
     'category': 'Accounting',
     'demo': [],
