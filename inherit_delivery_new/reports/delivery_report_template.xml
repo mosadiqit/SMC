@@ -169,6 +169,7 @@
                                         <th width="10%" class="text-center">Total Box</th>
                                         <th width="5%" class="text-center">Unit</th>
                                         <th width="10%" class="text-center">Reserved Qty</th>
+                                        <th width="10%" class="text-center">In transit</th>
                                         <th width="10%" class="text-center">Done Qty</th>
                                     </tr>
                                 </thead>
@@ -187,6 +188,7 @@
                                             <td class="text-center"><span t-field="line.sqm_box"/></td>
                                             <td class="text-center"><span t-field="line.total_sqm" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
                                             <td class="text-center"><span t-field="line.product_uom_id"/></td>
+                                            <td class="text-center"><span t-field="line.product_uom_qty"/></td>
                                             <td class="text-center"><span t-field="line.product_uom_qty"/></td>
                                             <td class="text-center"><span t-field="line.qty_done"/></td>
                                             <t t-set="total_quantity" t-value="total_quantity + line.qty_done"/>
