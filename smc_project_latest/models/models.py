@@ -10,13 +10,12 @@ from lxml import etree
 class SMC(models.Model):
     _inherit = 'product.template'
 
-    sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand", store=True)
+    sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand")
 
-    @api.depends('qty_available', 'purchase_ok', 'sale_ok')
+    # @api.depends('qty_available', 'purchase_ok', 'sale_ok')
     def _compute_on_hand(self):
         for i in self:
             if i.type == 'product':
-                print(i.sale_ok)
                 if not i.sale_ok or not i.purchase_ok:
                     i.sale_discontinued = True
 
