@@ -47,7 +47,9 @@
                             </div>
                             <br/>
 				            <div class="oe_structure"/>
-
+                            <div>
+                                <h3><span t-field="o.name"/></h3>
+                            </div>
                             <div class="row">
                                 <div class="col-6">
                                     <strong>Name:</strong>
@@ -86,6 +88,7 @@
                                         <th >Previous Return</th>
                                         <th >Sold Qty</th>
                                         <th >SQM/Box</th>
+                                        <th >Total Box</th>
                                         <th >Return Qty</th>
                                         <th >Received Qty</th>
                                         <th class="text-left pl-2">Unit</th>
@@ -112,6 +115,7 @@
                                             <td class="text-center"><span t-field="line.previous_return_quantity"/></td>
                                             <td class="text-center"><span t-field="line.sold_quantity"/></td>
                                             <td class="text-center"><span t-field="line.sqm_box"/></td>
+                                            <td class="text-center"><span t-field="line.total_sqm"/></td>
                                             <td class="text-center"><span t-field="line.return_quantity"/></td>
                                             <td class="text-center"><span t-field="line.recieved_qty"/></td>
                                             <td class="text-center"><span t-field="line.unit_price"/></td>

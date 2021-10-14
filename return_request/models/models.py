@@ -250,6 +250,13 @@ class ReturnRequested(models.Model):
     finish_no = fields.Char('Finish No', related='product_id.finish_no')
     recieved_qty = fields.Float('Received Qty')
     sqm_box = fields.Float('SQM/Box', related='product_id.sqm_box')
+    total_sqm = fields.Float(string="Total Box", compute='_compute_product_uom_qty')
+
+    @api.depends('return_quantity')
+    def _compute_product_uom_qty(self):
+        for rec in self:
+            rec.total_sqm = rec.return_quantity / (rec.sqm_box or 1)
+
     # invoice_id = fields.Many2one('account.move')
     state = fields.Selection(
         [('user', 'User'), ('manager', 'Manager'), ('director', 'Director'), ('approved', 'Approved'),

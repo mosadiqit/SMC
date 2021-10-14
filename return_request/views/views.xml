@@ -73,6 +73,7 @@
                     <field name="previous_return_quantity" readonly="1" force_save="1"/>
                     <field name="sold_quantity"/>
                     <field name="sqm_box"/>
+                    <field name="total_sqm"/>
                     <field name="return_quantity" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
                     <field name="uom_id" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
                     <field name="recieved_qty" attrs="{'readonly': [('state', 'not in', 'approved')]}" />
