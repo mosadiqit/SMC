@@ -198,9 +198,18 @@
                 <xpath expr="//button[@name='action_view_related_putaway_rules']" position="attributes">
                     <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
                 </xpath>
+
+                <xpath expr="//button[@name='action_update_quantity_on_hand']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                    <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
+                </xpath>
+
                 <xpath expr="//div[@name='button_box']/button[5]" position="attributes">
                     <attribute name="groups">smc_project_latest.group_show_onhand_purchased_qty</attribute>
                 </xpath>
+
             </field>
         </record>
 

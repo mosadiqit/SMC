@@ -12,21 +12,25 @@ class SMC(models.Model):
 
     sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand", store=True)
 
-    @api.depends('qty_available', 'purchase_ok')
+    @api.depends('qty_available', 'purchase_ok', 'sale_ok')
     def _compute_on_hand(self):
         for i in self:
             if i.type == 'product':
-                if i.qty_available <= 0 and i.purchase_ok == False:
+                print(i.sale_ok)
+                if not i.sale_ok or not i.purchase_ok:
                     i.sale_discontinued = True
-                    i.sale_ok = False
-                elif i.qty_available > 0 and i.purchase_ok == False:
-                    i.sale_discontinued = True
-                    i.sale_ok = True
-                else:
-                    i.sale_ok = True
-                    i.sale_discontinued = False
-            else:
-                i.sale_discontinued = False
+
+            #     if i.qty_available <= 0 and i.purchase_ok == False:
+            #         i.sale_discontinued = True
+            #         i.sale_ok = False
+            #     elif i.qty_available > 0 and i.purchase_ok == False:
+            #         i.sale_discontinued = True
+            #         i.sale_ok = True
+            #     else:
+            #         i.sale_ok = True
+            #         i.sale_discontinued = False
+            # else:
+            #     i.sale_discontinued = False
 
 
 class PurchaseOrderInh(models.Model):
