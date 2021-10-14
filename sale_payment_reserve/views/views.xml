@@ -35,6 +35,7 @@
                 <button string="Check Availability" type="object" class="oe_highlight" name="action_reserve_do" attrs="{'invisible': [('state', '!=', 'confirmed')]}" groups="sale_payment_reserve.group_show_check_availability_buttons_user"/>
                 <button string="Check Availability" type="object" class="oe_highlight" name="action_assign" states="approved" groups="sale_payment_reserve.group_show_check_availability_buttons_user"/>
                 <button string="Validate" type="object" class="oe_highlight" name="action_validate_inh" states="in_transit" groups="sales_consultant_user_rights.group_show_validate_button_user"/>
+                <button string="Go to Ready" type="object" class="oe_highlight" name="action_ready" states="in_transit" groups="sales_consultant_user_rights.group_show_validate_button_user"/>
                 <button string="Check Availability Again" type="object" class="oe_highlight" name="action_assign_custom" attrs="{'invisible': [('state', '!=', 'assigned')]}" groups="sale_payment_reserve.group_show_check_availability_buttons_user"/>
                 <button string="Get Credit Approval" type="object" class="oe_highlight" name="action_get_approvals" attrs="{'invisible': ['|',('state', '!=', 'confirmed'), ('no_enough_amount', '=', False)]}"/>
                 <button string="Approve From Manager" type="object" class="oe_highlight" groups="sale_payment_reserve.group_manager_approval" name="action_manager_approval" attrs="{'invisible': [('state', '!=', 'manager_approval')]}"/>

@@ -176,6 +176,9 @@ class StockPickingInh(models.Model):
         ('none', 'None'),
         ('ceo', 'Credit Approved By CEO'), ], string='Credit Approved By CEO', default='none')
 
+    def action_ready(self):
+        self.state = 'assigned'
+
     def button_validate(self):
         if self.picking_type_id.code == 'outgoing':
             self.state = 'in_transit'
