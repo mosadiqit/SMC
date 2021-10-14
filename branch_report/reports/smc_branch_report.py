@@ -863,14 +863,21 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                                                              ])
 
                     if payment:
-                        if payment.corporate_sale == True and payment.online_credit_payment == True:
-                            corporate_sale_list.append({
-                                'name': (rec.partner_id.name if rec.partner_id.name else ""),
-                                'debit': dbt,
-                                'label':rec.name
-                            })
+                        if bank == True:
+                            if payment.corporate_sale == True and payment.online_credit_payment == True:
+                                corporate_sale_list.append({
+                                    'name': (rec.partner_id.name if rec.partner_id.name else ""),
+                                    'debit': dbt,
+                                    'label':rec.name
+                                })
 
-
+                        if cash == True:
+                            if payment.corporate_sale == True:
+                                corporate_sale_list.append({
+                                    'name': (rec.partner_id.name if rec.partner_id.name else ""),
+                                    'debit': dbt,
+                                    'label':rec.name
+                                }) 
                         if payment.other_receipt == True:
                             other_receipt_list.append({
                                 'name': (rec.partner_id.name if rec.partner_id.name else ""),
