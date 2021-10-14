@@ -12,12 +12,15 @@ class SMC(models.Model):
 
     sale_discontinued = fields.Boolean("Sales Discontinued Products", compute="_compute_on_hand")
 
-    # @api.depends('qty_available', 'purchase_ok', 'sale_ok')
     def _compute_on_hand(self):
         for i in self:
             if i.type == 'product':
                 if not i.sale_ok or not i.purchase_ok:
                     i.sale_discontinued = True
+                else:
+                    i.sale_discontinued = False
+            else:
+                i.sale_discontinued = False
 
             #     if i.qty_available <= 0 and i.purchase_ok == False:
             #         i.sale_discontinued = True
