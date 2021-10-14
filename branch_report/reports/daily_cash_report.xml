@@ -1140,7 +1140,7 @@
                             </table>
                             <!--                            Atif End-->
 
-                            <div class="col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total:
                                 </div>
