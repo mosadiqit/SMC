@@ -230,34 +230,37 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         for sale_order in self:
-            if sale_order.max_discount > sale_order.allowed_discount:
-                raise UserError(
-                    _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
-            if sale_order.global_discount_type == 'percent':
-                if sale_order.global_order_discount > sale_order.allowed_discount:
-                    raise UserError('Global Discount Should be Less than Allowed Discount')
+            if sale_order.state != 'confirmed':
+                if sale_order.max_discount > sale_order.allowed_discount:
+                    raise UserError(
+                        _('Your discount limit is lesser then allowed discount.Click on "Ask for Approval" for Approvals'))
+                if sale_order.global_discount_type == 'percent':
+                    if sale_order.global_order_discount > sale_order.allowed_discount:
+                        raise UserError('Global Discount Should be Less than Allowed Discount')
 
+                else:
+                    amount = (sale_order.allowed_discount / 100) * sale_order.amount_untaxed
+                    if sale_order.global_order_discount > amount:
+                        raise UserError('Global Discount Should be Less than Allowed Discount')
+
+                # partner_ledger = self.env['account.move.line'].search(
+                #     [('partner_id', '=', sale_order.partner_id.id),
+                #      ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                #      ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                #      ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+                # existing_deliveries = self.env['stock.picking'].search([('partner_id', '=', sale_order.partner_id.id), ('state', '=', 'assigned')])
+                # existing_bal = 0
+                # for delivery in existing_deliveries:
+                #     existing_bal = existing_bal + delivery.sale_id.amount_total
+                # acc_bal = 0
+                # for par_rec in partner_ledger:
+                #     acc_bal = acc_bal + (par_rec.debit - par_rec.credit)
+                # acc_bal = -(acc_bal) - existing_bal
+                # if acc_bal < ((sale_order.amount_total * 75) / 100):
+                #     raise UserError('No Enough Amount in Account')
+                return super(SaleOrder, self).action_confirm()
             else:
-                amount = (sale_order.allowed_discount / 100) * sale_order.amount_untaxed
-                if sale_order.global_order_discount > amount:
-                    raise UserError('Global Discount Should be Less than Allowed Discount')
-
-            # partner_ledger = self.env['account.move.line'].search(
-            #     [('partner_id', '=', sale_order.partner_id.id),
-            #      ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-            #      ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-            #      ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
-            # existing_deliveries = self.env['stock.picking'].search([('partner_id', '=', sale_order.partner_id.id), ('state', '=', 'assigned')])
-            # existing_bal = 0
-            # for delivery in existing_deliveries:
-            #     existing_bal = existing_bal + delivery.sale_id.amount_total
-            # acc_bal = 0
-            # for par_rec in partner_ledger:
-            #     acc_bal = acc_bal + (par_rec.debit - par_rec.credit)
-            # acc_bal = -(acc_bal) - existing_bal
-            # if acc_bal < ((sale_order.amount_total * 75) / 100):
-            #     raise UserError('No Enough Amount in Account')
-        return super(SaleOrder, self).action_confirm()
+                return super(SaleOrder, self).action_confirm()
 
     @api.depends("order_line.discount")
     def compute_max_disccount(self):
