@@ -557,16 +557,14 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     cr_jv = j_rec.move_id
                     jornal_entry = self.env['account.move.line'].search([('date', '>=', date_from),
                                                                          ('date', '<=', date_to),
-                                                                         ('branch_id.id', '=', selected_id),
+                                                                    
                                                                          ('move_id.state', '=', 'posted'),
                                                                          ('move_id.id', '=', cr_jv.id),
                                                                          ('move_id.journal_id.type', 'in', ['cash','general'])])
 
                     rec_debt = jornal_entry.filtered(lambda r: r.debit == credt_val)
                     if rec_debt:
-                        if rec_debt[0].account_id.user_type_id.name == 'Current Assets':
-
-
+                        if rec_debt[0].account_id.user_type_id.name in ['Current Assets', 'Bank and Cash']:
 
                             cash_transfer_list.append({
                                 'cre_acc': j_rec.account_id.name,
