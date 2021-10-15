@@ -8,7 +8,7 @@ class ResBranchInh(models.Model):
     _inherit = 'res.branch'
 
     branch_code = fields.Char('Branch Code')
-    active = fields.Boolean(default=True)
+    # active = fields.Boolean(default=True)
 
 
 # class ResUsersInh(models.Model):
