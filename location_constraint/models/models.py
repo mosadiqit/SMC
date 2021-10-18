@@ -57,3 +57,9 @@ class StockLocationInh(models.Model):
                     })
 
         return super(StockLocationInh, self).write(values)
+
+
+class StockquantInh(models.Model):
+    _inherit = 'stock.quant'
+
+    active = fields.Boolean(default=True)
