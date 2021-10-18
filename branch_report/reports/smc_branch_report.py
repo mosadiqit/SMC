@@ -172,22 +172,22 @@ class ReportAccountHashIntegrity(models.AbstractModel):
         #end of for opening balance of accounts with type 'bank and cash'
        #test
 
-            acc_data = self.env['account.move.line'].search(
-                [('account_id', '=', res_acc.id), ('date', '>=', date_from), ('date', '<=', date_to),
-                 ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted'),('move_id.journal_id.type','=','cash')])
-
-            for rec1 in acc_data:
-                dbt1 = 0.0
-                if rec1.debit:
-                    dbt1 = rec1.debit
-
-                acc_wise_bal_lst1.append({
-                    'partner_id': rec1.partner_id.id,
-                    'account_id': res_acc.id,
-                    'acc_partner_name': (rec1.partner_id.name if rec1.partner_id.name else "") + '[' + res_acc.name + ']',
-                    'acc_name': res_acc.name,
-                    'debit': dbt1
-                })
+#             acc_data = self.env['account.move.line'].search(
+#                 [('account_id', '=', res_acc.id), ('date', '>=', date_from), ('date', '<=', date_to),
+#                  ('branch_id.id', '=', selected_id), ('move_id.state', '=', 'posted'),('move_id.journal_id.type','=','cash')])
+# 
+#             for rec1 in acc_data:
+#                 dbt1 = 0.0
+#                 if rec1.debit:
+#                     dbt1 = rec1.debit
+# 
+#                 acc_wise_bal_lst1.append({
+#                     'partner_id': rec1.partner_id.id,
+#                     'account_id': res_acc.id,
+#                     'acc_partner_name': (rec1.partner_id.name if rec1.partner_id.name else "") + '[' + res_acc.name + ']',
+#                     'acc_name': res_acc.name,
+#                     'debit': dbt1
+#                 })
        #test
        # all account debit(type [cash and bank])  for wizard date range
         acc_wise_bal_lst = []

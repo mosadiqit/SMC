@@ -135,6 +135,12 @@
                                 </div>
                                 <div class="col-2 text-right all_border border-top-0 border-right-0 pb-0 bold_pt_pb">
                                 </div>
+                                
+                                <div class="col-4 text-left all_border border-top-0 border-right-0 border-right-0 pb-0 bold_pt_pb">
+                                   &#160;
+                                </div>
+                                <div class="col-2 text-right all_border border-top-0 pb-0 bold_pt_pb">
+                                </div>
 
                             </div>
 
@@ -160,12 +166,12 @@
                                 </t>
                                     <tr>
                                         <td width="50%">
-                                            <table width="100%">
+                                            <table width="100%" style ="page-break-inside:auto ">
                                                 <tbody>
                                                     <t t-set="total_receipt" t-value="0"/>
 
                                                     <t t-foreach="acc_debits" t-as="ac_dbt">
-                                                        <tr>
+                                                        <tr style="page-break-inside:avoid; page-break-after:auto">
                                                             <td class="text-left pl-2" width="65.8%" style="border: 1px solid black; font-size:13px;">
                                                                 <span t-esc="ac_dbt['partner_journal']" /><br/>
                                                                 <!-- <span t-esc="ac_dbt['label']" /> -->
@@ -186,7 +192,7 @@
                                                         <t t-if="break_done_retail_sale_side == False">
                                                             <t t-foreach ="range(report_left_blank)" t-as="rlb">
 
-                                                                <tr>
+                                                                <tr style="page-break-inside:avoid; page-break-after:auto">
                                                                     <td class="pl-2" width="66.9%" style="border: 1px solid black; color: white; font-size:13px;">
                                                                         <span t-esc="acc_crdt['name']"/>&#160;&#160;[<span t-esc="acc_crdt['cred_acc']"/>]
                                                                     </td>
@@ -270,7 +276,7 @@
 
 
                             <!--total expense div -->
-                            <div class="container col-12  row zero_padding border-top-0">
+                            <div class="container col-12  row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0" style="">
                                     Total retail sale
                                 </div>
@@ -291,7 +297,7 @@
 
                             <!-- purchase div -->
 
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="">
                                     Corporate Sale:
                                 </div>
@@ -431,7 +437,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total corporate sale:
                                 </div>
@@ -456,7 +462,7 @@
 
 
                                                         <!-- sale return div -->
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <!--                            <div class="col-12 row border-top-0" style="padding-top: 0px;">-->
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Other Receipts(cash)
@@ -619,7 +625,7 @@
                                 </div>
                             </div>
                             <!-- Cash transfer -->
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb" style="color:white;">
                                     cash transfer hidden:
                                 </div>
@@ -687,7 +693,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     &#160;
                                 </div>
@@ -799,7 +805,7 @@
 
 
                             <!--                            Atif start-->
-                            <div class="container col-12  row zero_padding border-top-0">
+                            <div class="container col-12  row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0" >
                                     <strong>Bank Receipts</strong>
                                 </div>
@@ -813,7 +819,7 @@
                                 </div>
                             </div>
 
-                            <div class="container col-12  row zero_padding border-top-0">
+                            <div class="container col-12  row zero_padding border-top-0"  style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0" >
                                     &#160;
                                 </div>
@@ -830,7 +836,7 @@
 
 
                             <!-- purchase div -->
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border pb-0 bold_pt_pb">
                                     Cheques
                                 </div>
@@ -990,7 +996,7 @@
 
 
 
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border pb-0 bold_pt_pb">
                                     Online / Credit Card
                                 </div>
@@ -1025,7 +1031,7 @@
 
                                         <!--</td>-->
                                         <td width="49%">
-                                            <table width="99.8%" style="border-collapse: collapse;"  cellspacing="0">
+                                            <table width="100%" style="border-collapse: collapse;"  cellspacing="0">
                                                 <tbody>
                                                     <t t-set="bank_credit_total" t-value="0.0"/>
                                                     <t t-foreach="credit_online()" t-as="line">
@@ -1077,7 +1083,7 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="100%" >
                                                 <tbody>
                                                     <t t-set="total_bank_credit_card" t-value="0"/>
                                                     <t t-foreach="bank_credit_card" t-as="bank_creditcard">
@@ -1140,7 +1146,7 @@
                             </table>
                             <!--                            Atif End-->
 
-                            <div class="container col-12 row zero_padding border-top-0">
+                            <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total:
                                 </div>
@@ -1156,7 +1162,7 @@
                                 </div>
                             </div>
                             <!-- bank transfer section-->
-                            <div class="col-12 row zero_padding border-top-0" style="">
+                            <div class="col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Corporate Sale
                                 </div>
@@ -1191,7 +1197,7 @@
 
                                         <!--                                    </td>-->
                                         <td width="49%">
-                                            <table width="99.8%">
+                                            <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_bank_corporate" t-value="0"/>
                                                     <t t-set="bank_corporate" t-value="cash_corporate_receipt(corporate = True , bank=True)"/>
@@ -1250,7 +1256,7 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="100%" >
                                                 <tbody>
                                                     <t t-set="total_bank_transfer" t-value="0"/>
                                                     <t t-foreach="bank_transfer" t-as="bank_trnsfer">
@@ -1300,7 +1306,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="col-12 row zero_padding border-top-0">
+                            <div class="col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-center all_border border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total:
                                 </div>
@@ -1339,7 +1345,7 @@
                                     <tr>
 
                                         <td width="49%">
-                                            <table width="99.8%">
+                                            <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_bank_oreceipt" t-value="0"/>
                                                     <t t-set="bank_oreceipt" t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
@@ -1362,7 +1368,7 @@
                                             </table>
                                         </td>
                                         <td width="49%">
-                                            <table width="99.8%" >
+                                            <table width="100%" >
                                                 <tbody>
                                                     <t t-set="bank_oreceipt" t-value="cash_corporate_receipt(receipt = True , bank=True)"/>
                                                     <t t-if="len(bank_oreceipt) > 0">
@@ -1470,13 +1476,14 @@
                                     Grand total In:
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
+                                <t t-set="grand_total_in" t-value="grand_total_in + all_acc_ob" />
                                     <t t-esc="grand_total_in"/>
                                 </div>
                                 <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
                                      Grand total Out:
                                 </div>
                                 <div class="col-2 text-right all_border bold_pt_pb pb-0">
-                                   
+                                   <t t-set="grand_total_out" t-value="grand_total_out + round(closing_bal,2)" />
                                     <t t-esc="grand_total_out"/>
                                 </div>
                             </div>
