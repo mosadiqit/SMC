@@ -280,7 +280,7 @@ class ReturnRequested(models.Model):
                         [('partner_id', '=', rec.request_order_id.partner_id.id),
                          ('picking_type_id', '=', picking_incoming.id),
                          ('stock_link', '=', sale_order)])
-                print('del', deliveries)
+                # print('del', deliveries)
                 delivered_quantity = 0
                 if deliveries:
                     for delivery in deliveries:

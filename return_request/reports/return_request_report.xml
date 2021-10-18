@@ -55,23 +55,31 @@
                                     <strong>Name:</strong>
                                     <span class="m-0" t-field="o.partner_id.name"/>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-6">
+                                    <strong>Mobile:</strong>
+                                    <span class="m-0" t-field="o.partner_id.mobile"/>
+                                </div>
+				            </div>
+                            <div class="row">
+                                <div class="col-6">
                                     <span>
                                         <strong>Date:</strong>
                                         <span class="m-0" t-field="o.date"/>
                                     </span>
                                 </div>
+                                <div class="col-6">
+                                    <strong>Address:</strong>
+                                    <span class="m-0" t-field="o.partner_id.street"/>
+                                </div>
 				            </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <strong>Address:</strong>
-                                    <span class="m-0" t-field="o.address"/>
+                                    <strong>Salesperson:</strong>
+                                    <span class="m-0" t-field="o.user_id.name"/>
                                 </div>
-<!--                                <div class="col-5">-->
-<!--                                    <span>-->
-<!--                                        <strong>Mobile#:</strong>-->
-<!--&lt;!&ndash;                                        <span class="m-0" t-field="o.partner_id.mobile"/>&ndash;&gt;-->
-<!--                                    </span>-->
+<!--                                <div class="col-6">-->
+<!--                                    <strong>Mobile:</strong>-->
+<!--                                    <span class="m-0" t-field="o.partner_id.mobile"/>-->
 <!--                                </div>-->
 				            </div>
                             <br/>
