@@ -63,3 +63,8 @@ class StockquantInh(models.Model):
     _inherit = 'stock.quant'
 
     active = fields.Boolean(default=True)
+    
+    def run_locatoin(self):
+        obj=self.env['stock.quant'].search([("x_loc",'=','p1')])
+        for i in obj:
+            i.active=True
