@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class SaleOrderInh(models.Model):
     _inherit = 'sale.order'
 
-    partner_balance = fields.Float('Balance', compute='compute_balance')
+    partner_balance = fields.Float('Balance', compute='compute_balance', default=0)
     warehouse_ids = fields.Many2many('stock.warehouse', compute='compute_warehouse')
     quo_date = fields.Date('Old Date', default=fields.Date.today)
 
