@@ -42,6 +42,21 @@ class ResPartnerInh(models.Model):
         else:
             self.is_supplier = False
 
+    partner_balance = fields.Float('Balance', compute='compute_balance', default=0)
+
+    @api.depends('partner_id')
+    def compute_balance(self):
+        for rec in self:
+            partner_ledger = self.env['account.move.line'].search(
+                [('partner_id', '=', rec.id),
+                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+            bal = 0
+            for par_rec in partner_ledger:
+                bal = bal + (par_rec.debit - par_rec.credit)
+            rec.partner_balance = bal
+
     # @api.constrains('customer_code')
     # def check_code(self):
     #     if self.customer_code:
