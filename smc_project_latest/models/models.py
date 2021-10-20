@@ -5,7 +5,63 @@ from odoo.exceptions import UserError
 from itertools import groupby
 from odoo.tools.float_utils import float_is_zero
 from lxml import etree
+from datetime import datetime
 
+def _create_notification(self):
+        # groupObj = self.env['res.groups'].search([('name', '=', "Administrator")])
+        # user_list = []
+        # for user in groupObj.users:
+        #     user_list.append(user.id)
+        # if self.sale_id.user_id.id not in user_list:
+        #     if self.sale_id.user_id.id:
+        #         user_list.append(self.sale_id.user_id.id)
+        # for i in user_list:
+        #     userObj = self.env['res.users'].browse([i])
+        act_type_xmlid = 'mail.mail_activity_data_todo'
+        summary = 'Reserved DO Notification'
+        note = '25 Days passed.In 5 days left, DO no: ' + self.name + ' will be unreserved Automatically.'
+        if act_type_xmlid:
+            activity_type = self.sudo().env.ref(act_type_xmlid)
+        model_id = self.env['ir.model']._get(self._name).id
+        create_vals = {
+            'activity_type_id': activity_type.id,
+            'summary': summary or activity_type.summary,
+            'automated': True,
+            'note': note,
+            'date_deadline': datetime.today(),
+            'res_model_id': model_id,
+            'res_id': self.id,
+            'user_id': self.sale_id.user_id.id,
+        }
+        activities = self.env['mail.activity'].create(create_vals)
+
+class AccountPaymnetInh(models.Model):
+    _inherit = 'account.payment'
+
+    def action_post(self):
+        rec = super(AccountPaymnetInh, self).action_post()
+        self._create_notification()
+
+
+    def _create_notification(self):
+        act_type_xmlid = 'mail.mail_activity_data_todo'
+        summary = 'Payment Transaction'
+        note = 'Payment Processed at Branch : ' + self.branch_id.name + '.'
+        ceo = self.env['res.users'].search([('login', '=', 'umer.shahid@smcgroup.pk')])
+        if act_type_xmlid:
+            activity_type = self.sudo().env.ref(act_type_xmlid)
+        model_id = self.env['ir.model']._get(self._name).id
+        create_vals = {
+            'activity_type_id': activity_type.id,
+            'summary': summary or activity_type.summary,
+            'automated': True,
+            'note': note,
+            'date_deadline': datetime.today(),
+            'res_model_id': model_id,
+            'res_id': self.id,
+            'user_id': ceo.id,
+        }
+        activities = self.env['mail.activity'].create(create_vals)
 
 class SMC(models.Model):
     _inherit = 'product.template'
@@ -139,6 +195,30 @@ class in_invoicing(models.Model):
     sale_origin = fields.Many2one('sale.order', compute='_compute_sale_origin')
     purchase_origin = fields.Many2one('purchase.order',  compute='_compute_purchase_origin')
 
+    def action_post(self):
+        rec = super(in_invoicing, self).action_post()
+        self._create_notification()
+
+    def _create_notification(self):
+        act_type_xmlid = 'mail.mail_activity_data_todo'
+        summary = 'Transaction Posted'
+        note = 'Transaction Processed at Branch : ' + self.branch_id.name + '.'
+        ceo = self.env['res.users'].search([('login', '=', 'umer.shahid@smcgroup.pk')])
+        if act_type_xmlid:
+            activity_type = self.sudo().env.ref(act_type_xmlid)
+        model_id = self.env['ir.model']._get(self._name).id
+        create_vals = {
+            'activity_type_id': activity_type.id,
+            'summary': summary or activity_type.summary,
+            'automated': True,
+            'note': note,
+            'date_deadline': datetime.today(),
+            'res_model_id': model_id,
+            'res_id': self.id,
+            'user_id': ceo.id,
+        }
+        activities = self.env['mail.activity'].create(create_vals)
+
     def _compute_purchase_origin(self):
         for i in self:
             record = self.env['purchase.order'].search([('name', '=', i.invoice_origin)], limit=1)
@@ -223,10 +303,31 @@ class SaleOrder(models.Model):
             i.create_user = i.env.user.id
 
     def from_manager_approval(self):
+        self._create_notification()
         self.state = 'manager'
 
     def from_ceo_approval(self):
+        self._create_notification()
         self.state = 'ceo'
+
+    def _create_notification(self):
+        act_type_xmlid = 'mail.mail_activity_data_todo'
+        summary = 'Discount Approval'
+        note = 'Sale order No: ' + self.name + ' is waiting for Approval.'
+        if act_type_xmlid:
+            activity_type = self.sudo().env.ref(act_type_xmlid)
+        model_id = self.env['ir.model']._get(self._name).id
+        create_vals = {
+            'activity_type_id': activity_type.id,
+            'summary': summary or activity_type.summary,
+            'automated': True,
+            'note': note,
+            'date_deadline': datetime.today(),
+            'res_model_id': model_id,
+            'res_id': self.id,
+            'user_id': self.env.user.manager_id.id,
+        }
+        activities = self.env['mail.activity'].create(create_vals)
 
     def action_confirm(self):
         for sale_order in self:
