@@ -246,9 +246,9 @@
                 <table width="100%" >
                         <tr class="text-center">
                             <td width="50%">
-                                <span><strong>Sales Consultant: </strong></span><span t-field="doc.create_user.name"/><br/>
-                                <span>------------------------------</span><br/>
-                                <span><strong>Mobile: </strong></span><span t-field="doc.create_user.mobile"/>
+                                <span><strong>Sales Consultant: </strong></span><span t-field="doc.user_id.name"/><br/>
+                                <span>----------------------------------------------------</span><br/>
+                                <span><strong>Mobile: </strong></span><span t-esc="doc.get_mobile(doc.user_id)"/>
                             </td>
                             <td width="50%" class="font-weight-bold" >
 <!--                                Name: __________________-->
