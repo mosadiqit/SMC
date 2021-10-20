@@ -237,10 +237,38 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 text-left" style="padding-left:0px;margin-top:100px;width:100%;">
+                <div class="col-12 text-left" style="padding-left:0px;width:100%;">
                     <p t-if="doc.note" style="font-weight:bold;color:black; font-size:18px;">Terms And Conditions:</p>
                     <p t-field="doc.note" />
                 </div>
+                <br/>
+
+                <table width="100%" >
+                        <tr class="text-center">
+                            <td width="50%">
+                                <span><strong>Sales Consultant: </strong></span><span t-field="doc.create_user.name"/><br/>
+                                <span>------------------------------</span><br/>
+                                <span><strong>Mobile: </strong></span><span t-field="doc.create_user.mobile"/>
+                            </td>
+                            <td width="50%" class="font-weight-bold" >
+<!--                                Name: __________________-->
+                            </td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td width="50%" class="text-left">_______________</td>-->
+<!--                            <td width="50%" class="text-right font-weight-bold" style="padding-right:35px;">-->
+<!--                                Mobile#: __________________-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            &lt;!&ndash;                                        <td width="50%" class="text-left font-weight-bold">Sales Consultant</td>&ndash;&gt;-->
+<!--                            <td width="50%" class="text-left font-weight-bold"></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td width="50%" class="text-left font-weight-bold"><span t-field="doc.create_user.partner_id.mobile"/></td>-->
+<!--                            <td width="50%" class="text-left font-weight-bold"></td>-->
+<!--                        </tr>-->
+                </table>
             </div>
 
         </xpath>
