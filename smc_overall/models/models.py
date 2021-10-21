@@ -37,38 +37,14 @@ class ResPartnerInh(models.Model):
     currency_id = fields.Many2one('res.currency')
 
     def compute_is_supplier(self):
-        if self.supplier_rank > 0:
-            self.is_supplier = True
-        else:
-            self.is_supplier = False
-
-    partner_balance = fields.Float('Balance', compute='compute_balance', default=0)
-
-    @api.depends('partner_id')
-    def compute_balance(self):
         for rec in self:
-            partner_ledger = self.env['account.move.line'].search(
-                [('partner_id', '=', rec.id),
-                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
-            bal = 0
-            for par_rec in partner_ledger:
-                bal = bal + (par_rec.debit - par_rec.credit)
-            rec.partner_balance = bal
+            # rec.partner_balance = rec.credit - rec.debit
+            if rec.supplier_rank > 0:
+                rec.is_supplier = True
+            else:
+                rec.is_supplier = False
 
-    # @api.constrains('customer_code')
-    # def check_code(self):
-    #     if self.customer_code:
-    #         code = self.env['res.partner'].search([('customer_code', '=', self.customer_code)])
-    #         if len(code) > 1:
-    #             raise UserError('User Already Exist')
-
-    # def name_get(self):
-    #     res = []
-    #     for rec in self:
-    #         res.append((rec.id, '%s : %s : %s' % (rec.customer_code, rec.name, str(rec.total_due))))
-    #     return res
+    # partner_balance = fields.Float('Balance')
 
     @api.model
     def create(self, vals):
