@@ -56,7 +56,9 @@
 		<field name="arch" type="xml">
 
 			<xpath expr="//field[@name='phone']" position="before">
+				<field name="is_supplier" invisible="1"/>
 				<field name="partner_balance"/>
+<!--				<field name="partner_balance_1" invisible="1"/>-->
             </xpath>
 
 		</field>
