@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from pytz import timezone
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -8,6 +10,43 @@ class AccountPaymentInh(models.Model):
     _inherit = 'account.payment'
 
     received_from = fields.Char('Received From')
+    journals_ids = fields.Many2many('account.journal', compute='compute_journals')
+
+    @api.depends('journal_id')
+    def compute_journals(self):
+        journals = self.env['account.journal'].search([])
+        journal_list = []
+        for rec in journals:
+            if rec.branch_id.id == self.env.user.branch_id.id:
+                journal_list.append(rec.id)
+        self.journals_ids = journal_list
+
+    def get_print_date(self):
+        now_utc_date = datetime.now()
+        now_dubai = now_utc_date.astimezone(timezone('Asia/Karachi'))
+        return now_dubai.strftime('%d/%m/%Y %H:%M:%S')
+
+
+class AccountMoveLineInh(models.Model):
+    _inherit = 'account.move.line'
+
+    branch_id = fields.Many2one('res.branch', related='account_id.branch_id')
+
+
+class AccountAccountInh(models.Model):
+    _inherit = 'account.account'
+
+    branch_id = fields.Many2one('res.branch')
+
+
+class AccountJournalInh(models.Model):
+    _inherit = 'account.journal'
+
+    branch_id = fields.Many2one('res.branch')
+
+    @api.onchange('default_account_id')
+    def onchange_default_account_id(self):
+        self.branch_id = self.default_account_id.branch_id.id
 
 
 class AccountMoveInh(models.Model):

@@ -36,12 +36,18 @@
                     <div class="page">
                         <h3><strong>Payment Receipt: <span t-field="o.name"/></strong></h3>
                         <div class="row mt64">
-                            <div class="col-6" t-if="o.date">
+                            <div class="col-4" t-if="o.date">
                                 <strong>Payment Date: </strong> <span t-field="o.date"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Print Date: </strong> <span t-esc="o.get_print_date()"/>
+                            </div>
+                            <div class="col-4">
+<!--                                <strong>Print Date: </strong> <span t-esc="o.get_print_date()"/>-->
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6" t-if="o.partner_type">
+                            <div class="col-4" t-if="o.partner_type">
                                 <t t-if="o.partner_type == 'customer'">
                                     <strong>Customer: </strong>
                                 </t>
@@ -49,15 +55,32 @@
                                     <strong>Vendor: </strong>
                                 </t><span t-field="o.partner_id"/>
                             </div>
-                            <div class="col-6" t-if="o.payment_method_id">
-                                <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
+                            <div class="col-4">
+                                <strong>Mobile: </strong><span t-field="o.partner_id.mobile"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Email: </strong><span t-field="o.partner_id.email"/>
                             </div>
                         </div>
                         <div class="row mb64">
-                            <div class="col-6" t-if="o.amount">
+                            <div class="col-4">
+                                <strong>Address: </strong><span t-field="o.partner_id.street"/>
+                            </div>
+<!--                            <div class="col-4" t-if="o.amount">-->
+<!--                                <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>-->
+<!--                            </div>-->
+<!--                            <div class="col-4" t-if="o.ref">-->
+<!--                                <strong>Memo: </strong><span t-field="o.ref"/>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="row mb64">
+                            <div class="col-4" t-if="o.payment_method_id">
+                                <strong>Payment Method: </strong><span t-field="o.payment_method_id.name"/>
+                            </div>
+                            <div class="col-4" t-if="o.amount">
                                 <strong>Payment Amount: </strong><span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                             </div>
-                            <div class="col-6" t-if="o.ref">
+                            <div class="col-4" t-if="o.ref">
                                 <strong>Memo: </strong><span t-field="o.ref"/>
                             </div>
                         </div>
@@ -73,12 +96,21 @@
                                         <!--                                <div widget="html" t-field="user.signature" width="10%"/>-->
                                     </div>
                                 </td>
+<!--                                <td>-->
+<!--                                    <div class="col-sm">-->
+<!--                                        <strong>Created Date: </strong>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-sm">-->
+<!--                                        <span t-esc="o.env.user.name"/>-->
+<!--                                        &lt;!&ndash;                                <div widget="html" t-field="user.signature" width="10%"/>&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                </td>-->
                                 <td>
                                     <div class="col-sm">
                                         <strong> Received By:  </strong>
                                     </div>
                                     <div class="col-sm">
-                                        <span t-esc="o.partner_id.name"/>
+                                        <span t-esc="o.env.user.name"/>
                                         <!--                                <div widget="html" t-field="user.signature" width="10%"/>-->
                                     </div>
                                 </td>
