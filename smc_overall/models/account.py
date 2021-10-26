@@ -4,6 +4,12 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 
 
+class AccountPaymentInh(models.Model):
+    _inherit = 'account.payment'
+
+    received_from = fields.Char('Received From')
+
+
 class AccountMoveInh(models.Model):
     _inherit = 'account.move'
 
