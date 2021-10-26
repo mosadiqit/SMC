@@ -67,7 +67,7 @@
                   <tree editable="bottom">
                     <field name="invoice_date" />
                     <field name="invoice_id" required="1" attrs="{'readonly': [('state', 'not in', 'user')]}" invisible="1"/>
-                    <field name="product_id" options="{'no_open': True, 'no_create_edit': True}" required="1" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
+                    <field name="product_id" options="{'no_open': True, 'no_create_edit': True, 'no_create': True, 'no_edit' : True}" required="1" attrs="{'readonly': [('state', 'not in', 'user')]}"/>
                     <field name="art"/>
                     <field name="finish_no"/>
                     <field name="previous_return_quantity" readonly="1" force_save="1"/>
