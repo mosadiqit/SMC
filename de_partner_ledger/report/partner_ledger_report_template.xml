@@ -1,59 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="de_partner_ledger_pdf_report">
-  <t t-call="web.html_container">
+        <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <div class="page">
                     <!--<div class="oe_structure"/>-->
                     <div class="text-left">
-                    <h3 class="text-center">Partner Ledger </h3>
-                    <t t-foreach="request.env['res.partner'].search([('id', '=', data['partner_id'])])" t-as="prd">
-                        <strong>Name: </strong><span t-field="prd.name"/><br/>
-                        <strong>Address:</strong><span t-field="prd.street"/>
-                    </t>
+                        <h3 class="text-center">Partner Ledger </h3>
+                        <t t-foreach="request.env['res.partner'].search([('id', '=', data['partner_id'])])" t-as="prd">
+                            <strong>Name: </strong><span t-field="prd.name"/><br/>
+                            <strong>Address:</strong><span t-field="prd.street"/>
+                        </t>
                         <p><strong>Date: </strong><span t-esc="data['start_date']" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="data['end_date']" t-options="{'widget': 'date'}"/></p>
                     </div>
                 </div>
                 <table class="table table-sm" name="account_lines_table" style="border-bottom:1px solid black;">
 
-                        <tr style="border-bottom:1px solid black;">
-                            <td style="border-bottom:1px solid black;"><strong>Date</strong></td>
-                            <td style="border-bottom:1px solid black;"><strong>Voucher#</strong></td>
-                            <td style="border-bottom:1px solid black;"><strong>Details</strong></td>
-                            <!--<th>Details</th>-->
-                            <td style="border-bottom:1px solid black;" class="text-right"><strong>Debit</strong></td>
-                            <td style="border-bottom:1px solid black;" class="text-right"><strong>Credit</strong></td>
-                            <td style="border-bottom:1px solid black;" class="text-right"><strong>Balance</strong></td>
-                        </tr>
-
+                    <tr style="border-bottom:1px solid black;">
+                        <td style="border-bottom:1px solid black;"><strong>Date</strong></td>
+                        <td style="border-bottom:1px solid black;"><strong>Voucher#</strong></td>
+                        <td style="border-bottom:1px solid black;"><strong>Details</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Debit</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Credit</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Balance</strong></td>
+                    </tr>
                     <tbody>
-
-                         <t t-set="rb" t-value="0"/>
-                        <tr t-foreach="openbal" t-as="o" >
-                               <strong> <td style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Opening Balance</strong></td></strong>
-                                <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="o['opening_bal']"/></strong></td>
-
-                            <t t-if="o['opening_bal']">
-                            <t t-set="rb" t-value="rb + o['opening_bal']"/>
-                            </t>
+                        <tr >
+                            <strong> <td style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Opening Balance</strong></td></strong>
+                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>
                         </tr>
-                       <tr t-foreach="dat" t-as="d" style="font-size: 13px;" >
-                            <t t-set="rb" t-value="rb + d['debit'] - d['credit'] "/>
-                           <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d['date']" t-options="{'widget': 'date'}"/></td>
-                                <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d['doc_no']"/></td>
-                                <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d['gl_account']"/></td>
-                                <!--<td class="text-left"><span t-esc="d['line_desc']"/></td>-->
-                               <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d['debit']))"/></td>
-                                <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d['credit']))"/></td>
-                           <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(rb))"/></td>
-
+                        <tr t-foreach="dat" t-as="d" style="font-size: 13px;" >
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.date" t-options="{'widget': 'date'}"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.move_id.name"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.name"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.debit))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.credit))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.balance))"/></td>
                         </tr>
                         <tr style="border-top:1px solid #000;">
-                                <td  style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Closing Balance</strong></td>
-                                <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(rb))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Closing Balance</strong></td>
+                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(closingbal))"/></strong></td>
                         </tr>
                     </tbody>
-                  </table>
+                </table>
             </t>
         </t>
     </template>
