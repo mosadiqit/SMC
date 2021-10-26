@@ -197,7 +197,8 @@ class in_invoicing(models.Model):
 
     def action_post(self):
         rec = super(in_invoicing, self).action_post()
-        self._create_notification()
+        if self.branch_id:
+            self._create_notification()
 
     def _create_notification(self):
         act_type_xmlid = 'mail.mail_activity_data_todo'
