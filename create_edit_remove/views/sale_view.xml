@@ -49,10 +49,6 @@
 				<attribute name="options">{'no_create': True, 'no_edit' : True}</attribute>
             </xpath>
 
-<!--			<xpath expr="//field[@name='responsible_id']" position="attributes">-->
-<!--				<attribute name="options">{'no_create': True, 'no_edit' : True}</attribute>-->
-<!--            </xpath>-->
-
 			<xpath expr="//field[@name='property_stock_production']" position="attributes">
 				<attribute name="options">{'no_create': True, 'no_edit' : True}</attribute>
             </xpath>
@@ -60,7 +56,6 @@
 			<xpath expr="//field[@name='property_stock_inventory']" position="attributes">
 				<attribute name="options">{'no_create': True, 'no_edit' : True}</attribute>
             </xpath>
-
 
 		</field>
 	</record>
