@@ -5,8 +5,8 @@
         <field name="name">Payment A4</field>
         <field name="default" eval="True"/>
         <field name="format">custom</field>
-        <field name="page_height">130</field>
-        <field name="page_width">250</field>
+        <field name="page_height">140</field>
+        <field name="page_width">210</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">35</field>
         <field name="margin_bottom">30</field>
@@ -24,8 +24,7 @@
             string="Payment Receipt New"
             name="smc_overall.report_payment_receipt_document_inh"
             file="smc_overall.report_payment_receipt_document_inh"
-            paperformat="smc_overall.paperformat_account_payment_custom"
-    />
+            paperformat="smc_overall.paperformat_account_payment_custom"/>
 
     <template id="report_payment_receipt_document_inh">
         <t t-call="web.html_container">
@@ -43,7 +42,7 @@
                                 <strong>Print Date: </strong> <span t-esc="o.get_print_date()"/>
                             </div>
                             <div class="col-4">
-<!--                                <strong>Print Date: </strong> <span t-esc="o.get_print_date()"/>-->
+                                <strong>Created Date: </strong><span t-field="o.create_date"/>
                             </div>
                         </div>
                         <div class="row">
@@ -92,7 +91,7 @@
                                         <strong>Created By: </strong>
                                     </div>
                                     <div class="col-sm">
-                                        <span t-esc="o.env.user.name"/>
+                                        <span t-esc="o.create_uid.name"/>
                                         <!--                                <div widget="html" t-field="user.signature" width="10%"/>-->
                                     </div>
                                 </td>
@@ -110,7 +109,7 @@
                                         <strong> Received By:  </strong>
                                     </div>
                                     <div class="col-sm">
-                                        <span t-esc="o.env.user.name"/>
+                                         <span t-esc="o.create_uid.name"/>
                                         <!--                                <div widget="html" t-field="user.signature" width="10%"/>-->
                                     </div>
                                 </td>

@@ -31,6 +31,13 @@ class AccountMoveLineInh(models.Model):
     _inherit = 'account.move.line'
 
     branch_id = fields.Many2one('res.branch', related='account_id.branch_id')
+    return_qty = fields.Float('Return Qty')
+
+    def compute_return_qty(self):
+        for k in self.invoice_line_ids:
+            saleorder = self.env['sale.order'].search([("name", '=', self.invoice_origin)])
+            for l in saleorder.picking_ids:
+                print(l.picking_type_id.code)
 
 
 class AccountAccountInh(models.Model):
@@ -59,6 +66,13 @@ class AccountMoveInh(models.Model):
             invoices = self.env['res.partner'].search([('id', '=', rec.partner_id.id)])
             rec.customer_balance = invoices.total_due
 
+            for k in self.invoice_line_ids:
+                saleorder = self.env['sale.order'].search([("name", '=', self.invoice_origin)])
+                for l in saleorder.picking_ids:
+                    if l.picking_type_id.code == 'incoming':
+                        for line in l.move_line_ids_without_package:
+                            if k.product_id.id == line.product_id.id:
+                                k.return_qty = line.qty_done
 
 class StockLandedInh(models.Model):
     _inherit = 'stock.landed.cost'
