@@ -2,6 +2,18 @@
 <odoo>
     <data>
 
+        <record id="product_template_kanban_view_inherit_art" model="ir.ui.view">
+            <field name="name">product.template.kanban.warehouse.quantity</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <div name="product_lst_price" position="after">
+                    <span>Article No:</span><field name="article_no"/><br/>
+                    <span>Finish No:</span><field name="finish_no"/><br/>
+                </div>
+            </field>
+        </record>
+
         <record id="view_product_template_article" model="ir.ui.view">
             <field name="name">product.template.volume</field>
             <field name="model">product.template</field>
@@ -32,8 +44,8 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='uom_id']" position="attributes">
-                     <attribute name="invisible">1</attribute>
-                 </xpath>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="article_no" />
                     <field name="finish_no" />
@@ -43,12 +55,12 @@
                     <field name="uom_id" string="UOM"/>
                 </xpath>
                 <xpath expr="//field[@name='virtual_available']" position="attributes">
-                     <attribute name="invisible">1</attribute>
-                 </xpath>
-                 <xpath expr="//field[@name='virtual_available']" position="attributes">
-                     <attribute name="invisible">1</attribute>
-                 </xpath>
-                 <xpath expr="//field[@name='virtual_available']" position="after">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='virtual_available']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='virtual_available']" position="after">
                     <field name="sqm_box" string="UOM/BOX"/>
                     <field name="pcs_box" />
                     <field name="forecasted_qty"/>
@@ -135,9 +147,9 @@
                     <field name="architect" />
                     <field name="project_description" />
                 </field>
-<!--                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">-->
-<!--                    <attribute name="invisible">1</attribute>-->
-<!--                </xpath>-->
+                <!--                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">-->
+                <!--                    <attribute name="invisible">1</attribute>-->
+                <!--                </xpath>-->
                 <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
                     <field name="article_no" />
                     <field name="finish_no" />
@@ -148,16 +160,16 @@
         </record>
 
         <record id="view_picking_internal_search_inherit_stock_picking_article" model="ir.ui.view">
-        <field name="name">stock.picking.search</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='product_id']" position="after">
-                <field name="move_line_ids_without_package" string="Article No" filter_domain="[('move_line_ids_without_package.product_id.article_no', 'ilike', self)]"/>
-                <field name="move_line_ids_without_package" string="Finish No" filter_domain="[('move_line_ids_without_package.product_id.finish_no', 'ilike', self)]"/>
-            </xpath>
-        </field>
-    </record>
+            <field name="name">stock.picking.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="move_line_ids_without_package" string="Article No" filter_domain="[('move_line_ids_without_package.product_id.article_no', 'ilike', self)]"/>
+                    <field name="move_line_ids_without_package" string="Finish No" filter_domain="[('move_line_ids_without_package.product_id.finish_no', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
 
         <record id="product_template_view_search_inherit" model="ir.ui.view">
             <field name="name">product.template.search.inherit.sale</field>
