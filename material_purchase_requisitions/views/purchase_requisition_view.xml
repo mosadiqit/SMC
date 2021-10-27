@@ -9,15 +9,15 @@
                 <form>
                     <header>
                         <button name="requisition_confirm" type="object" string="Confirm" states="draft" class="btn-primary" groups="base.group_user"/>
-                        <button name="manager_approve" type="object" string="Department Approve" states="dept_confirm,cancel" class="btn-primary" groups="material_purchase_requisitions.group_purchase_requisition_department"/>
-                        <button name="user_approve" type="object" string="Approve" states="ir_approve" class="btn-primary" groups="material_purchase_requisitions.group_purchase_requisition_user"/>
-                        <button name="request_stock" type="object" string="Create Picking and PO" states="approve" class="btn-primary" groups="material_purchase_requisitions.group_purchase_requisition_user"/>
-                        <button name="action_received" type="object" string="Received" states="stock" class="btn-primary"/>
-                        <button name="requisition_reject" type="object" string="Reject" groups="material_purchase_requisitions.group_purchase_requisition_department,material_purchase_requisitions.group_purchase_requisition_user" states="dept_confirm,approve,ir_approve" />
+                        <button name="manager_approve" type="object" string="Approve" states="line_confirm" class="btn-primary" groups="material_purchase_requisitions.group_requisition_line_manager"/>
+<!--                        <button name="user_approve" type="object" string="Approve" states="ir_approve" class="btn-primary" groups="material_purchase_requisitions.group_purchase_requisition_user"/>-->
+                        <button name="request_stock" type="object" string="Create Picking and PO" states="approve" class="btn-primary" groups="material_purchase_requisitions.group_requisition_purchase_manager"/>
+                        <button name="action_received" type="object" string="Received" class="btn-primary" attrs="{'invisible': ['|',('state', '!=', 'stock'), ('is_po_int_done', '!=', True)]}"/>
+                        <button name="requisition_reject" type="object" string="Reject" groups="material_purchase_requisitions.group_requisition_line_manager" states="line_confirm" />
                         <button name="action_cancel" type="object" states="draft" string="Cancel" groups="base.group_user"/>
-                        <button name="reset_draft" type="object" string="Reset to Draft" states="cancel,reject,receive" class="btn-primary"/>
+                        <button name="reset_draft" type="object" string="Reset to Draft" states="cancel,reject" class="btn-primary"/>
                         <field name="state" widget="statusbar" string="confirm"  
-                                        statusbar_visible="draft,dept_confirm,ir_approve,approve,stock,receive"/>
+                                        statusbar_visible="draft,line_confirm,approve,stock,receive"/>
                     </header>
                     <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -44,36 +44,41 @@
                                     <field name="request_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                     <field name="receive_date" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
                                     <field name="date_end" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
+                                    <field name="is_po_int_done" invisible="1"/>
                                     <field name="analytic_account_id" groups="analytic.group_analytic_accounting" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
                                 </group>
                              </group>
                         <notebook>
                             <page string="Requisitions Lines">
-                                <field name="requisition_line_ids" attrs="{'readonly': [('state', 'in', ['cancel','receive'])]}">
+                                <field name="requisition_line_ids" attrs="{'readonly': [('state', 'in', ['cancel','receive','stock'])]}">
                                     <tree editable="bottom">
-                                        <field name="requisition_type" groups="material_purchase_requisitions.group_purchase_requisition_user,purchase.group_purchase_user,material_purchase_requisitions.group_purchase_requisition_manager,material_purchase_requisitions.group_purchase_requisition_department"/>
+                                        <field name="requisition_type" groups="purchase.group_purchase_user,material_purchase_requisitions.group_requisition_purchase_manager"/>
                                         <field name="product_id"/>
+                                        <field name="capex"/>
+                                        <field name="non_capex"/>
                                         <field name="description"/>
                                         <field name="qty"/>
                                         <field name="uom"/>
-                                        <field name="partner_id" groups="material_purchase_requisitions.group_purchase_requisition_user,purchase.group_purchase_user,material_purchase_requisitions.group_purchase_requisition_manager,material_purchase_requisitions.group_purchase_requisition_department" attrs="{'readonly': [('requisition_type', '!=', 'purchase')]}" widget="many2many_tags"/>
+                                        <field name="partner_id" groups="purchase.group_purchase_user,material_purchase_requisitions.group_requisition_purchase_manager" attrs="{'readonly': [('requisition_type', '!=', 'purchase')]}" widget="many2many_tags"/>
                                     </tree>
                                 </field>
                                 <group>
                                     <field name="reason" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}" placeholder="Add Reason for Internal Requistion ...."/>
                                 </group>
                             </page>
-                            <page groups="material_purchase_requisitions.group_purchase_requisition_user,stock.group_stock_user" string="Picking Details" attrs="{'readonly': [['state', 'in', ['done']]]}">
+                            <page groups="material_purchase_requisitions.group_requisition_line_manager,stock.group_stock_user" string="Picking Details" attrs="{'readonly': [['state', 'in', ['done']]]}">
                                 <group>
                                     <group>
                                             <field name="location_id"
-                                                   groups="material_purchase_requisitions.group_purchase_requisition_user,stock.group_stock_user" 
-                                                   domain="[('usage','!=', 'view')]" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
+                                                   groups="material_purchase_requisitions.group_requisition_line_manager,stock.group_stock_user"
+                                                   domain="[('usage','!=', 'view')]" attrs="{'readonly': [['state', 'in', ['stock','reject','cancel','receive']]]}"/>
                                     </group>
                                     <group>
-                                        <field name="dest_location_id" groups="material_purchase_requisitions.group_purchase_requisition_user,stock.group_stock_user" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
-                                        <field name="delivery_picking_id" groups="material_purchase_requisitions.group_purchase_requisition_user,stock.group_stock_user"/>
-                                        <field name="custom_picking_type_id" groups="material_purchase_requisitions.group_purchase_requisition_user,stock.group_stock_user" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
+                                        <field name="dest_location_id" groups="material_purchase_requisitions.group_requisition_line_manager,stock.group_stock_user" attrs="{'readonly': [['state', 'in', ['stock','reject','cancel','receive']]]}"/>
+                                        <field name="delivery_picking_id" groups="material_purchase_requisitions.group_requisition_line_manager,stock.group_stock_user"/>
+                                        <field name="custom_picking_type_id" groups="material_purchase_requisitions.group_requisition_line_manager,stock.group_stock_user" attrs="{'readonly': [['state', 'in', ['stock','reject','cancel','receive']]]}" domain="[('id', 'in', custom_picking_type_ids)]"/>
+
+                                        <field name="custom_picking_type_ids" widget="many2many_tags" invisible="1"/>
                                     </group>
                                 </group>
                             </page>
@@ -88,8 +93,8 @@
                                     <group>
                                         <field name="confirm_date"/>
                                         <field name="managerapp_date"/>
-                                        <field name="userrapp_date"/>
-                                        <field name="userreject_date"/>
+<!--                                        <field name="userrapp_date"/>-->
+<!--                                        <field name="userreject_date"/>-->
                                     </group>
                                 </group>
                             </page>
@@ -133,7 +138,7 @@
                     <field name="approve_employee_id"/>
                     <field name="location_id"/>
                     <field name="managerapp_date"/>
-                    <field name="userrapp_date"/>
+<!--                    <field name="userrapp_date"/>-->
                     <field name="receive_date"/>
                     <field name="date_done"/>
                     <field name="dest_location_id"/>
@@ -150,7 +155,7 @@
                         <filter string="Approve By" name="approve_by" context="{'group_by':'approve_employee_id'}"/>
                         <filter string="Location" name="location" context="{'group_by':'location_id'}"/>
                         <filter string="Manager Approve Date" name="managerapp_date" context="{'group_by':'managerapp_date'}"/>
-                        <filter string="User Approve Date" name="userapp_date" context="{'group_by':'userrapp_date'}"/>
+<!--                        <filter string="User Approve Date" name="userapp_date" context="{'group_by':'userrapp_date'}"/>-->
                         <filter string="Destination Location" name="dest_location_id" context="{'group_by':'dest_location_id'}"/>
                         <filter string="Delivery Picking" name="delivery_picking_id" context="{'group_by':'delivery_picking_id'}"/>
                         <filter string="Reason" name="reason" context="{'group_by':'reason'}"/>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from lxml import etree
 from odoo import models, fields, api, _
 from datetime import datetime, date
 from odoo.exceptions import Warning, UserError
@@ -25,8 +26,8 @@ class MaterialPurchaseRequisition(models.Model):
     )
     state = fields.Selection([
         ('draft', 'New'),
-        ('dept_confirm', 'Waiting Department Approval'),
-        ('ir_approve', 'Waiting IR Approval'),
+        ('line_confirm', 'Waiting For Line Manager Approval'),
+        # ('ir_approve', 'Waiting IR Approval'),
         ('approve', 'Approved'),
         ('stock', 'Purchase Order Created'),
         ('receive', 'Received'),
@@ -119,11 +120,11 @@ class MaterialPurchaseRequisition(models.Model):
         readonly=True,
         copy=False,
     )
-    userrapp_date = fields.Date(
-        string='Approved Date',
-        readonly=True,
-        copy=False,
-    )
+    # userrapp_date = fields.Date(
+    #     string='Approved Date',
+    #     readonly=True,
+    #     copy=False,
+    # )
     receive_date = fields.Date(
         string='Received Date',
         readonly=True,
@@ -173,11 +174,47 @@ class MaterialPurchaseRequisition(models.Model):
         'custom_requisition_id',
         string='Purchase Ordes',
     )
+
+    custom_picking_type_ids = fields.Many2many(
+        'stock.picking.type',
+        string='Picking Types',
+        copy=False,
+        compute='compute_custom_picking_type_ids'
+    )
+
     custom_picking_type_id = fields.Many2one(
         'stock.picking.type',
         string='Picking Type',
-        copy=False,
     )
+
+    is_po_int_done = fields.Boolean(
+        string='PO INT Done',
+        default=False,
+        compute='compute_is_po_int_done'
+    )
+
+    @api.depends('custom_picking_type_id')
+    def compute_custom_picking_type_ids(self):
+        picking = self.env['stock.picking.type'].search([('sequence_code', '=', 'INT')])
+        self.custom_picking_type_ids = picking.ids
+
+    def compute_is_po_int_done(self):
+        flag = True
+        if self.env.user.has_group('material_purchase_requisitions.group_requisition_user'):
+            purchase_record = self.env['purchase.order'].search([('custom_requisition_id', '=', self.id)])
+            picking_record = self.env['stock.picking'].search([('custom_requisition_id', '=', self.id)])
+            for purchase_rec in purchase_record:
+                if purchase_rec.state != 'purchase':
+                    flag = False
+            for picking_rec in picking_record:
+                if picking_rec.state != 'done':
+                    flag = False
+            if flag:
+                self.is_po_int_done = True
+            else:
+                self.is_po_int_done = False
+        else:
+            self.is_po_int_done = False
     
     @api.model
     def create(self, vals):
@@ -194,7 +231,7 @@ class MaterialPurchaseRequisition(models.Model):
             manager_mail_template = self.env.ref('material_purchase_requisitions.email_confirm_material_purchase_requistion')
             rec.employee_confirm_id = rec.employee_id.id
             rec.confirm_date = fields.Date.today()
-            rec.state = 'dept_confirm'
+            rec.state = 'line_confirm'
             if manager_mail_template:
                 manager_mail_template.send_mail(self.id)
             
@@ -214,14 +251,26 @@ class MaterialPurchaseRequisition(models.Model):
             email_iruser_template = self.env.ref('material_purchase_requisitions.email_purchase_requisition')
             employee_mail_template.sudo().send_mail(self.id)
             email_iruser_template.sudo().send_mail(self.id)
-            rec.state = 'ir_approve'
+            rec.state = 'approve'
 
     #@api.multi
-    def user_approve(self):
-        for rec in self:
-            rec.userrapp_date = fields.Date.today()
-            rec.approve_employee_id = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
-            rec.state = 'approve'
+    # def user_approve(self):
+    #     for rec in self:
+    #         rec.userrapp_date = fields.Date.today()
+    #         rec.approve_employee_id = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
+    #         rec.state = 'approve'
+
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        result = super(MaterialPurchaseRequisition, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
+        if not self.env.user.has_group('material_purchase_requisitions.group_requisition_user'):
+            temp = etree.fromstring(result['arch'])
+            temp.set('create', '0')
+            temp.set('delete', '0')
+            result['arch'] = etree.tostring(temp)
+        return result
 
     #@api.multi
     def reset_draft(self):
