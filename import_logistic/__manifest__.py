@@ -11,7 +11,7 @@
         'account',
         'purchase',
         'stock_landed_costs',
-        #                 'obro_workflows',
+        'product_article_finish_no'
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -21,6 +21,6 @@
         'views/lc_view.xml',
         'reports/landed_cost.xml',
     ],
-    'installable': True,
-    'auto_install': False,
+    # 'installable': True,
+    # 'auto_install': False,
 }

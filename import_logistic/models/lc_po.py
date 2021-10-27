@@ -1,10 +1,18 @@
 from odoo import api, fields, models
 
 
+class PurchaseOrderLineInh(models.Model):
+    _inherit = 'purchase.order.line'
+
+    article_no = fields.Char('Article No', related="product_id.article_no")
+    finish_no = fields.Char('Finish No', related="product_id.finish_no")
+
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     is_import_vendor = fields.Boolean('Is import Vendor?')
+
 
 class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'

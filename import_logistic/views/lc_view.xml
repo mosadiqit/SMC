@@ -148,17 +148,22 @@
                     <attribute name="sum">Total QTY</attribute>
                 </xpath>
 
+                <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
+                    <field name="article_no"/>
+                    <field name="finish_no"/>
+                </xpath>
+
                 <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_qty']" position="after">
                     <field name="product_uom" string="UOM"/>
                     <field name="s_for" invisible="1"/>
-                    <field name="unit_pricefc" string="Rate invoice value  FC" attrs="{'invisible':[('s_for','=','local')]}"/>
-                    <field name="sub_total_fc" string="Total invoice amount FC" attrs="{'invisible':[('s_for','=','local')]}" sum="Total Invoice"/>
-                    <field name="sub_total_lp" attrs="{'invisible':[('s_for','=','local')]}"/>
-                    <field name="assessed_value" attrs="{'invisible':[('s_for','=','local')]}" sum="Assessed Value"/>
-                    <field name="total_assessed_value" attrs="{'invisible':[('s_for','=','local')]}" sum="Total Assessed"/>
-                    <field name="lc_cost" attrs="{'invisible':[('s_for','=','local')]}"/>
-                    <field name="cust_duty" attrs="{'invisible':[('s_for','=','local')]}" sum="Total CD"/>
-                    <field name="other_charges" attrs="{'invisible':[('s_for','=','local')]}" sum="Total Other Charges"/>
+                    <field name="unit_pricefc" string="Rate invoice value  FC" attrs="{'column_invisible':[('parent.s_for','=','local')]}"/>
+                    <field name="sub_total_fc" string="Total invoice amount FC" attrs="{'column_invisible':[('parent.s_for','=','local')]}" sum="Total Invoice"/>
+                    <field name="sub_total_lp" attrs="{'column_invisible':[('parent.s_for','=','local')]}"/>
+                    <field name="assessed_value" attrs="{'column_invisible':[('parent.s_for','=','local')]}" sum="Assessed Value"/>
+                    <field name="total_assessed_value" attrs="{'column_invisible':[('parent.s_for','=','local')]}" sum="Total Assessed"/>
+                    <field name="lc_cost" attrs="{'column_invisible':[('parent.s_for','=','local')]}"/>
+                    <field name="cust_duty" attrs="{'column_invisible':[('parent.s_for','=','local')]}" sum="Total CD"/>
+                    <field name="other_charges" attrs="{'column_invisible':[('parent.s_for','=','local')]}" sum="Total Other Charges"/>
                 </xpath>
 
                 <xpath expr="//notebook" position="inside">
