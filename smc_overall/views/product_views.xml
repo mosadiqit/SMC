@@ -12,6 +12,19 @@
 <!--        </field>-->
 <!--    </record>-->
 
+    <record id="quant_search_view_inherit_active" model="ir.ui.view">
+        <field name="name">stock.quant.search.inherit</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.quant_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='reserved']" position="after">
+                <separator/>
+                <filter string="Active Product" name="product_id"
+                    domain="[('product_id.active', '=', True)]"/>
+            </xpath>
+        </field>
+     </record>
+
     <record model="ir.ui.view" id="smc_landed_cost_form">
         <field name="name">smc_project_list</field>
         <field name="model">stock.landed.cost</field>

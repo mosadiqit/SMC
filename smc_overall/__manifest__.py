@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs'],
+    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs', 'purchase'],
 
     # always loaded
     'data': [
@@ -33,5 +33,6 @@
         'reports/ledger_report.xml',
         'reports/purchase_report.xml',
         'reports/payment_report.xml',
+        'views/purchase.xml',
     ],
 }

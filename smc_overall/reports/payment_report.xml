@@ -5,7 +5,7 @@
         <field name="name">Payment A4</field>
         <field name="default" eval="True"/>
         <field name="format">custom</field>
-        <field name="page_height">140</field>
+        <field name="page_height">148</field>
         <field name="page_width">210</field>
         <field name="orientation">Portrait</field>
         <field name="margin_top">35</field>
@@ -83,7 +83,7 @@
                                 <strong>Memo: </strong><span t-field="o.ref"/>
                             </div>
                         </div>
-                        <br/>
+                        <br/><br/><br/><br/>
                         <table width="100%">
                             <tr>
                                 <td>
