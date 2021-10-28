@@ -261,7 +261,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                     cr_jv= crdit_record.move_id
                     jornal_entry= self.env['account.move.line'].search([('date', '>=', date_from),
                                                                         ('date', '<=', date_to),
-                                                                        ('branch_id.id', '=', selected_id),
+                       
                                                                         ('move_id.state', '=', 'posted'),
                                                                         ('move_id.id','=',cr_jv.id),('move_id.journal_id.type', 'in', ['cash','general'])])
 
