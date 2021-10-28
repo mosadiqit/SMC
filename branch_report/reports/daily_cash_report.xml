@@ -497,7 +497,7 @@
                                             <table width="100%">
                                                 <tbody>
                                                     <t t-set="total_cash_oreceipt" t-value="0"/>
-                                                    <t t-set="cash_otherReceipt" t-value="cash_corporate_receipt(receipt = True , cash=True)"/>
+                                                    <t t-set="cash_otherReceipt" t-value="cash_corporate_receipt(receipt = True , cash=True ,special_case= True)"/>
                                                     <t t-if="len(cash_otherReceipt) > 0">
                                                         <t t-foreach="cash_otherReceipt" t-as="o_receipt">
                                                             <tr>
@@ -678,7 +678,7 @@
                                                     <t t-foreach="cash_transfer_data" t-as="cash_trnsfer">
                                                         <tr>
                                                             <td class="pl-2" width="66.9%" style="border: 1px solid black; border-left:none; font-size:13px;">
-                                                                dbt:<span t-esc="cash_trnsfer['debit_acc']"/>
+                                                               <span t-esc="cash_trnsfer['debit_acc']"/>
                                                                 <!-- <span t-esc="cash_trnsfer['label']"/> -->
                                                             </td>
                                                             <td class="text-right pr-2" width="37.1%" style="border: 1px solid black; font-size:13px;">
@@ -1427,7 +1427,7 @@
 
 
                             <!--total debits and total credits(Bank section )-->
-                            <div class="container col-12 row zero_padding border-top-0 mt-4">
+                            <div class="container col-12 row zero_padding border-top-0 mt-4" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Total Bank Debits:
                                 </div>
@@ -1447,7 +1447,7 @@
                             <!--end total debits and total credits (Bank section)-->
                              
                              
-                              <div class="container col-12 row zero_padding border-top-0">
+                              <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
                                     &#160;
                                 </div>
@@ -1471,7 +1471,7 @@
                              
                              
                     
-                             <div class="container col-12 row zero_padding border-top-0">
+                             <div class="container col-12 row zero_padding border-top-0" style="page-break-inside:avoid;">
                                 <div class="col-4 text-left all_border  border-right-0 pl-1 pb-0 bold_pt_pb">
                                     Grand total In:
                                 </div>
