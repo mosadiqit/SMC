@@ -38,6 +38,25 @@ class ResPartnerInh(models.Model):
             rec.partner_id = partner.id
 
 
+class ProductProductInh(models.Model):
+    _inherit = 'product.product'
+
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='tree', toolbar=False, submenu=False):
+        # result = fields_view_get_extra(self, view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        result = super(ProductProductInh, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
+
+        if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
+            temp = etree.fromstring(result['arch'])
+            temp.set('create', '0')
+            temp.set('edit', '0')
+            result['arch'] = etree.tostring(temp)
+
+        return result
+
+
 class ProductTemplateInh(models.Model):
     _inherit = 'product.template'
 
@@ -95,11 +114,11 @@ class StockPickingInh(models.Model):
             temp.set('delete', '0')
             temp.set('edit', '0')
             result['arch'] = etree.tostring(temp)
-        if self.env.user.has_group('sales_consultant_user_rights.group_readonly_user'):
-            temp = etree.fromstring(result['arch'])
-            temp.set('create', '0')
-            temp.set('edit', '0')
-            result['arch'] = etree.tostring(temp)
+        # if self.env.user.has_group('sales_consultant_user_rights.group_transfers_readonly_user'):
+        #     temp = etree.fromstring(result['arch'])
+        #     temp.set('create', '0')
+        #     temp.set('edit', '0')
+        #     result['arch'] = etree.tostring(temp)
         return result
 
     def test_action(self):
