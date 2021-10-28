@@ -12,7 +12,7 @@ class CustomReport(models.AbstractModel):
             [('partner_id', '=', data['partner_id']),('date', '>=', data['start_date']),('date', '<=', data['end_date']),
              ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
              ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-             ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+             ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')], order="date asc")
         return partner_ledger
 
     def get_opening_bal(self, data):
