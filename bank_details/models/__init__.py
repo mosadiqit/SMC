@@ -2,3 +2,4 @@
 
 from . import vendor_xlsx
 from . import courier
+from . import partner_xlsx

@@ -7,7 +7,8 @@
             string="Payment Transfers"
             report_type="xlsx"
             name="bank_details.report_bank_details_xlsx"
-            file="bank_details.report_bank_details_xlsx"/>
+            file="bank_details.report_bank_details_xlsx"
+        menu="False"/>
 
         <report
             id="courier_xlsx"
@@ -15,6 +16,15 @@
             string="Couriers"
             report_type="xlsx"
             name="bank_details.report_courier_xlsx"
-            file="bank_details.report_courier_xlsx"/>
+            file="bank_details.report_courier_xlsx"
+        menu="False"/>
+
+        <report
+            id="partner_xlsx"
+            model="res.partner"
+            string="Partner Info"
+            report_type="xlsx"
+            name="bank_details.report_partner_xlsx"
+            file="bank_details.report_partner_xlsx"/>
 
 </odoo>
