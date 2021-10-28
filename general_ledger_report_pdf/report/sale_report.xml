@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_general_pdf_report" model="ir.actions.report">
+        <field name="name">General Ledger Report</field>
+        <field name="model">general.ledger.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">general_ledger_report_pdf.report_general_document</field>
+    </record>
+
+    <template id="report_general_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-left">
+                        <h3 class="text-center">General Ledger </h3>
+                            <strong>Account: </strong><span t-esc="account"/><br/>
+                        <p><strong>Date: </strong><span t-esc="date_from" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="date_to" t-options="{'widget': 'date'}"/></p>
+                    </div>
+                </div>
+                <table class="table table-sm" name="account_lines_table" style="border-bottom:1px solid black;">
+
+                    <tr style="border-bottom:1px solid black;">
+                        <td style="border-bottom:1px solid black;"><strong>Date</strong></td>
+                        <td style="border-bottom:1px solid black;"><strong>Voucher#</strong></td>
+                        <td style="border-bottom:1px solid black;"><strong>Details</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Debit</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Credit</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Balance</strong></td>
+                    </tr>
+                    <tbody>
+                        <tr t-foreach="ledgers" t-as="l" style="font-size: 13px;" >
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.date" t-options="{'widget': 'date'}"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.move_id.name"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.name"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.debit))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.credit))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.balance))"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+
+</odoo>
