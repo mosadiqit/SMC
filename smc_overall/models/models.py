@@ -31,7 +31,7 @@ class ResPartnerInh(models.Model):
     iban_no = fields.Char('IBAN NO.')
     swift_code = fields.Char('Swift Code')
     ac_no = fields.Char('Account No.')
-    short_code = fields.Char('Short Code')
+    short_code = fields.Char('Amount')
     purpose = fields.Char('Purpose')
     is_supplier = fields.Boolean(default=False, compute='compute_is_supplier')
     currency_id = fields.Many2one('res.currency')

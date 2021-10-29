@@ -12,6 +12,19 @@
 <!--        </field>-->
 <!--    </record>-->
 
+    <record id="view_stock_scrap_form_inh" model="ir.ui.view">
+		<field name="name">stock.scrap.form</field>
+		<field name="model">stock.scrap</field>
+		<field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='location_id']" position="attributes">
+				<attribute name="domain">[('is_active', '=', True)]</attribute>
+            </xpath>
+		</field>
+	</record>
+
+
+
     <record id="quant_search_view_inherit_active" model="ir.ui.view">
         <field name="name">stock.quant.search.inherit</field>
         <field name="model">stock.quant</field>

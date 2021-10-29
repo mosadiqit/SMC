@@ -74,6 +74,7 @@ class AccountMoveInh(models.Model):
                             if k.product_id.id == line.product_id.id:
                                 k.return_qty = line.qty_done
 
+
 class StockLandedInh(models.Model):
     _inherit = 'stock.landed.cost'
 
