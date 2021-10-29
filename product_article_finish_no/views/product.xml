@@ -51,7 +51,7 @@
                     <field name="finish_no" />
                 </xpath>
                 <xpath expr="//field[@name='qty_available']" position="after">
-                    <field name="free_sold_qty" />
+                    <field name="free_sold_qty" force_save="1"/>
                     <field name="uom_id" string="UOM"/>
                 </xpath>
                 <xpath expr="//field[@name='virtual_available']" position="attributes">
@@ -112,7 +112,7 @@
                     <field name="article_no" />
                     <field name="finish_no" />
                     <field name="qty_available" />
-                    <field name="free_sold_qty" decoration-bf="1"/>
+                    <field name="free_sold_qty" decoration-bf="1" force_save="1"/>
                     <field name="uom_id" string="UOM"/>
                     <field name="lst_price" string="Sale Price"/>
                     <field name="sqm_box" string="UOM/BOX"/>

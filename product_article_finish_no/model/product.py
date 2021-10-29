@@ -8,16 +8,16 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
-    free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
+    free_sold_qty = fields.Float('Available Qty')
 
-    @api.depends('qty_available')
-    def compute_free_sold_qty(self):
-        for rec in self:
-            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
-            prd_resrv_qty = 0
-            for rsrvqt in quants:
-                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
-            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
+    # @api.depends('qty_available')
+    # def compute_free_sold_qty(self):
+    #     for rec in self:
+    #         quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+    #         prd_resrv_qty = 0
+    #         for rsrvqt in quants:
+    #             prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+    #         rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     def compute_forecasted_qty(self):
         for rec in self:
@@ -30,6 +30,11 @@ class ProductProduct(models.Model):
                 # so_list.append('(' + line.picking_id.purchase_id.name + ':' + str(qty) + ')' )
             # joined_string = ",".join(so_list)
             rec.forecasted_qty = qty
+            quants = self.env['stock.quant'].search([('product_id', '=', rec.id)])
+            prd_resrv_qty = 0
+            for rsrvqt in quants:
+                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     def name_get(self):
         res = []
@@ -90,7 +95,7 @@ class ProductTemplate(models.Model):
     sqft_box = fields.Float('SQFT/BOX')
     rft_box = fields.Float('RFT/BOX')
     forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
-    free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
+    free_sold_qty = fields.Float('Available Qty')
 
     @api.model
     def create(self, vals):
@@ -99,14 +104,14 @@ class ProductTemplate(models.Model):
         result = super(ProductTemplate, self).create(vals)
         return result
 
-    @api.depends('qty_available')
-    def compute_free_sold_qty(self):
-        for rec in self:
-            prd_resrv_qty = 0.0
-            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
-            for rsrvqt in quants:
-                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
-            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
+    # @api.depends('qty_available')
+    # def compute_free_sold_qty(self):
+    #     for rec in self:
+    #         prd_resrv_qty = 0.0
+    #         quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+    #         for rsrvqt in quants:
+    #             prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+    #         rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     def compute_forecasted_qty(self):
         for rec in self:
@@ -120,6 +125,11 @@ class ProductTemplate(models.Model):
                 # so_list.append('(' + line.picking_id.purchase_id.name + ':' + str(qty) + ')' )
             # joined_string = ",".join(so_list)
             rec.forecasted_qty = qty
+            prd_resrv_qty = 0.0
+            quants = self.env['stock.quant'].search([('product_tmpl_id', '=', rec.id)])
+            for rsrvqt in quants:
+                prd_resrv_qty = prd_resrv_qty + rsrvqt.reserved_quantity
+            rec.free_sold_qty = rec.qty_available - prd_resrv_qty
 
     @api.constrains('system_code')
     def unique_system_code(self):
