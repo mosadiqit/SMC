@@ -29,13 +29,15 @@
                         <td style="border-bottom:1px solid black;" class="text-right"><strong>Balance</strong></td>
                     </tr>
                     <tbody>
+                        <t t-set="bal" t-value="0"/>
                         <tr t-foreach="ledgers" t-as="l" style="font-size: 13px;" >
+                            <t t-set="bal" t-value="bal+(l.debit - l.credit)"/>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.date" t-options="{'widget': 'date'}"/></td>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.move_id.name"/></td>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="l.name"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.debit))"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.credit))"/></td>
-                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.balance))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(bal))"/></td>
                         </tr>
                     </tbody>
                 </table>
