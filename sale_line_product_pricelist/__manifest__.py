@@ -14,6 +14,7 @@ Avail Popup to display prices of product for each line.""",
     'data': [
         'views/assets_view.xml',
         'views/sale_order.xml',
+        'views/product.xml',
     ],
     'qweb': ['static/src/xml/price_on_line.xml'],
     'installable': True,
