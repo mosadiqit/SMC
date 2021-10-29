@@ -34,7 +34,7 @@
                             <t t-set="bal" t-value="bal+(d.debit - d.credit)"/>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.date" t-options="{'widget': 'date'}"/></td>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.move_id.name"/></td>
-                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.name"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.move_id.freight"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.debit))"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.credit))"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(bal))"/></td>
