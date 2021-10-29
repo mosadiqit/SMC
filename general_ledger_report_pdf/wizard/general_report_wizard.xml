@@ -28,6 +28,6 @@
 		<field name="target">new</field>
 	</record>
 
-	<menuitem id="general_ledger_report_menu_new" action="general_ledger_report_pdf.action_general_report_wizard_form" name="General Ledger PDF" parent="account.account_reports_legal_statements_menu" />
+	<menuitem id="general_ledger_report_menu_new" action="general_ledger_report_pdf.action_general_report_wizard_form" name="General Ledger PDF" parent="account_reports.account_reports_partners_reports_menu" />
 
 </odoo>
