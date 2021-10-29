@@ -22,25 +22,37 @@
                         <td style="border-bottom:1px solid black;"><strong>Details</strong></td>
                         <td style="border-bottom:1px solid black;" class="text-right"><strong>Debit</strong></td>
                         <td style="border-bottom:1px solid black;" class="text-right"><strong>Credit</strong></td>
+                        <td style="border-bottom:1px solid black;" class="text-right"><strong>Amount In Currency</strong></td>
                         <td style="border-bottom:1px solid black;" class="text-right"><strong>Balance</strong></td>
                     </tr>
                     <tbody>
-                        <tr >
-                            <strong> <td style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Opening Balance</strong></td></strong>
+                        <tr>
+                            <strong> <td style="border-bottom:1px solid black;" colspan="6" class="text-left"><strong>Opening Balance</strong></td></strong>
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>
                         </tr>
-                        <t t-set="bal" t-value="0"/>
+                        <t t-set="bal" t-value="openbal"/>
+                        <t t-set="amount_currency" t-value="0"/>
+                        <t t-set="total_debit" t-value="0"/>
+                        <t t-set="total_credit" t-value="0"/>
                         <tr t-foreach="dat" t-as="d" style="font-size: 13px;" >
                             <t t-set="bal" t-value="bal+(d.debit - d.credit)"/>
+                            <t t-set="total_debit" t-value="total_debit + d.debit"/>
+                            <t t-set="total_credit" t-value="total_credit + d.credit"/>
+                            <t t-set="amount_currency" t-value="amount_currency+(d.amount_currency)"/>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.date" t-options="{'widget': 'date'}"/></td>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.move_id.name"/></td>
                             <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="d.move_id.freight"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.debit))"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.credit))"/></td>
+                            <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(d.amount_currency))"/></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(bal))"/></td>
                         </tr>
                         <tr style="border-top:1px solid #000;">
-                            <td  style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Closing Balance</strong></td>
+                            <td  style="border-bottom:1px solid black;" colspan="3" class="text-left"><strong>Closing Balance</strong></td>
+                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(total_debit))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(total_credit))"/></strong></td>
+<!--                            <td/>-->
+                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(amount_currency))"/></strong></td>
                             <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(closingbal))"/></strong></td>
                         </tr>
                     </tbody>

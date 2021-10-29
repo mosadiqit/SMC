@@ -24,6 +24,7 @@ class CustomReport(models.AbstractModel):
         bal = 0
         for rec in open_bal:
             bal = bal + rec.balance
+
         return bal
 
     def get_closing_bal(self, data):
