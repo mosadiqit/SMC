@@ -88,17 +88,17 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_stock_move_line_tree_inh">
-        <field name="name">stock.move.line.inh</field>
-        <field name="model">stock.move.line</field>
-        <field name="inherit_id" ref="stock.view_move_line_tree"/>
-        <field name="arch" type="xml">
+<!--    <record model="ir.ui.view" id="view_stock_move_line_tree_inh">-->
+<!--        <field name="name">stock.move.line.inh</field>-->
+<!--        <field name="model">stock.move.line</field>-->
+<!--        <field name="inherit_id" ref="stock.view_move_line_tree"/>-->
+<!--        <field name="arch" type="xml">-->
 
-            <xpath expr="//field[@name='qty_done']" position="attributes">
-                <attribute name="sum">Total</attribute>
-            </xpath>
-        </field>
-    </record>
+<!--            <xpath expr="//field[@name='qty_done']" position="attributes">-->
+<!--                <attribute name="sum">Total</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
     <record model="ir.ui.view" id="smc_quant_list">
         <field name="name">smc_project_list</field>
