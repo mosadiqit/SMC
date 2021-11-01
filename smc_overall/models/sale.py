@@ -26,3 +26,11 @@ class SaleOrderInh(models.Model):
         for par_rec in partner_ledger:
             bal = bal + (par_rec.debit - par_rec.credit)
         self.partner_balance = bal
+
+    def action_cancel(self):
+        for rec in self.picking_ids:
+            if rec.state == 'in_transit' or rec.state == 'done':
+                raise UserError('You cannot cancel Sale Order when Delivery is in Transit/Done State.')
+        return super(SaleOrderInh, self).action_cancel()
+
+
