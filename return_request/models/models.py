@@ -82,15 +82,19 @@ class ReturnRequest(models.Model):
     # @api.depends('request_lines')
     def compute_check_quantity(self):
         if self.request_lines:
+            is_check = False
             for rec in self.request_lines:
-                if rec.return_quantity == rec.recieved_qty:
-                    self.is_check_qty = False
+                if rec.return_quantity != rec.recieved_qty:
+                    is_check = True
+                    # self.is_check_qty = False
                 elif self.is_second_approved == True:
-                    self.is_check_qty = False
-                else:
-                    self.is_check_qty = True
+                    is_check = False
+            if not is_check:
+                self.is_check_qty = False
+            else:
+                self.is_check_qty = True
         else:
-            self.is_check_qty = True
+            self.is_check_qty = False
 
     def action_second_approval_from_manager(self):
         self.state = 'manager'
