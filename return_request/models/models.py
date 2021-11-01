@@ -150,7 +150,7 @@ class ReturnRequest(models.Model):
                     line_vals.append((0, 0, {
                         'product_id': line.product_id.id,
                         'price_unit': line.unit_price,
-                        'quantity': line.return_quantity,
+                        'quantity': line.recieved_qty,
                         'discount': line.discount_qty,
                         'account_id': record.id
                     }))
@@ -201,8 +201,8 @@ class ReturnRequest(models.Model):
                         'product_uom': line.product_id.uom_id.id,
                         'location_id': delivery.location_dest_id.id,
                         'location_dest_id': self.dest_location_id.id,
-                        'product_uom_qty': line.return_quantity,
-                        'quantity_done': line.return_quantity,
+                        'product_uom_qty': line.recieved_qty,
+                        'quantity_done': line.recieved_qty,
                         'group_id': sale_order.id
                     }))
             new_picking = delivery.copy({
