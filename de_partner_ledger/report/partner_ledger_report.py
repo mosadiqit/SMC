@@ -17,14 +17,13 @@ class CustomReport(models.AbstractModel):
 
     def get_opening_bal(self, data):
         open_bal = self.env['account.move.line'].search(
-            [('partner_id', '=', data['partner_id']),('date', '<=', data['start_date']),
+            [('partner_id', '=', data['partner_id']), ('date', '<', data['start_date']),
              ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
              ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
              ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
         bal = 0
         for rec in open_bal:
             bal = bal + rec.balance
-
         return bal
 
     def get_closing_bal(self, data):
