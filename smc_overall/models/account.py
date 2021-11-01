@@ -30,12 +30,15 @@ class AccountPaymentInh(models.Model):
 class AccountMoveLineInh(models.Model):
     _inherit = 'account.move.line'
 
-    branch_id = fields.Many2one('res.branch')
+    branch_id = fields.Many2one('res.branch', related='account_id.branch_id')
+    # branch_id_new = fields.Many2one('res.branch', compute='compute_branch')
     return_qty = fields.Float('Return Qty')
 
-    @api.onchange('account_id')
-    def onchange_account_id(self):
+    # @api.onchange('account_id')
+    # @api.depends('account_id')
+    def compute_branch(self):
         for rec in self:
+            # rec.branch_id_new = rec.account_id.branch_id.id
             rec.branch_id = rec.account_id.branch_id.id
     # def compute_return_qty(self):
     #     for k in self.invoice_line_ids:
