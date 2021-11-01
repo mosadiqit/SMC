@@ -101,8 +101,8 @@
 			<xpath expr="//button[@name='%(stock.action_report_delivery)d']" position="after">
 				<button name="%(stock.action_report_delivery)d" string="Print" attrs="{'invisible': [('state', 'not in', ['assigned'])]}" type="action" groups="sales_consultant_user_rights.group_show_validate_button_user"/>
             </xpath>
-			<xpath expr="//header/button[4]" position="attributes">
-				<attribute name="groups">sales_consultant_user_rights.group_show_unbold_validate_button_user</attribute>
+			<xpath expr="//header/button[@class='o_btn_validate']" position="attributes">
+				<attribute name="groups">sales_consultant_user_rights.group_show_validate_button_user</attribute>
             </xpath>
 			<xpath expr="//button[@name='action_confirm']" position="attributes">
 				<attribute name="groups">sales_consultant_user_rights.group_show_do_buttons_user</attribute>
