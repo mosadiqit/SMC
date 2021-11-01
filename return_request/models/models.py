@@ -82,17 +82,21 @@ class ReturnRequest(models.Model):
     # @api.depends('request_lines')
     def compute_check_quantity(self):
         if self.request_lines:
-            is_check = False
-            for rec in self.request_lines:
-                if rec.return_quantity != rec.recieved_qty:
-                    is_check = True
-                    # self.is_check_qty = False
-                elif self.is_second_approved == True:
-                    is_check = False
-            if not is_check:
+            if self.is_second_approved:
                 self.is_check_qty = False
             else:
-                self.is_check_qty = True
+                is_check = False
+                for rec in self.request_lines:
+                    if rec.return_quantity != rec.recieved_qty:
+                        is_check = True
+                        # self.is_check_qty = False
+                    # elif self.is_second_approved == True:
+                    #     is_check = False
+                print('----------------------',is_check)
+                if not is_check:
+                    self.is_check_qty = False
+                else:
+                    self.is_check_qty = True
         else:
             self.is_check_qty = False
 
@@ -117,6 +121,7 @@ class ReturnRequest(models.Model):
         self.state = 'user'
 
     def action_validate(self):
+        print(self.is_check_qty)
         if self.is_check_qty == False:
             invoices_list = []
             for rec in self.request_lines:
