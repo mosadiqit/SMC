@@ -101,6 +101,7 @@ class StockPickingInh(models.Model):
              " * Ready: The transfer is ready to be processed.\n(a) The shipping policy is \"As soon as possible\": at least one product has been reserved.\n(b) The shipping policy is \"When all products are ready\": all product have been reserved.\n"
              " * Done: The transfer has been processed.\n"
              " * Cancelled: The transfer has been cancelled.")
+    extension_approve_count = fields.Integer()
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
@@ -127,16 +128,26 @@ class StockPickingInh(models.Model):
     def check_date(self):
         transfers = self.env['stock.picking'].search([('state', 'in', ['assigned'])])
         for rec in transfers:
+            # if rec.name == 'DP/OUT/00112':
             if rec.scheduled_date:
-                diff = datetime.today() - rec.create_date
+                diff = datetime.today() - rec.scheduled_date
                 if abs(diff.days) > 25:
-                    rec._create_notification()
-                    rec.is_notified = True
-                if abs(diff.days) >= 30:
+                    if not rec.is_notified:
+                        rec._create_notification()
+                        rec.is_notified = True
+                if rec.extension_approve_count > 0:
+                    total_days = 30 + (15 * rec.extension_approve_count)
+                else:
+                    total_days = 30
+                # print(abs(diff.days))
+                # print(total_days)
+                if abs(diff.days) >= total_days:
                     if rec.is_reserve_approved:
                         rec.scheduled_date = rec.scheduled_date + relativedelta(days=15)
+                        rec.is_reserve_approved = False
                     else:
                         rec.do_unreserve()
+                        # rec.is_notified = False
 
     def _create_notification(self):
         # groupObj = self.env['res.groups'].search([('name', '=', "Administrator")])
@@ -154,6 +165,10 @@ class StockPickingInh(models.Model):
         if act_type_xmlid:
             activity_type = self.sudo().env.ref(act_type_xmlid)
         model_id = self.env['ir.model']._get(self._name).id
+        # if self.create_user.id:
+        #     user = self.create_user.id
+        # else:
+        #     user =
         create_vals = {
             'activity_type_id': activity_type.id,
             'summary': summary or activity_type.summary,
@@ -162,7 +177,8 @@ class StockPickingInh(models.Model):
             'date_deadline': datetime.today(),
             'res_model_id': model_id,
             'res_id': self.id,
-            'user_id': self.sale_id.user_id.id,
+            # 'user_id': self.sale_id.user_id.id,
+            'user_id': self.sale_id.user_id.id or self.create_user.id ,
         }
         activities = self.env['mail.activity'].create(create_vals)
 
@@ -173,6 +189,7 @@ class StockPickingInh(models.Model):
         # for rec in self:
         self.is_reserve_approved = True
         self.state = 'assigned'
+        self.extension_approve_count = self.extension_approve_count + 1
 
     def action_send_for_approvals(self):
         for rec in self:

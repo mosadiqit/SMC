@@ -129,22 +129,12 @@
 				<field name="is_reserve_approved" invisible="1"/>
 				<field name="is_notified" invisible="1"/>
 				<field name="is_sent_for_approval" invisible="1"/>
+				<field name="extension_approve_count" invisible="1"/>
             </xpath>
 
 		</field>
 	</record>
 
-<!--	<record id="view_res_partner_form_inh" model="ir.ui.view">-->
-<!--		<field name="name">res.partner.form</field>-->
-<!--		<field name="model">res.partner</field>-->
-<!--		<field name="inherit_id" ref="base.view_partner_form"/>-->
-<!--		<field name="arch" type="xml">-->
-<!--			<xpath expr="//field[@name='email']" position="after">-->
-<!--			<field name="is_same_branch"/>-->
-<!--			</xpath>-->
-
-<!--		</field>-->
-<!--	</record>-->
 
 	<record id="res_partner_action_customer_inh" model="ir.actions.act_window">
             <field name="name">Customers</field>
