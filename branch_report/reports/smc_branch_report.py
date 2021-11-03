@@ -415,7 +415,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc':j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit':credt_val,
-                                'debit_acc':rec_debt.account_id.name,
+                                'debit_acc':rec_debt[0].account_id.name,
                                 'label':rec.name
                             })
 
@@ -455,7 +455,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name,
+                                'debit_acc': rec_debt[0].account_id.name,
                                 'label':rec.name
                             })
 
@@ -493,7 +493,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                         'cre_acc': j_rec.account_id.name,
                                         'partnr': partner_name,
                                         'credit': credt_val,
-                                        'debit_acc': rec_debt.account_id.name
+                                        'debit_acc': rec_debt[0].account_id.name
                                     })
 
 
@@ -533,7 +533,7 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                         'cre_acc': j_rec.account_id.name,
                                         'partnr': partner_name,
                                         'credit': credt_val,
-                                        'debit_acc': rec_debt.account_id.name
+                                        'debit_acc': rec_debt[0].account_id.name
                                     })
 
 
@@ -570,8 +570,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name,
-                                'label':rec_debt.name
+                                'debit_acc': rec_debt[0].account_id.name,
+                                'label':rec_debt[0].name
                             })
         #end for cash transfer
 
@@ -607,8 +607,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name,
-                                'label':rec_debt.name
+                                'debit_acc': rec_debt[0].account_id.name,
+                                'label':rec_debt[0].name
                             })
 
         #end bank sale return
@@ -655,8 +655,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                         'cre_acc': j_rec.account_id.name,
                                         'partnr': partner_name,
                                         'credit': credt_val,
-                                        'debit_acc': rec_debt.account_id.name,
-                                        'label':rec_debt.name
+                                        'debit_acc': rec_debt[0].account_id.name,
+                                        'label':rec_debt[0].name
                                     })
 
         #end bank credit card
@@ -694,8 +694,8 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 'cre_acc': j_rec.account_id.name,
                                 'partnr': partner_name,
                                 'credit': credt_val,
-                                'debit_acc': rec_debt.account_id.name,
-                                'label':rec_debt.name
+                                'debit_acc': rec_debt[0].account_id.name,
+                                'label':rec_debt[0].name
                             })
 
         #end bank transfers
