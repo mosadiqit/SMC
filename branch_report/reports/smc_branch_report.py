@@ -887,7 +887,9 @@ class ReportAccountHashIntegrity(models.AbstractModel):
                                 })
                         elif special_case == True:
                             if not rec.partner_id:
-                                credited_account = ((rec.move_id.line_ids).filtered(lambda r,q=rec:r.id != q.id))[0].account_id.name
+                                line_jv = (rec.move_id.line_ids).filtered(lambda r,q=rec:r.id != q.id)
+                                
+                                credited_account = line_jv.filtered(lambda r,q=rec:r.credit == q.debit)[0].account_id.name
                                 
                             other_receipt_list.append({
                                     'name': (rec.partner_id.name if rec.partner_id.name else credited_account),
