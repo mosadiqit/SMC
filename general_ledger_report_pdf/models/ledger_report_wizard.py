@@ -5,8 +5,8 @@ from odoo.exceptions import UserError
 class GeneralReportWizard(models.TransientModel):
     _name = 'general.ledger.wizard'
 
-    date_from = fields.Datetime('Date From')
-    date_to = fields.Datetime('Date To')
+    date_from = fields.Date('Date From')
+    date_to = fields.Date('Date To')
     account_id = fields.Many2one('account.account')
 
     def print_report(self):
