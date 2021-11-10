@@ -15,6 +15,12 @@ class HelpdeskTicketInh(models.Model):
     warranty = fields.Selection([('in', 'In Warranty'),
                                        ('out', 'Out Warranty'),
                                        ('nr', 'NR')], 'Warranty')
+    brand = fields.Selection([('apollo', 'APPOLLO'),
+                                 ('tona', 'TONA'),
+                                 ('forever', 'FOREVER GLASS'),('grohe', 'GROHE'),('remer', 'REMER'),('cerdomus', 'CERDOMUS'),('supergres', 'SUPERGRES'),('versace', 'VERSACE'),('mirage', 'MIRAGE'),
+                              ('homeworks', 'HOMEWORKS'),('florim', 'FLORIM'),('elios', 'ELIOS'),('lafabrica', 'LAFABRICA'),('rondine', 'RONDINE'),('brennero', 'BRENNERO'),('marcopolo', 'MARCOPOLO'),
+                              ('vescovi', 'VESCOVI'),('orans', 'ORANS'),('laminam', 'LAMINAM'),('komodor', 'KOMODOR'),('swriss', 'SWRISSKRONO'),('progress', 'PROGRESS PROFILES'),('other', 'OTHER'),
+                              ('hunter', 'HUNTER FAN'),('westinghouse', 'WESTINGHOUSE'),('kerakoll', 'KERAKOLL')], 'Brand')
     problem = fields.Char('Problem')
     serial_no = fields.Char('Serial No')
     amount = fields.Float('Service Changes')
