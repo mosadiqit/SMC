@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, models
-
+from datetime import datetime
+from pytz import timezone
 
 class SaleReportCustom(models.AbstractModel):
     _name = 'report.general_ledger_report_pdf.report_general_document'
@@ -35,16 +36,23 @@ class SaleReportCustom(models.AbstractModel):
             bal = bal + rec.balance
         return bal
 
+    def get_print_date(self):
+        now_utc_date = datetime.now()
+        now_dubai = now_utc_date.astimezone(timezone('Asia/Karachi'))
+        return now_dubai.strftime('%d/%m/%Y %H:%M:%S')
+
     @api.model
     def _get_report_values(self, docids, data=None):
         model = self.env.context.get('active_model')
         rec_model = self.env[model].browse(self.env.context.get('active_id'))
         return {
             'doc_ids': self.ids,
+            'user': self.env.user.name,
             'doc_model': 'general_ledger_report_pdf.general.ledger.wizard',
             'date_from': rec_model.date_from,
             'date_to': rec_model.date_to,
             'account': rec_model.account_id.name,
+            'print_date': self.get_print_date(),
             'ledgers': self.get_ledgers(),
             'opening': self.get_opening_bal(),
             'closing': self.get_closing_bal() + self.get_opening_bal(),

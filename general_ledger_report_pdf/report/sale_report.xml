@@ -14,7 +14,23 @@
                 <div class="page">
                     <div class="text-left">
                         <h3 class="text-center">General Ledger </h3>
-                            <strong>Account: </strong><span t-esc="account"/><br/>
+                        <div class="row mt64">
+                            <div class="col-6" >
+                                <strong>Account: </strong> <span t-esc="account"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Print Date: </strong> <span t-esc="print_date"/>
+                            </div>
+                        </div>
+                        <div class="row mt64">
+                            <div class="col-6" >
+                                <strong>User: </strong> <span t-esc="user.name"/>
+                            </div>
+<!--                            <div class="col-6">-->
+<!--                                <strong>Print Date: </strong> <span t-esc="print_date"/>-->
+<!--                            </div>-->
+                        </div>
+<!--                            <strong>Account: </strong><span t-esc="account"/><br/>-->
                         <p><strong>Date: </strong><span t-esc="date_from" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="date_to" t-options="{'widget': 'date'}"/></p>
                     </div>
                 </div>
