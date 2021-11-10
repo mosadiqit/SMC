@@ -45,6 +45,7 @@ class SaleReportCustom(models.AbstractModel):
     def _get_report_values(self, docids, data=None):
         model = self.env.context.get('active_model')
         rec_model = self.env[model].browse(self.env.context.get('active_id'))
+        print(docids)
         return {
             'doc_ids': self.ids,
             'user': self.env.user.name,
