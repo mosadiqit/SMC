@@ -72,18 +72,18 @@
 
     <record id="paperformat_general_ledger"
             model="report.paperformat">
-        <field name="name">General Ldeger A4</field>
+        <field name="name">General Ledger A4</field>
         <field name="default" eval="True"/>
         <field name="format">A4</field>
         <field name="page_height">0</field>
         <field name="page_width">0</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">55</field>
-        <field name="margin_bottom">50</field>
+        <field name="margin_top">65</field>
+        <field name="margin_bottom">28</field>
         <field name="margin_left">5</field>
         <field name="margin_right">5</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">50</field>
+        <field name="header_spacing">60</field>
         <field name="dpi">90</field>
     </record>
 
@@ -117,7 +117,7 @@
                                 <!--                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>-->
                                 <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(opening))"/></strong></td>
                             </tr>
-                            <t t-set="bal" t-value="0"/>
+                            <t t-set="bal" t-value="opening"/>
                             <t t-set="counter" t-value="0"/>
                             <t t-set="total_debit" t-value="0"/>
                             <t t-set="total_credit" t-value="0"/>
@@ -132,29 +132,6 @@
                                 <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.debit))"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(l.credit))"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(bal))"/></td>
-
-                                <!--                                <t t-if="counter == 15">-->
-                                <!--                                    <p style="page-break-after:avoid;"> </p>-->
-                                <!--                                    <td>hello</td>-->
-                                <!--                                    <div class="text-left">-->
-                                <!--                                        <h3 class="text-center">General Ledger </h3>-->
-                                <!--                                        <div class="row mt64">-->
-                                <!--                                            <div class="col-6" >-->
-                                <!--                                                <strong>Account: </strong> <span t-esc="account"/>-->
-                                <!--                                            </div>-->
-                                <!--                                            <div class="col-6">-->
-                                <!--                                                <strong>Print Date: </strong> <span t-esc="print_date"/>-->
-                                <!--                                            </div>-->
-                                <!--                                        </div>-->
-                                <!--                                        <div class="row mt64">-->
-                                <!--                                            <div class="col-6" >-->
-                                <!--                                                <strong>User: </strong> <span t-esc="user.name"/>-->
-                                <!--                                            </div>-->
-                                <!--                                        </div>-->
-                                <!--                                        <p><strong>Date: </strong><span t-esc="date_from" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="date_to" t-options="{'widget': 'date'}"/></p>-->
-                                <!--                                    </div>-->
-                                <!--                                    <t t-set="counter" t-value="0"/>-->
-                                <!--                                </t>-->
                             </tr>
                             <tr style="border-top:1px solid #000; font-size:10px;">
                                 <td  style="border-bottom:1px solid black; font-size:13px;" colspan="3" class="text-left"><strong>Closing Balance</strong></td>
