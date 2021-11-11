@@ -57,7 +57,7 @@ class CustomReport(models.AbstractModel):
             'doc_model': 'partner.ledger',
             'openbal': openbal,
             'foreign_openbal': self.get_foreign_opening_bal(data),
-            'closingbal': closingbal + openbal,
+            'closingbal': closingbal,
             'dat': dat,
             'data': data,
         }

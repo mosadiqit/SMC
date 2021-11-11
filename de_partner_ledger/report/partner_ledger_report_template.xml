@@ -31,7 +31,7 @@
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(foreign_openbal))"/></strong></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(openbal))"/></strong></td>
                         </tr>
-                        <t t-set="bal" t-value="0"/>
+                        <t t-set="bal" t-value="openbal"/>
                         <t t-set="amount_currency" t-value="0"/>
                         <t t-set="total_debit" t-value="0"/>
                         <t t-set="total_credit" t-value="0"/>
