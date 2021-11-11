@@ -92,7 +92,7 @@ class ReturnRequest(models.Model):
                         # self.is_check_qty = False
                     # elif self.is_second_approved == True:
                     #     is_check = False
-                print('----------------------',is_check)
+                # print('----------------------',is_check)
                 if not is_check:
                     self.is_check_qty = False
                 else:
@@ -260,6 +260,14 @@ class ReturnRequested(models.Model):
     recieved_qty = fields.Float('Received Qty')
     sqm_box = fields.Float('SQM/Box', related='product_id.sqm_box')
     total_sqm = fields.Float(string="Total Box", compute='_compute_product_uom_qty')
+
+    def unlink(self):
+        # print('Hello')
+        for rec in self:
+            if rec.request_order_id.state not in ('user'):
+                raise UserError(
+                    _('You can not delete this Return in this state.'))
+        return super(ReturnRequested, self).unlink()
 
     @api.depends('return_quantity')
     def _compute_product_uom_qty(self):
