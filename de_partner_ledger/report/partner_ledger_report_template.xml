@@ -26,8 +26,9 @@
                     </tr>
                     <tbody>
                         <tr>
-                            <strong> <td style="border-bottom:1px solid black;" colspan="6" class="text-left"><strong>Opening Balance</strong></td></strong>
+                            <strong> <td style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Opening Balance</strong></td></strong>
 <!--                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>-->
+                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(foreign_openbal))"/></strong></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(openbal))"/></strong></td>
                         </tr>
                         <t t-set="bal" t-value="0"/>
@@ -48,11 +49,11 @@
                             <td style="border-bottom:1px solid black;" class="text-right"><t t-esc="'{0:,.0f}'.format(int(bal))"/></td>
                         </tr>
                         <tr style="border-top:1px solid #000;">
-                            <td  style="border-bottom:1px solid black;" colspan="3" class="text-left"><strong>Closing Balance</strong></td>
-                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(total_debit))"/></strong></td>
-                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(total_credit))"/></strong></td>
-                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(amount_currency))"/></strong></td>
-                            <td  style="border-bottom:1px solid black;" class="text-right"><strong><t t-esc="'{0:,.0f}'.format(int(closingbal))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;font-size:13px;" colspan="3" class="text-left"><strong>Closing Balance</strong></td>
+                            <td  style="border-bottom:1px solid black;font-size:13px;" class="text-right text-nowrap"><strong><t t-esc="'{0:,.0f}'.format(int(total_debit))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;font-size:13px;" class="text-right text-nowrap"><strong><t t-esc="'{0:,.0f}'.format(int(total_credit))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;font-size:13px;" class="text-right text-nowrap"><strong><t t-esc="'{0:,.0f}'.format(int(amount_currency+foreign_openbal))"/></strong></td>
+                            <td  style="border-bottom:1px solid black;font-size:13px;" class="text-right text-nowrap"><strong><t t-esc="'{0:,.0f}'.format(int(closingbal))"/></strong></td>
                         </tr>
                     </tbody>
                 </table>

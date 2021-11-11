@@ -26,6 +26,17 @@ class CustomReport(models.AbstractModel):
             bal = bal + rec.balance
         return bal
 
+    def get_foreign_opening_bal(self, data):
+        open_bal = self.env['account.move.line'].search(
+            [('partner_id', '=', data['partner_id']), ('date', '<', data['start_date']),
+             ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+             ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+             ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+        bal = 0
+        for rec in open_bal:
+            bal = bal + rec.amount_currency
+        return bal
+
     def get_closing_bal(self, data):
         open_bal = self.env['account.move.line'].search(
             [('partner_id', '=', data['partner_id']), ('date', '>=', data['start_date']), ('date', '<=', data['end_date']),
@@ -45,6 +56,7 @@ class CustomReport(models.AbstractModel):
             'doc_ids': self.ids,
             'doc_model': 'partner.ledger',
             'openbal': openbal,
+            'foreign_openbal': self.get_foreign_opening_bal(data),
             'closingbal': closingbal + openbal,
             'dat': dat,
             'data': data,
