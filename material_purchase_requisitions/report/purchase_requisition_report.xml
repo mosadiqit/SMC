@@ -38,6 +38,10 @@
                                    <td><strong>Company</strong></td><td> <span t-field="doc.company_id.name"/></td>
                                    <td><strong>Analytic Account</strong></td><td> <span t-field="doc.analytic_account_id.name"/></td>
                                </tr>
+                                 <tr style="border: 2px solid black;">
+                                   <td><strong>Client Name</strong></td><td> <span t-field="doc.partner_id.name"/></td>
+                                   <td><strong>Order Type</strong></td><td> <span t-field="doc.material_order"/></td>
+                               </tr>
                             </table>
                             <strong><h3>Other Information</h3></strong>
                             <table class="table table-responsive">
@@ -82,7 +86,8 @@
                                <tr style="border: 2px solid black;">
                                     <td><strong>Requisition Action</strong></td>
                                     <td><strong>Product</strong></td>
-                                    <td><strong>Description</strong></td>
+                                    <td><strong>Article No</strong></td>
+                                    <td><strong>Finish No</strong></td>
                                     <td><strong>Quantity</strong></td>
                                     <td><strong>Unit of Measure</strong></td>
                                     <td><strong>Vendors</strong></td>
@@ -91,7 +96,9 @@
                                    <tr style="border: 2px solid grey;">
                                     <td><span t-field="line.requisition_type"/></td>
                                     <td><span t-field="line.product_id.name"/></td>
-                                    <td><span t-esc="line.description"/></td>
+                                    <td><span t-field="line.product_id.article_no"/></td>
+                                    <td><span t-field="line.product_id.finish_no"/></td>
+<!--                                    <td><span t-esc="line.description"/></td>-->
                                     <td class="text-right"><span t-esc="line.qty"/></td>
                                     <td class="text-right"><span t-esc="line.uom.name"/></td>
                                     <td><t t-foreach ="line.partner_id" t-as="vendore"><span t-field="vendore.name"/>,</t></td>
