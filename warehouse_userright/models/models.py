@@ -32,10 +32,10 @@ class StockPickingInh(models.Model):
             result['arch'] = etree.tostring(temp)
         return result
 
-    @api.onchange('move_line_ids_without_package')
-    def onchange_move_line_ids_without_package(self):
-        for rec in self:
-            if len(rec.move_line_ids_without_package) > 1:
-                for line in rec.move_line_ids_without_package:
-                    if line.qty_done == 0:
-                        line.qty_done = line.product_uom_qty
+    # @api.onchange('move_line_ids_without_package')
+    # def onchange_move_line_ids_without_package(self):
+    #     for rec in self:
+    #         if len(rec.move_line_ids_without_package) > 1:
+    #             for line in rec.move_line_ids_without_package:
+    #                 if line.qty_done == 0:
+    #                     line.qty_done = line.product_uom_qty
