@@ -1,11 +1,9 @@
 <odoo>
 
     <!--    <template id="purchase_quotation_report_inherit" inherit_id="purchase.report_purchasequotation_document">-->
-
     <!--        &lt;!&ndash;        <xpath expr="//t[@t-set='address']" position="replace">&ndash;&gt;-->
     <!--        &lt;!&ndash;            <span>&#160;</span>&ndash;&gt;-->
     <!--        &lt;!&ndash;        </xpath>&ndash;&gt;-->
-
     <!--        <xpath expr="//div[@class='page']" position="replace">-->
 
     <template id="purchase.report_purchasequotation_document">
@@ -202,35 +200,35 @@
                     </tbody>
                 </table>
 
-                <t t-if="o.state != 'draft'">
-                    <div id="total" class="row justify-content-end">
-                        <div class="col-4">
-                            <table class="table table-sm">
-                                <tr class="border-black">
-                                    <td name="td_subtotal_label"><strong>Subtotal</strong></td>
-                                    <td class="text-right">
-                                        <span t-field="o.amount_untaxed"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td name="td_taxes_label">Taxes</td>
-                                    <td class="text-right">
-                                        <span t-field="o.amount_tax"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr class="border-black o_total">
-                                    <td name="td_amount_total_label"><strong>Total</strong></td>
-                                    <td class="text-right">
-                                        <span t-field="o.amount_total"
-                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </t>
+<!--                <t t-if="o.state != 'draft'">-->
+<!--                    <div id="total" class="row justify-content-end">-->
+<!--                        <div class="col-4">-->
+<!--                            <table class="table table-sm">-->
+<!--                                <tr class="border-black">-->
+<!--                                    <td name="td_subtotal_label"><strong>Subtotal</strong></td>-->
+<!--                                    <td class="text-right">-->
+<!--                                        <span t-field="o.amount_untaxed"-->
+<!--                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                <tr>-->
+<!--                                    <td name="td_taxes_label">Taxes</td>-->
+<!--                                    <td class="text-right">-->
+<!--                                        <span t-field="o.amount_tax"-->
+<!--                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                <tr class="border-black o_total">-->
+<!--                                    <td name="td_amount_total_label"><strong>Total</strong></td>-->
+<!--                                    <td class="text-right">-->
+<!--                                        <span t-field="o.amount_total"-->
+<!--                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </t>-->
 
                 <p t-field="o.notes"/>
                 <div class="oe_structure"/>

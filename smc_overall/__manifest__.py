@@ -34,5 +34,6 @@
         'reports/purchase_report.xml',
         'reports/payment_report.xml',
         'views/purchase.xml',
+        'views/hr_view.xml',
     ],
 }
