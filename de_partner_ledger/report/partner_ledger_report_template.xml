@@ -4,13 +4,20 @@
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <div class="page">
-                    <!--<div class="oe_structure"/>-->
                     <div class="text-left">
                         <h3 class="text-center">Partner Ledger </h3>
                         <t t-foreach="request.env['res.partner'].search([('id', '=', data['partner_id'])])" t-as="prd">
                             <strong>Name: </strong><span t-field="prd.name"/><br/>
                             <strong>Address:</strong><span t-field="prd.street"/>
                         </t>
+                        <div class="row mt64">
+                            <div class="col-6" >
+                                <strong>User: </strong> <span t-esc="user.name"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Print Date: </strong> <span t-esc="print_date"/>
+                            </div>
+                        </div>
                         <p><strong>Date: </strong><span t-esc="data['start_date']" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="data['end_date']" t-options="{'widget': 'date'}"/></p>
                     </div>
                 </div>
@@ -27,7 +34,7 @@
                     <tbody>
                         <tr>
                             <strong> <td style="border-bottom:1px solid black;" colspan="5" class="text-left"><strong>Opening Balance</strong></td></strong>
-<!--                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>-->
+                            <!--                            <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="openbal"/></strong></td>-->
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(foreign_openbal))"/></strong></td>
                             <td style="border-bottom:1px solid black;" class="text-right"><strong><span t-esc="'{0:,.0f}'.format(int(openbal))"/></strong></td>
                         </tr>

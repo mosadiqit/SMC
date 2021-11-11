@@ -2,6 +2,8 @@
 
 
 from odoo import models
+from datetime import datetime
+from pytz import timezone
 
 
 class CustomReport(models.AbstractModel):
@@ -48,6 +50,11 @@ class CustomReport(models.AbstractModel):
             bal = bal + rec.balance
         return bal
 
+    def get_print_date(self):
+        now_utc_date = datetime.now()
+        now_dubai = now_utc_date.astimezone(timezone('Asia/Karachi'))
+        return now_dubai.strftime('%d/%m/%Y %H:%M:%S')
+
     def _get_report_values(self, docids, data=None):
         dat = self.get_partner_bal(data)
         openbal = self.get_opening_bal(data)
@@ -56,6 +63,8 @@ class CustomReport(models.AbstractModel):
             'doc_ids': self.ids,
             'doc_model': 'partner.ledger',
             'openbal': openbal,
+            'print_date': self.get_print_date(),
+            'login_user': self.env.user.name,
             'foreign_openbal': self.get_foreign_opening_bal(data),
             'closingbal': closingbal + openbal,
             'dat': dat,
