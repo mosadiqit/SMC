@@ -35,9 +35,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                         <t t-set="total_qty" t-value="0"/>
                         <t t-foreach="o.order_line" t-as="order_line">
                             <tr t-att-class="'bg-200 font-weight-bold o_line_section' if order_line.display_type == 'line_section' else 'font-italic o_line_note' if order_line.display_type == 'line_note' else ''">
                                 <t t-if="not order_line.display_type">
+                                    <t t-set="total_qty" t-value="total_qty + order_line.product_qty"/>
                                     <td id="product">
                                         <span t-field="order_line.product_id.name"/>
                                     </td>
@@ -62,6 +64,14 @@
                                 </t>
                             </tr>
                         </t>
+                        <tr class="is-subtotal text-right">
+                            <td colspan="99" id="subtotal">
+                                <strong class="mr16">Total Qty</strong>
+                                <span
+                                        t-esc="total_qty"
+                                />
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
 
