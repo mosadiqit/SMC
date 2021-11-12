@@ -94,9 +94,6 @@
                                 </tr>
                             </tbody>
                         </table>
-
-                        <!--                        <p t-field="o.notes"/>-->
-
                         <div class="oe_structure"/>
                     </div>
                 </t>

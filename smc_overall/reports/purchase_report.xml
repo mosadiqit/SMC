@@ -67,9 +67,7 @@
                         <tr class="is-subtotal text-right">
                             <td colspan="99" id="subtotal">
                                 <strong class="mr16">Total Qty</strong>
-                                <span
-                                        t-esc="total_qty"
-                                />
+                                <span t-esc="total_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/>
                             </td>
                         </tr>
                     </tbody>
@@ -201,10 +199,7 @@
                         <tr class="is-subtotal text-right">
                             <td colspan="99" id="subtotal">
                                 <strong class="mr16">Total Qty</strong>
-                                <span
-                                        t-esc="total_qty"
-
-                                />
+                                <span t-esc="total_qty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/>
                             </td>
                         </tr>
                     </tbody>
