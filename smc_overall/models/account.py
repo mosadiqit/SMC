@@ -81,6 +81,11 @@ class AccountMoveInh(models.Model):
                             if k.product_id.id == line.product_id.id:
                                 k.return_qty = line.qty_done
 
+    def get_print_date(self):
+        now_utc_date = datetime.now()
+        now_dubai = now_utc_date.astimezone(timezone('Asia/Karachi'))
+        return now_dubai.strftime('%d/%m/%Y %H:%M:%S')
+
 
 class StockLandedInh(models.Model):
     _inherit = 'stock.landed.cost'
