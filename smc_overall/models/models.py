@@ -4,6 +4,18 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+class StockScrapInh(models.Model):
+    _inherit = 'stock.scrap'
+
+    def action_validate(self):
+        product = self.env['stock.quant'].search([('product_id', '=', self.product_id.id), ('location_id', '=', self.location_id.id)], limit=1)
+        print(product.available_quantity)
+        if self.scrap_qty > product.available_quantity:
+            raise UserError('Available Quantity is less than Scrap Quantity.')
+        else:
+            return super(StockScrapInh, self).action_validate()
+
+
 class ResBranchInh(models.Model):
     _inherit = 'res.branch'
 
