@@ -97,12 +97,12 @@ class ProductTemplate(models.Model):
     forecasted_qty = fields.Float('Forecasted Qty', compute='compute_forecasted_qty')
     free_sold_qty = fields.Float('Available Qty', compute='compute_free_sold_qty')
 
-    @api.model
-    def create(self, vals):
-        products = self.env['product.template'].search([], order="id desc")
-        vals['system_code'] = int(products[0].system_code) + 1
-        result = super(ProductTemplate, self).create(vals)
-        return result
+    # @api.model
+    # def create(self, vals):
+    #     products = self.env['product.template'].search([], order="id desc")
+    #     vals['system_code'] = int(products[0].system_code) + 1
+    #     result = super(ProductTemplate, self).create(vals)
+    #     return result
 
     @api.depends('qty_available')
     def compute_free_sold_qty(self):
@@ -127,11 +127,11 @@ class ProductTemplate(models.Model):
             # joined_string = ",".join(so_list)
             rec.forecasted_qty = qty
 
-    @api.constrains('system_code')
-    def unique_system_code(self):
-        product = self.env['product.template'].search([('system_code', '=', self.system_code)])
-        if len(product) > 1:
-            raise UserError('System Code Already Exist')
+    # @api.constrains('system_code')
+    # def unique_system_code(self):
+    #     product = self.env['product.template'].search([('system_code', '=', self.system_code)])
+    #     if len(product) > 1:
+    #         raise UserError('System Code Already Exist')
 
     @api.constrains('name')
     def unique_product_desc(self):
