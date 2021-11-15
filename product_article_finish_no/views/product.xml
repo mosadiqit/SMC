@@ -32,7 +32,7 @@
                     <field name="pcs_box" />
                 </field>
                 <xpath expr="//field[@name='barcode']" position="after">
-                    <field name="system_code"/>
+                    <field name="system_code" readonly="1"/>
                 </xpath>
             </field>
         </record>
