@@ -33,6 +33,9 @@
                         </span><br/>
                         <spn class="p1"><strong>Validity :</strong>
                             <span class="p2" t-field="doc.validity_date"/>
+                        </spn><br/>
+                        <spn class="p1"><strong>Printed By :</strong>
+                            <span class="p2" t-field="user.name"/>
                         </spn>
                     </div>
                     <div class="col-6">
@@ -46,6 +49,9 @@
                             <span class="p2" t-field="doc.partner_id.no_cnic"/></span><br/>
                         <span class="p1"><strong>NTN :</strong>
                             <span class="p2" t-field="doc.partner_id.ntn"/>
+                        </span><br/>
+                        <span class="p1"><strong>Print Date :</strong>
+                            <span class="p2" t-esc="doc.get_print_date()"/>
                         </span>
                     </div>
                 </div>
