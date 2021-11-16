@@ -103,6 +103,13 @@
                                             <t t-if="o.company_id.website"> Email:<span t-esc="o.company_id.website"/></t>
                                         </p>
 
+                                        <span class="p1"><strong>Print Date :</strong>
+                                            <span class="p1" t-esc="o.get_print_date()"/>
+                                        </span><br/>
+                                        <span class="p1"><strong>User:</strong>
+                                            <span class="p1" t-esc="user.name"/>
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>

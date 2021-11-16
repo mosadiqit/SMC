@@ -16,7 +16,7 @@ class InheritField(models.Model):
     _inherit = 'account.move'
 
     freight = fields.Char(string='Details')
-    journal_id = fields.Many2one("account.journal",string='Journal id')
+    journal_id = fields.Many2one("account.journal", string='Journal id')
 
     def get_print_date(self):
         now_utc_date = datetime.now()
