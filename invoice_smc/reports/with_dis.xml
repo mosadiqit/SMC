@@ -57,8 +57,11 @@
                             table tr{
                             }
                         </style>
-                        <div style="font-size:30px; font-weight: bold;" align="center">
+                        <div style="font-size:30px; font-weight: bold;" align="center" t-if="o.move_type != 'out_refund'">
                             <strong>INVOICE</strong>
+                        </div>
+                        <div style="font-size:30px; font-weight: bold;" align="center" t-else="">
+                            <strong>Credit Note</strong>
                         </div>
                         <div class="container">
                             <div class="container">
@@ -99,6 +102,12 @@
                                             <t t-if="o.create_user.branch_id.telephone"><span style="margin-left:58px" t-field="o.create_user.branch_id.telephone"/><br/></t>
 
                                         </p>
+                                        <span class="p1"><strong>Print Date :</strong>
+                                            <span class="p1" t-esc="o.get_print_date()"/>
+                                        </span><br/>
+                                        <span class="p1"><strong>User:</strong>
+                                            <span class="p1" t-esc="user.name"/>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -392,8 +401,7 @@
                                     <div class="col-4">
                                         <t t-esc="o.invoice_user_id.name"/>
                                         _________________________<br/>
-
-<!--                                        <strong>Sales Consultant</strong><br/>-->
+                                        <!--                                        <strong>Sales Consultant</strong><br/>-->
                                         <strong> <t t-esc="o.invoice_user_id.email"/></strong><br/>
                                         <strong><t t-esc="o.invoice_user_id.phone"/></strong>
                                     </div>
@@ -408,16 +416,16 @@
                                         <strong>Customer</strong>
                                     </div>
                                 </div>
-<!--                                <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:13px" align="center">-->
-<!--                                    Create On:-->
-<!--                                    <span t-field="o.create_date" style="font-size:15px"/>-->
-<!--                                    Create By:-->
-<!--                                    <span t-field="o.invoice_user_id.name" style="font-size:15px"/>-->
-<!--                                    Modified on-->
-<!--                                    <span t-field="o.write_date" style="font-size:15px"/>-->
-<!--                                    Modified By:-->
-<!--                                    <span t-field="o.write_uid.name" style="font-size:15px"/>-->
-<!--                                </div>-->
+                                <!--                                <div class="col-12" style="padding-left:25px;margin-top:20px;font-size:13px" align="center">-->
+                                <!--                                    Create On:-->
+                                <!--                                    <span t-field="o.create_date" style="font-size:15px"/>-->
+                                <!--                                    Create By:-->
+                                <!--                                    <span t-field="o.invoice_user_id.name" style="font-size:15px"/>-->
+                                <!--                                    Modified on-->
+                                <!--                                    <span t-field="o.write_date" style="font-size:15px"/>-->
+                                <!--                                    Modified By:-->
+                                <!--                                    <span t-field="o.write_uid.name" style="font-size:15px"/>-->
+                                <!--                                </div>-->
 
                             </div>
                         </div>
