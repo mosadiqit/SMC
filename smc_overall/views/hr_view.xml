@@ -1,5 +1,32 @@
 <odoo>
 
+     <record id="view_hr_payslip_tree_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.tree.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="multi_edit">1</attribute>
+                </xpath>
+
+                <xpath expr="//tree" position="inside">
+                    <header>
+                        <button string="Compute" name="action_compute_deductions" type="object"/>
+                    </header>
+                </xpath>
+                <xpath expr="//field[@name='net_wage']" position="before">
+                    <field name='balance'/>
+                    <field name='conveyance'/>
+                    <field name='mobile_allowance'/>
+                    <field name='meal_allowance'/>
+<!--                    <field name='other'/>-->
+                </xpath>
+
+            </field>
+    </record>
+
      <record id="view_hr_employee_tree_inh" model="ir.ui.view">
         <field name="name">hr.employee.tree.inh</field>
         <field name="model">hr.employee</field>
