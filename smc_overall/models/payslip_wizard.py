@@ -22,50 +22,59 @@ class PayrollWizard(models.TransientModel):
 
     def action_compute_deductions(self):
         for rec in self.payslip_line:
-            val = {
-                'Conveyance': rec.conveyance
-            }
-            vals_list = []
-            category = self.env['hr.salary.rule.category'].search([('code', '=', 'DED')])
-            oad = self.env['hr.salary.rule'].search([('code', '=', 'OAD')])
-            vals_list.append([0, 0, {
-                'name': 'Old Advance',
-                'code': 'OAD',
-                'sequence': 101,
-                'category_id': category.id,
-                'salary_rule_id': oad.id,
-                'amount': rec.conveyance,
-                'total': rec.conveyance,
-                'quantity': 1,
-            }])
-
-            cad = self.env['hr.salary.rule'].search([('code', '=', 'CAD')])
-            vals_list.append([0, 0, {
-                'name': 'Current Advance',
-                'code': 'CAD',
-                'category_id': category.id,
-                'sequence': 101,
-                'salary_rule_id': cad.id,
-                'amount': rec.mobile_allowance,
-                'total': rec.mobile_allowance,
-                'quantity': 1,
-            }])
-            ads = self.env['hr.salary.rule'].search([('code', '=', 'ADS')])
-            vals_list.append([0, 0, {
-                'name': 'Absent Days',
-                'code': 'ADS',
-                'sequence': 101,
-                'category_id': category.id,
-                'salary_rule_id': ads.id,
-                'amount': rec.meal_allowance,
-                'total': rec.meal_allowance,
-                'quantity': 1,
-            }])
-            rec.slip_id.line_ids = vals_list
+            # val = {
+            #     'Conveyance': rec.conveyance
+            # }
+            # vals_list = []
+            # category = self.env['hr.salary.rule.category'].search([('code', '=', 'DED')])
+            # oad = self.env['hr.salary.rule'].search([('code', '=', 'OAD')])
+            # vals_list.append([0, 0, {
+            #     'name': 'Old Advance',
+            #     'code': 'OAD',
+            #     'sequence': 101,
+            #     'category_id': category.id,
+            #     'salary_rule_id': oad.id,
+            #     'amount': rec.conveyance,
+            #     'total': rec.conveyance,
+            #     'quantity': 1,
+            # }])
+            #
+            # cad = self.env['hr.salary.rule'].search([('code', '=', 'CAD')])
+            # vals_list.append([0, 0, {
+            #     'name': 'Current Advance',
+            #     'code': 'CAD',
+            #     'category_id': category.id,
+            #     'sequence': 101,
+            #     'salary_rule_id': cad.id,
+            #     'amount': rec.mobile_allowance,
+            #     'total': rec.mobile_allowance,
+            #     'quantity': 1,
+            # }])
+            # ads = self.env['hr.salary.rule'].search([('code', '=', 'ADS')])
+            # vals_list.append([0, 0, {
+            #     'name': 'Absent Days',
+            #     'code': 'ADS',
+            #     'sequence': 101,
+            #     'category_id': category.id,
+            #     'salary_rule_id': ads.id,
+            #     'amount': rec.meal_allowance,
+            #     'total': rec.meal_allowance,
+            #     'quantity': 1,
+            # }])
+            # rec.slip_id.line_ids = vals_list
             total = rec.meal_allowance + rec.mobile_allowance + rec.conveyance
             for line in rec.slip_id.line_ids:
                 if line.code == 'NET':
                     line.amount = line.amount - total
+                if line.code == 'OAD':
+                    line.amount = rec.conveyance
+                    line.total = rec.conveyance
+                if line.code == 'CAD':
+                    line.amount = rec.mobile_allowance
+                    line.total = rec.mobile_allowance
+                if line.code == 'ADS':
+                    line.amount = rec.meal_allowance
+                    line.total = rec.meal_allowance
 
     def write_amount(self):
         for record in self.payslip_line:
