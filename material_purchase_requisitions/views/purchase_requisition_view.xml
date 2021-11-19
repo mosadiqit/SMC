@@ -9,7 +9,7 @@
                 <form>
                     <header>
                         <button name="requisition_confirm" type="object" string="Confirm" states="draft" class="btn-primary" groups="base.group_user"/>
-                        <button name="manager_approve" type="object" string="Approve" states="line_confirm" class="btn-primary" groups="material_purchase_requisitions.group_requisition_user"/>
+                        <button name="manager_approve" type="object" string="Approve" states="line_confirm" class="btn-primary" groups="material_purchase_requisitions.group_requisition_cs"/>
                         <button name="user_approve" type="object" string="Approve" states="ir_approve" class="btn-primary" groups="material_purchase_requisitions.group_requisition_line_manager" />
                         <button name="request_stock" type="object" string="Create Picking and PO" states="approve" class="btn-primary" groups="material_purchase_requisitions.group_requisition_purchase_manager"/>
                         <button name="action_received" type="object" string="Received" class="btn-primary" attrs="{'invisible': ['|',('state', '!=', 'stock'), ('is_po_int_done', '!=', True)]}"/>
@@ -49,7 +49,7 @@
                                 <field name="date_end" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
                                 <field name="is_po_int_done" invisible="1"/>
                                 <field name="analytic_account_id" groups="analytic.group_analytic_accounting" attrs="{'readonly': [['state', 'in', ['reject','cancel','receive']]]}"/>
-                            <field name="vendor_id" domain="[('supplier_rank', '=', 1)]"/>
+                            <field name="vendor_id" domain="[('supplier_rank', '=', 1)]" options="{'no_create': True, 'no_edit' : True}"/>
                             </group>
                         </group>
                         <notebook>

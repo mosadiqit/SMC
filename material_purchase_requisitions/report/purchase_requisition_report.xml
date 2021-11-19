@@ -54,7 +54,7 @@
                                         <span class="p2" t-field="doc.partner_id.name"/>
                                     </spn><br/>
                                     <spn class="p1"><strong>Employee :</strong>
-                                        <span class="p2" t-field="doc.partner_id.name"/>
+                                        <span class="p2" t-field="doc.employee_id.name"/>
                                     </spn><br/>
                                 </div>
                                 <div class="col-6">
