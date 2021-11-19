@@ -19,11 +19,11 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs', 'purchase', 'purchase_stock'],
+    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs', 'purchase', 'purchase_stock', 'partner_current_account'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'security/groups.xml',
         'views/res_partner_views.xml',
         'data/sequence.xml',
@@ -36,5 +36,6 @@
         'reports/jv_report.xml',
         'views/purchase.xml',
         'views/hr_view.xml',
+        'wizard/payslip_wizard.xml',
     ],
 }

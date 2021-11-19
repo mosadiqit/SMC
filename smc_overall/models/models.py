@@ -46,6 +46,7 @@ class ResPartnerInh(models.Model):
     short_code = fields.Char('Amount')
     purpose = fields.Char('Purpose')
     is_supplier = fields.Boolean(default=False, compute='compute_is_supplier')
+    # is_current = fields.Boolean('Current Account')
     currency_id = fields.Many2one('res.currency')
 
     def compute_is_supplier(self):
