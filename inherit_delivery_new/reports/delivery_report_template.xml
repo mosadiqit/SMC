@@ -54,7 +54,7 @@
                             <div class="row" style="font-size:13px;">
                                 <div class="col-6">
                                 </div>
-                                <div class="col-5">
+                                <div class="col-5" t-if="o.picking_type_id.code == 'outgoing' or o.picking_type_id.code == 'incoming'">
                                     <span>
                                         <strong>Branch:</strong>
                                         <span class="m-0" t-field="o.create_user.branch_id.name"/>
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-5">
                                     <span>
-                                        <strong>D.O Date:</strong>
+                                        <strong>Date:</strong>
                                         <span class="m-0" t-field="o.scheduled_date"/>
                                     </span>
                                 </div>
