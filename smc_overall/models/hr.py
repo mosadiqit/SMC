@@ -29,12 +29,12 @@ class HrPayslipInh(models.Model):
     def compute_current_balance(self):
         for rec in self:
             if rec.employee_id.partner_ids:
-                employee = ''
+                employee = -1
                 for p in rec.employee_id.partner_ids:
                     if p.is_current:
                         employee = p
                 bal = 0
-                if employee:
+                if employee != -1:
                     partner_ledger = self.env['account.move.line'].search(
                         [('partner_id', '=', employee.id),
                          ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
@@ -50,18 +50,19 @@ class HrPayslipInh(models.Model):
     def compute_balance(self):
         for rec in self:
             if rec.employee_id.partner_ids:
-                employee = ''
+                employee = -1
                 for p in rec.employee_id.partner_ids:
                     if not p.is_current:
                         employee = p
                 bal = 0
-                partner_ledger = self.env['account.move.line'].search(
-                    [('partner_id', '=', employee.id),
-                     ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-                     ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-                     ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
-                for par_rec in partner_ledger:
-                    bal = bal + (par_rec.debit - par_rec.credit)
+                if employee != -1:
+                    partner_ledger = self.env['account.move.line'].search(
+                        [('partner_id', '=', employee.id),
+                         ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                         ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                         ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+                    for par_rec in partner_ledger:
+                        bal = bal + (par_rec.debit - par_rec.credit)
                 rec.balance = bal
             else:
                 rec.balance = 0
