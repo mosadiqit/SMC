@@ -26,6 +26,7 @@ class MaterialPurchaseRequisition(models.Model):
         index=True,
         readonly=1,
     )
+    vendor_id = fields.Many2one('res.partner')
 
     material_order = fields.Selection([
         ('project', 'Project'),
@@ -36,8 +37,8 @@ class MaterialPurchaseRequisition(models.Model):
 
     state = fields.Selection([
         ('draft', 'New'),
-        ('line_confirm', 'Approval from CEO'),
-        # ('ir_approve', 'Waiting IR Approval'),
+        ('line_confirm', 'Approval from CS'),
+        ('ir_approve', 'Approval from CEO'),
         ('approve', 'Approved'),
         ('stock', 'Purchase Order Created'),
         ('receive', 'Received'),
@@ -130,11 +131,11 @@ class MaterialPurchaseRequisition(models.Model):
         readonly=True,
         copy=False,
     )
-    # userrapp_date = fields.Date(
-    #     string='Approved Date',
-    #     readonly=True,
-    #     copy=False,
-    # )
+    userrapp_date = fields.Date(
+        string='Approved Date',
+        readonly=True,
+        copy=False,
+    )
     receive_date = fields.Date(
         string='Received Date',
         readonly=True,
@@ -200,10 +201,16 @@ class MaterialPurchaseRequisition(models.Model):
     is_po_int_done = fields.Boolean(
         string='PO INT Done',
         default=False,
-        compute='compute_is_po_int_done'
-    )
+        compute='compute_is_po_int_done')
 
     picking_type_id = fields.Many2one('stock.picking.type')
+
+    def action_add_vendors(self):
+        if self.vendor_id:
+            for line in self.requisition_line_ids:
+                line.partner_id = [self.vendor_id.id]
+        else:
+            raise UserError('Please Select Vendor.')
 
     @api.depends('custom_picking_type_id')
     def compute_custom_picking_type_ids(self):
@@ -265,14 +272,14 @@ class MaterialPurchaseRequisition(models.Model):
             email_iruser_template = self.env.ref('material_purchase_requisitions.email_purchase_requisition')
             employee_mail_template.sudo().send_mail(self.id)
             email_iruser_template.sudo().send_mail(self.id)
-            rec.state = 'approve'
+            rec.state = 'ir_approve'
 
     # @api.multi
-    # def user_approve(self):
-    #     for rec in self:
-    #         rec.userrapp_date = fields.Date.today()
-    #         rec.approve_employee_id = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
-    #         rec.state = 'approve'
+    def user_approve(self):
+        for rec in self:
+            rec.userrapp_date = fields.Date.today()
+            rec.approve_employee_id = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
+            rec.state = 'approve'
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
@@ -442,9 +449,18 @@ class MaterialPurchaseRequisition(models.Model):
 
     # @api.multi
     def action_show_po(self):
-        for rec in self:
-            purchase_action = self.env.ref('purchase.purchase_rfq')
-            purchase_action = purchase_action.read()[0]
-            purchase_action['domain'] = str([('custom_requisition_id', '=', rec.id)])
-        return purchase_action
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Purchase Order',
+            # 'view_id': self.env.ref('de_partner_ledger.partner_ledger_wizard_report', False).id,
+            'target': 'current',
+            'res_model': 'purchase.order',
+            'domain': [('custom_requisition_id', '=', self.id)],
+            'view_mode': 'tree,form',
+        }
+        # for rec in self:
+        #     purchase_action = self.env.ref('purchase.purchase_rfq')
+        #     purchase_action = purchase_action.read()[0]
+        #     purchase_action['domain'] = str([('custom_requisition_id', '=', rec.id)])
+        #     return purchase_action
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
