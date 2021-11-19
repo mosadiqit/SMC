@@ -4,6 +4,10 @@ from pytz import timezone
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
+class HrEmployeeInh(models.Model):
+    _inherit = 'hr.employee'
+
+    partner_ids = fields.Many2many('res.partner')
 
 class HrPayslipInh(models.Model):
     _inherit = 'hr.payslip'
@@ -16,29 +20,43 @@ class HrPayslipInh(models.Model):
 
     def compute_current_balance(self):
         for rec in self:
-            partner_ledger = self.env['account.move.line'].search(
-                [('partner_id.name', '=', rec.employee_id.name),
-                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
-            bal = 0
-            for par_rec in partner_ledger:
-                    if par_rec.partner_id.is_current:
-                        bal = bal + (par_rec.debit - par_rec.credit)
-            rec.current_balance = bal
+            if rec.employee_id.partner_ids:
+                employee = ''
+                for p in rec.employee_id.partner_ids:
+                    if p.is_current:
+                        employee = p
+                bal = 0
+                if employee:
+                    partner_ledger = self.env['account.move.line'].search(
+                        [('partner_id', '=', employee.id),
+                         ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                         ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                         ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+
+                    for par_rec in partner_ledger:
+                            bal = bal + (par_rec.debit - par_rec.credit)
+                rec.current_balance = bal
+            else:
+                rec.current_balance = 0
 
     def compute_balance(self):
         for rec in self:
-            partner_ledger = self.env['account.move.line'].search(
-                [('partner_id.name', '=', rec.employee_id.name),
-                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
-                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
-                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
-            bal = 0
-            for par_rec in partner_ledger:
-                if not par_rec.partner_id.is_current:
+            if rec.employee_id.partner_ids:
+                employee = ''
+                for p in rec.employee_id.partner_ids:
+                    if not p.is_current:
+                        employee = p
+                bal = 0
+                partner_ledger = self.env['account.move.line'].search(
+                    [('partner_id', '=', employee.id),
+                     ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                     ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                     ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+                for par_rec in partner_ledger:
                     bal = bal + (par_rec.debit - par_rec.credit)
-            rec.balance = bal
+                rec.balance = bal
+            else:
+                rec.balance = 0
 
     def action_compute_deductions(self):
         for rec in self:
