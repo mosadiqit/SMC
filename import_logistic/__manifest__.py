@@ -11,7 +11,8 @@
         'account',
         'purchase',
         'stock_landed_costs',
-        'product_article_finish_no'
+        'product_article_finish_no',
+        'bi_purchase_discount'
     ],
     'data': [
         'security/ir.model.access.csv',

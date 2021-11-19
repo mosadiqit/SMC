@@ -196,6 +196,7 @@ class PurchaseOrder(models.Model):
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
+
     unit_pricefc = fields.Float('Unit Price FC')
     sub_total_fc = fields.Float('Subtotal FC')
     sub_total_lp = fields.Float('Subtotal LP')
@@ -219,14 +220,15 @@ class PurchaseOrderLine(models.Model):
     @api.depends('product_qty', 'price_unit', 'taxes_id')
     def _compute_amount(self):
         for line in self:
-
             taxes = line.taxes_id.compute_all(line.price_unit, line.order_id.currency_id, line.product_qty,
                                               product=line.product_id, partner=line.order_id.partner_id)
+            discount = (line.price_unit * line.discount * line.product_qty) / 100
             if line.s_for != 'import':
+
                 line.update({
                     'price_tax': taxes['total_included'] - taxes['total_excluded'],
                     'price_total': taxes['total_included'],
-                    'price_subtotal': taxes['total_excluded'],
+                    'price_subtotal': taxes['total_excluded'] - discount,
                 })
             else:
                 line.update({
@@ -243,7 +245,7 @@ class PurchaseOrderLine(models.Model):
                         line.price_unit = line.product_id.list_price
                         # line.price_unit = line.price_subtotal / line.product_qty
 
-                line.price_subtotal = line.lc_cost + line.sub_total_lp
+                line.price_subtotal = (line.lc_cost + line.sub_total_lp) - discount
 
 
                     # if line.qty_received > 0:
