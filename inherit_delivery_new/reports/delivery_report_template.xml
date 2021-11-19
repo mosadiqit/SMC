@@ -74,7 +74,11 @@
                                 </div>
                             </div>
                             <div class="row" style="font-size:13px;">
-                                <div class="col-6">
+                                <div class="col-6" t-if="o.picking_type_id.code == 'internal'">
+                                    <strong>User:</strong>
+                                    <span class="m-0" t-field="o.partner_id.name"/>
+                                </div>
+                                <div class="col-6" t-if="o.picking_type_id.code == 'outgoing' or o.picking_type_id.code == 'incoming'">
                                     <strong>Customer Name:</strong>
                                     <span class="m-0" t-field="o.partner_id.name"/>
                                 </div>
@@ -104,9 +108,17 @@
                                 </div>
                             </div>
                             <div class="row" style="font-size:13px;">
-                                <div class="col-6">
+                                <div class="col-6" t-if="o.picking_type_id.code == 'outgoing' or o.picking_type_id.code == 'incoming'">
                                     <strong>Godown:</strong>
                                     <span class="m-0" t-field="o.location_id"/>
+                                </div>
+                                <div class="col-6" t-if="o.picking_type_id.code == 'internal'">
+                                    <strong>From:</strong>
+                                    <span class="m-0" t-field="o.location_id"/>
+                                </div>
+                                <div class="col-6" t-if="o.picking_type_id.code == 'internal'">
+                                    <strong>To:</strong>
+                                    <span class="m-0" t-field="o.location_dest_id"/>
                                 </div>
                             </div>
                             <div class="row" style="font-size:13px;">
