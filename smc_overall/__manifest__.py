@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs', 'purchase', 'purchase_stock', 'partner_current_account'],
+    'depends': ['base', 'contacts', 'account', 'sale', 'branch', 'sale_stock', 'account_reports', 'stock_landed_costs', 'purchase', 'purchase_stock', 'partner_current_account', 'hr_contract'],
 
     # always loaded
     'data': [

@@ -4,10 +4,18 @@ from pytz import timezone
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
+
+class HrContractInh(models.Model):
+    _inherit = 'hr.contract'
+
+    bonus = fields.Float('Bonus')
+
+
 class HrEmployeeInh(models.Model):
     _inherit = 'hr.employee'
 
     partner_ids = fields.Many2many('res.partner')
+
 
 class HrPayslipInh(models.Model):
     _inherit = 'hr.payslip'
