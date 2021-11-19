@@ -92,6 +92,7 @@
 				<field name="mobile" string="Mobile" required="1"/>
 				<field name="fax" string="Fax"/>
 				<field name="website" string="Website"/>
+				<field name="is_current"/>
             </xpath>
 <!--			<xpath expr="//field[@name='property_product_pricelist']" position="after">-->
 <!--				<field name="customer_rank" invisible="1"/>-->

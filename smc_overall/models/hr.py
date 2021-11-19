@@ -11,16 +11,37 @@ class HrPayslipInh(models.Model):
     conveyance = fields.Float('Old Advance')
     mobile_allowance = fields.Float('Current Advance')
     meal_allowance = fields.Float('Absent Days')
-    balance = fields.Float('Balance', compute='compute_balance')
+    balance = fields.Float('Old Balance', compute='compute_balance')
+    current_balance = fields.Float('Current Balance', compute='compute_current_balance')
+
+    def compute_current_balance(self):
+        for rec in self:
+            partner_ledger = self.env['account.move.line'].search(
+                [('partner_id.name', '=', rec.employee_id.name),
+                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+            bal = 0
+            for par_rec in partner_ledger:
+                    if par_rec.partner_id.is_current:
+                        bal = bal + (par_rec.debit - par_rec.credit)
+            rec.current_balance = bal
 
     def compute_balance(self):
         for rec in self:
-            rec.balance = rec.employee_id.user_id.partner_id.credit - rec.employee_id.user_id.partner_id.debit
+            partner_ledger = self.env['account.move.line'].search(
+                [('partner_id.name', '=', rec.employee_id.name),
+                 ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+                 ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+                 ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+            bal = 0
+            for par_rec in partner_ledger:
+                if not par_rec.partner_id.is_current:
+                    bal = bal + (par_rec.debit - par_rec.credit)
+            rec.balance = bal
 
     def action_compute_deductions(self):
         for rec in self:
-            print(rec.number)
-
             val = {
                 'Conveyance': rec.conveyance
             }
@@ -65,6 +86,30 @@ class HrPayslipInh(models.Model):
             for line in rec.line_ids:
                 if line.code == 'NET':
                     line.amount = line.amount - total
+
+    def action_payslip_wizard(self):
+        payslip_list = []
+        selected_ids = self.env.context.get('active_ids', [])
+        selected_records = self.env['hr.payslip'].browse(selected_ids)
+
+        for record in selected_records:
+            line = (0, 0, {
+                    'slip_id': record.id,
+                    'employee_id': record.employee_id.id,
+                    'conveyance': record.conveyance,
+                    'mobile_allowance': record.mobile_allowance,
+                    'meal_allowance': record.meal_allowance,
+                })
+            payslip_list.append(line)
+        return {
+                'type': 'ir.actions.act_window',
+                'name': 'Payroll Payment',
+                'view_id': self.env.ref('smc_overall.view_payroll_wizard_form', False).id,
+                'target': 'new',
+                'context': {'default_payslip_line': payslip_list},
+                'res_model': 'payroll.wizard',
+                'view_mode': 'form',
+            }
 
 
 class HrEmployeeInh(models.Model):
