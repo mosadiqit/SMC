@@ -124,7 +124,7 @@
                             <div class="row" style="font-size:13px;">
                                 <div class="col-6">
                                     <strong>Driver Name:</strong>
-                                    <span class="m-0" t-field="o.driver_id.name"/>
+                                    <span class="m-0" t-field="o.driver.name"/>
                                 </div>
                                 <div class="col-5">
                                     <span>
