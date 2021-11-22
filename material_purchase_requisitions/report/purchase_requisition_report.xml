@@ -74,9 +74,9 @@
                             <table class="table table-sm">
                                 <thead>
                                     <tr >
-                                        <th class="text-nowrap text-center">
-                                            <strong>Requisition Action</strong>
-                                        </th>
+<!--                                        <th class="text-nowrap text-center">-->
+<!--                                            <strong>Requisition Action</strong>-->
+<!--                                        </th>-->
                                         <th class="text-nowrap">
                                             <strong>Product</strong>
                                         </th>
@@ -92,35 +92,35 @@
                                         <th class="text-nowrap text-center">
                                             <strong>Uom</strong>
                                         </th>
-                                        <th class="text-nowrap text-center">
-                                            <strong>Vendor</strong>
-                                        </th>
+<!--                                        <th class="text-nowrap text-center">-->
+<!--                                            <strong>Vendor</strong>-->
+<!--                                        </th>-->
                                     </tr>
                                 </thead>
                                 <tbody class="sale_tbody">
                                     <t t-foreach="doc.requisition_line_ids" t-as="line">
                                         <tr>
-                                            <td name="td_id" class="text-center" >
-                                                <span t-field="line.requisition_type"/>
-                                            </td>
+<!--                                            <td name="td_id" class="text-center" >-->
+<!--                                                <span t-field="line.requisition_type"/>-->
+<!--                                            </td>-->
                                             <td class="div_tb" >
                                                 <span t-field="line.product_id.name"/>
                                             </td>
-                                            <td class="div_tb" >
+                                            <td class="text-center" >
                                                 <span t-field="line.product_id.article_no"/>
                                             </td>
-                                            <td class="div_tb" >
+                                            <td class="text-center" >
                                                 <span t-field="line.product_id.finish_no"/>
                                             </td>
-                                            <td class="div_tb" >
+                                            <td class="text-center" >
                                                 <span t-field="line.qty"/>
                                             </td>
-                                            <td class="div_tb" >
+                                            <td class="text-center" >
                                                 <span t-field="line.uom.name" />
                                             </td>
-                                            <td class="text-center" >
-                                                <span t-field="line.partner_id.name"/>
-                                            </td>
+<!--                                            <td class="text-center" >-->
+<!--                                                <span t-field="line.partner_id.name"/>-->
+<!--                                            </td>-->
                                         </tr>
                                     </t>
                                     <br/>

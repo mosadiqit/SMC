@@ -21,6 +21,20 @@ class MaterialPurchaseRequisition(models.Model):
                     _('You can not delete Purchase Requisition which is not in draft or cancelled or rejected state.'))
         return super(MaterialPurchaseRequisition, self).unlink()
 
+    partner_balance = fields.Float('Balance', compute='compute_balance', default=0)
+
+    @api.depends('partner_id')
+    def compute_balance(self):
+        partner_ledger = self.env['account.move.line'].search(
+            [('partner_id', '=', self.partner_id.id),
+             ('move_id.state', '=', 'posted'), ('full_reconcile_id', '=', False), ('balance', '!=', 0),
+             ('account_id.reconcile', '=', True), ('full_reconcile_id', '=', False), '|',
+             ('account_id.internal_type', '=', 'payable'), ('account_id.internal_type', '=', 'receivable')])
+        bal = 0
+        for par_rec in partner_ledger:
+            bal = bal + (par_rec.debit - par_rec.credit)
+        self.partner_balance = bal
+
     name = fields.Char(
         string='Number',
         index=True,
