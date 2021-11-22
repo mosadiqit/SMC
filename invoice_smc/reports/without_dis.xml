@@ -96,11 +96,12 @@
                                     <div class="col-6">
 
                                         <p class="p1">Branch :
-                                            <t t-if="o.branch_id.address"> <span t-field="o.branch_id.name"/><br/></t>
-                                            <t t-if="o.branch_id.address"><span t-esc="o.branch_id.address"/><br/></t>
-                                            <t t-if="o.branch_id.telephone">Tel:<span t-esc="o.branch_id.telephone"/><br/></t>
-                                            <t t-if="o.company_id.website"> <span t-esc="o.company_id.website"/><br/></t>
-                                            <t t-if="o.company_id.website"> Email:<span t-esc="o.company_id.website"/></t>
+                                            <span t-field="o.create_user.branch_id.name"/><br/>
+<!--                                            <t t-if="o.branch_id.address"> <span t-field="o.branch_id.name"/><br/></t>-->
+<!--                                            <t t-if="o.branch_id.address"><span t-esc="o.branch_id.address"/><br/></t>-->
+<!--                                            <t t-if="o.branch_id.telephone">Tel:<span t-esc="o.branch_id.telephone"/><br/></t>-->
+<!--                                            <t t-if="o.company_id.website"> <span t-esc="o.company_id.website"/><br/></t>-->
+<!--                                            <t t-if="o.company_id.website"> Email:<span t-esc="o.company_id.website"/></t>-->
                                         </p>
 
                                         <span class="p1"><strong>Print Date :</strong>
@@ -326,7 +327,7 @@
                             <br/>
                             <div class="container row" style="margin-top:4em; font-size:15px;">
                                 <div class="col-4">
-                                    <t t-esc="o.create_uid.name"/>
+                                    <t t-esc="o.invoice_user_id.name"/>
                                     __________________________________
                                 </div>
                                 <div class="col-4">
@@ -342,11 +343,10 @@
                                 <div class="col-4">
 
                                     <strong>Sales Consultant</strong>
-                                    <strong> <t t-esc="o.create_uid.email"/></strong><br/>
-                                    <strong><t t-esc="o.create_uid.phone"/></strong><br/>
+                                    <strong> <t t-esc="o.invoice_user_id.email"/></strong><br/>
+                                    <strong><t t-esc="o.invoice_user_id.phone"/></strong><br/>
                                 </div>
                                 <div class="col-4">
-
                                     <strong>Manager</strong>
                                 </div>
                                 <div class="col-4">
