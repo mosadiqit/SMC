@@ -4,11 +4,18 @@ from odoo import models, fields, api
 from lxml import etree
 
 
+class HrEmployeeInh(models.Model):
+    _inherit = 'hr.employee'
+
+    is_driver = fields.Boolean('Is Driver?')
+
+
 class StockPickingInh(models.Model):
     _inherit = 'stock.picking'
 
     driver_id = fields.Many2one('res.partner', 'Driver Name')
-    mobile = fields.Char('Mobile', related='driver_id.mobile')
+    driver = fields.Many2one('hr.employee', 'Driver Name')
+    mobile = fields.Char('Mobile', related='driver.mobile_phone')
     vehicle_no = fields.Char('Vehicle No')
     note_del = fields.Char('Note')
     x_css = fields.Html(string='CSS', sanitize=False, compute='_compute_css', store=False)
