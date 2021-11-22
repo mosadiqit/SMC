@@ -9,6 +9,7 @@
 
                 <xpath expr="//field[@name='work_location']" position="after">
                     <field name="is_driver"/>
+                    <field name="vehicle_no" attrs="{'invisible': [('is_driver', '=', False)]}"/>
                 </xpath>
 
             </field>

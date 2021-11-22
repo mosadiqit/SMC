@@ -8,6 +8,8 @@ class HrEmployeeInh(models.Model):
     _inherit = 'hr.employee'
 
     is_driver = fields.Boolean('Is Driver?')
+    vehicle_no = fields.Char()
+
 
 
 class StockPickingInh(models.Model):
@@ -19,6 +21,10 @@ class StockPickingInh(models.Model):
     vehicle_no = fields.Char('Vehicle No')
     note_del = fields.Char('Note')
     x_css = fields.Html(string='CSS', sanitize=False, compute='_compute_css', store=False)
+
+    @api.onchange('driver')
+    def onchange_driver(self):
+        self.vehicle_no = self.driver.vehicle_no
 
     def _compute_css(self):
         for application in self:
