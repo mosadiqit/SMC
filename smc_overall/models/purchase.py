@@ -9,4 +9,5 @@ class PurchaseOrderInh(models.Model):
         ('in_production', 'In Production'),
         ('on_the_way', 'On the Way to Khi'),
         ('out_of_way', 'Out of way to Lhr'),
+        ('arrived', 'Arrived'),
     ], string='Status Ref')
