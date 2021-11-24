@@ -1,7 +1,7 @@
 from datetime import datetime
 from pytz import timezone
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
@@ -25,6 +25,19 @@ class HrPayslipInh(models.Model):
     meal_allowance = fields.Float('Absent Days')
     balance = fields.Float('Old Balance', compute='compute_balance')
     current_balance = fields.Float('Current Balance', compute='compute_current_balance')
+    address_id = fields.Many2one('res.partner')
+    work_location = fields.Char('Work Location')
+
+    def compute_sheet(self):
+        payslips = self.filtered(lambda slip: slip.state in ['draft', 'verify'])
+        # delete old payslip lines
+        payslips.line_ids.unlink()
+        for payslip in payslips:
+            number = payslip.number or self.env['ir.sequence'].next_by_code('salary.slip')
+            lines = [(0, 0, line) for line in payslip._get_payslip_lines()]
+            payslip.write({'line_ids': lines, 'number': number, 'state': 'verify', 'compute_date': fields.Date.today(), 'address_id': payslip.employee_id.address_id.id,
+                           'work_location': payslip.employee_id.work_location})
+        return True
 
     def compute_current_balance(self):
         for rec in self:

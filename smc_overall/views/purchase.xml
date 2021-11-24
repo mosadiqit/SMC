@@ -53,7 +53,7 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_tree"/>
         <field name="arch" type="xml">
-            
+
             <xpath expr="//field[@name='amount_total']" position="after">
                 <field name="status_ref"/>
             </xpath>
