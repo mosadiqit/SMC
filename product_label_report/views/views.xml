@@ -170,7 +170,8 @@
                             <td style="border:1px solid black; border-right:none;padding:0px; margin:0px; text-align:left; ">
                                 <!--                              <div style="display:inline-block;"> <span t-esc="product.uom_id.name"/></div>-->
                                 <div style="display:inline-block;padding-left:2px;width:100%;">
-                                    <span>Per PCS</span>
+<!--                                    <span>Per PCSss</span>-->
+                                    <span t-esc="product.uom_id.name"/>
                                 </div>
                                 <!--                              <div style="display:inline-block; border:1px solid black;"> <span t-esc="product.pcs_box"/></div>-->
                             </td>
