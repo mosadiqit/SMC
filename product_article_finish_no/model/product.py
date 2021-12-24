@@ -167,8 +167,14 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('product_uom_qty')
     def _compute_product_uom_qty(self):
-        self.total_sqm = self.product_uom_qty / (self.product_id.sqm_box or 1)
-        self.total_pcs = self.total_sqm * self.product_id.pcs_box
+        for rec in self:
+            rec.total_sqm = round(rec.product_uom_qty / (round(rec.product_id.sqm_box, 4) or 1), 4)
+            rec.total_pcs = rec.total_sqm * rec.product_id.pcs_box
+            sqm = rec.total_sqm - int(rec.total_sqm)
+            print((round(rec.product_id.sqm_box, 4)))
+            print(sqm)
+            if sqm != 0:
+                raise UserError('Plz Add Rounded Qty')
 
 
 class StockMoveLine(models.Model):
@@ -181,6 +187,13 @@ class StockMoveLine(models.Model):
     def _compute_product_uom_qty(self):
         for rec in self:
             if rec.state not in ['done']:
-                rec.total_sqm = rec.product_uom_qty / (rec.sqm_box or 1)
+                if rec.qty_done == 0:
+                    rec.total_sqm = rec.product_uom_qty / (round(rec.product_id.sqm_box, 4) or 1)
+                else:
+                    rec.total_sqm = round(rec.qty_done / (round(rec.product_id.sqm_box, 4) or 1), 4)
+                    sqm = rec.total_sqm - int(rec.total_sqm)
+                    print(sqm)
+                    if sqm != 0:
+                        raise UserError('Plz Add Rounded Qty')
             else:
-                rec.total_sqm = rec.qty_done / (rec.sqm_box or 1)
+                rec.total_sqm = rec.qty_done / (round(rec.product_id.sqm_box, 4) or 1)
