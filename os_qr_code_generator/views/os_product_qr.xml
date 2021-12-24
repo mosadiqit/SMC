@@ -9,9 +9,23 @@
             <xpath expr="//form/header/button" position="after">
                 <button name="generate_qr" type="object" string="Generate Qr" class="btn btn-primary"/>
             </xpath>
-            <field name="categ_id" position="after">
-                <field name="qr_code" widget="image" class="oe_avatar"/>
+            <field name="uom_po_id" position="after">
+                <field name="pro_qr_code" widget="image"/>
+                <field name="qr_code" widget="image" invisible="1"/>
             </field>
         </field>
     </record>
+    
+    
+    <record id="action_server_generate_qr_code" model="ir.actions.server">
+      <field name="name">Generate QR Code</field>
+      <field name="type">ir.actions.server</field>
+      <field name="binding_model_id" ref="model_product_template"/>
+      <field name="model_id" ref="model_product_template"/>
+      <field name="state">code</field>
+      <field name="code"> if records: records.generate_qr() </field>
+    </record>
+
+    
+    
 </odoo>

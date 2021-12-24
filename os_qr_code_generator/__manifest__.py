@@ -16,6 +16,7 @@
         'views/os_customer_qr.xml',
         'views/os_product_qr.xml',
         'views/os_employee_qr.xml',
+        'reports/report_qr_code_pdf.xml'
     ],
     'license': 'AGPL-3',
     'installable': True,

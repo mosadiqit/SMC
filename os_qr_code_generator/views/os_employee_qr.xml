@@ -7,10 +7,10 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form/header" position="inside">
-                <button name="generate_hr_qr" type="object" string="Generate Qr" class="btn btn-primary"/>
+                <button name="generate_hr_qr" type="object" string="Generate Qr" class="btn btn-primary" invisible="1"/>
             </xpath>
             <field name="parent_id" position="after">
-                <field name="qr_code" widget="image" class="oe_avatar"/>
+                <field name="qr_code" widget="image" class="oe_avatar" invisible="1"/>
             </field>
         </field>
     </record>
