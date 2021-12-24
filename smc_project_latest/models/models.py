@@ -5,35 +5,29 @@ from odoo.exceptions import UserError
 from itertools import groupby
 from odoo.tools.float_utils import float_is_zero
 from lxml import etree
-from datetime import datetime
+from datetime import datetime, timedelta
+import locale
+import urllib
 
 def _create_notification(self):
-        # groupObj = self.env['res.groups'].search([('name', '=', "Administrator")])
-        # user_list = []
-        # for user in groupObj.users:
-        #     user_list.append(user.id)
-        # if self.sale_id.user_id.id not in user_list:
-        #     if self.sale_id.user_id.id:
-        #         user_list.append(self.sale_id.user_id.id)
-        # for i in user_list:
-        #     userObj = self.env['res.users'].browse([i])
-        act_type_xmlid = 'mail.mail_activity_data_todo'
-        summary = 'Reserved DO Notification'
-        note = '25 Days passed.In 5 days left, DO no: ' + self.name + ' will be unreserved Automatically.'
-        if act_type_xmlid:
-            activity_type = self.sudo().env.ref(act_type_xmlid)
-        model_id = self.env['ir.model']._get(self._name).id
-        create_vals = {
-            'activity_type_id': activity_type.id,
-            'summary': summary or activity_type.summary,
-            'automated': True,
-            'note': note,
-            'date_deadline': datetime.today(),
-            'res_model_id': model_id,
-            'res_id': self.id,
-            'user_id': self.sale_id.user_id.id,
-        }
-        activities = self.env['mail.activity'].create(create_vals)
+    act_type_xmlid = 'mail.mail_activity_data_todo'
+    summary = 'Reserved DO Notification'
+    note = '25 Days passed.In 5 days left, DO no: ' + self.name + ' will be unreserved Automatically.'
+    if act_type_xmlid:
+        activity_type = self.sudo().env.ref(act_type_xmlid)
+    model_id = self.env['ir.model']._get(self._name).id
+    create_vals = {
+        'activity_type_id': activity_type.id,
+        'summary': summary or activity_type.summary,
+        'automated': True,
+        'note': note,
+        'date_deadline': datetime.today(),
+        'res_model_id': model_id,
+        'res_id': self.id,
+        'user_id': self.sale_id.user_id.id,
+    }
+    activities = self.env['mail.activity'].create(create_vals)
+
 
 class AccountPaymnetInh(models.Model):
     _inherit = 'account.payment'
@@ -41,7 +35,26 @@ class AccountPaymnetInh(models.Model):
     def action_post(self):
         rec = super(AccountPaymnetInh, self).action_post()
         self._create_notification()
+        self.action_payment_sms_api()
 
+    def action_payment_sms_api(self):
+        user = '03334220752'
+        password = '03334220752'
+        sender = 'SMC'
+        to = self.partner_id.mobile
+        # locale.setlocale(locale.LC_ALL, '')
+        # amnt = str(locale.currency(self.amount, grouping=True))
+        msg = 'Dear Customer,\nThank you for the payment against your Sale Order #: ' + self.ref + ' Amount Rs' + str(self.amount) + '\nBest Regards,\nSMC Team'
+        params = urllib.parse.urlencode(
+            {'Username': user, 'Password': password, 'To': to, 'From': sender, 'Message': msg})
+        url = "http://my.ezeee.pk/sendsms_url.html?send_sms&%s" % params
+        f = urllib.request.urlopen(url)
+        ret = f.read().decode('utf-8')
+        if ret:
+            print("The message was sent successfully")
+        else:
+            print("There was an error Parameters")
+            print("Error number is [%s]" % ret)
 
     def _create_notification(self):
         act_type_xmlid = 'mail.mail_activity_data_todo'
@@ -62,6 +75,7 @@ class AccountPaymnetInh(models.Model):
             'user_id': ceo.id,
         }
         activities = self.env['mail.activity'].create(create_vals)
+
 
 class SMC(models.Model):
     _inherit = 'product.template'
@@ -150,11 +164,13 @@ class PurchaseOrderInh(models.Model):
             invoice_vals_list.append(invoice_vals)
 
         if not invoice_vals_list:
-            raise UserError(_('There is no invoiceable line. If a product has a control policy based on received quantity, please make sure that a quantity has been received.'))
+            raise UserError(
+                _('There is no invoiceable line. If a product has a control policy based on received quantity, please make sure that a quantity has been received.'))
 
         # 2) group by (company_id, partner_id, currency_id) for batch creation
         new_invoice_vals_list = []
-        for grouping_keys, invoices in groupby(invoice_vals_list, key=lambda x: (x.get('company_id'), x.get('partner_id'), x.get('currency_id'))):
+        for grouping_keys, invoices in groupby(invoice_vals_list, key=lambda x: (
+        x.get('company_id'), x.get('partner_id'), x.get('currency_id'))):
             origins = set()
             payment_refs = set()
             refs = set()
@@ -183,7 +199,8 @@ class PurchaseOrderInh(models.Model):
         # 4) Some moves might actually be refunds: convert them if the total amount is negative
         # We do this after the moves have been created since we need taxes, etc. to know if the total
         # is actually negative or not
-        moves.filtered(lambda m: m.currency_id.round(m.amount_total) < 0).action_switch_invoice_into_refund_credit_note()
+        moves.filtered(
+            lambda m: m.currency_id.round(m.amount_total) < 0).action_switch_invoice_into_refund_credit_note()
         return self.action_view_invoices()
 
 
@@ -193,12 +210,38 @@ class in_invoicing(models.Model):
     delivery_order = fields.Many2one('stock.picking', compute='_compute_global')
     create_user = fields.Many2one('res.users', string='User', compute="compute_self_id")
     sale_origin = fields.Many2one('sale.order', compute='_compute_sale_origin')
-    purchase_origin = fields.Many2one('purchase.order',  compute='_compute_purchase_origin')
+    purchase_origin = fields.Many2one('purchase.order', compute='_compute_purchase_origin')
 
     def action_post(self):
         rec = super(in_invoicing, self).action_post()
         if self.branch_id:
             self._create_notification()
+
+    def _create_due_date_notification(self):
+        bills = self.env['account.move'].search([('move_type', '=', 'in_invoice'), ('state', '=', 'posted'), ('invoice_date_due', '>=', (datetime.today().date())),('invoice_date_due', '<=', (datetime.today().date() + timedelta(days=30)))])
+        print(bills)
+        for bill in bills:
+            # if bill.invoice_date_due <= (datetime.today().date() + timedelta(days=30)):
+            act_type_xmlid = 'mail.mail_activity_data_todo'
+            summary = 'Bill Due Date Arrived'
+            note = 'Due Date of Bill No: ' + bill.name + ' is ' + str(bill.invoice_date_due)
+            users = self.env['res.users'].search([])
+            if act_type_xmlid:
+                activity_type = self.sudo().env.ref(act_type_xmlid)
+            model_id = self.env['ir.model']._get(bill._name).id
+            for user in users:
+                if user.has_group('account.group_account_manager'):
+                    create_vals = {
+                        'activity_type_id': activity_type.id,
+                        'summary': summary or activity_type.summary,
+                        'automated': True,
+                        'note': note,
+                        'date_deadline': datetime.today(),
+                        'res_model_id': model_id,
+                        'res_id': bill.id,
+                        'user_id': user.id,
+                    }
+                    activities = self.env['mail.activity'].create(create_vals)
 
     def _create_notification(self):
         act_type_xmlid = 'mail.mail_activity_data_todo'
@@ -256,10 +299,11 @@ class SaleOrder(models.Model):
 
     max_discount = fields.Float(string='Max Disccount', compute='compute_max_disccount', default=0, store=True)
     allowed_discount = fields.Float(string='Allowed Disccount', related='create_user.allowed_discount')
-    create_user = fields.Many2one('res.users', string='User', default=lambda self:self.env.user.id, compute='compute_self_id')
+    create_user = fields.Many2one('res.users', string='User', default=lambda self: self.env.user.id,
+                                  compute='compute_self_id')
     is_approved_by_manager_discount = fields.Selection([
         ('none', 'None'),
-        ('manager', 'Discount Approved By Manager'),], string='Discount Approved By Manager', default='none')
+        ('manager', 'Discount Approved By Manager'), ], string='Discount Approved By Manager', default='none')
     is_approved_by_ceo_discount = fields.Selection([
         ('none', 'None'),
         ('ceo', 'Discount Approved By CEO'), ], string='Discount Approved By CEO', default='none')
@@ -418,7 +462,8 @@ class StockPicking(models.Model):
 
     def _compute_invoice_origin(self):
         for i in self:
-            record = self.env['account.move'].search([('invoice_origin', '=', i.origin), ('state', '=', 'posted')], limit=1)
+            record = self.env['account.move'].search([('invoice_origin', '=', i.origin), ('state', '=', 'posted')],
+                                                     limit=1)
             i.invoice_origin = record.id
 
     def compute_self_id(self):
