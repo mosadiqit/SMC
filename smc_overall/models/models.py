@@ -1,7 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+
+
+class StockValuationSalesprice(models.Model):
+    _inherit = 'stock.quant'
+
+    valuation_salesprice = fields.Float(string="Valuation w.r.t unitprice", compute='get_salesprice_valuation')
+
+    def get_salesprice_valuation(self):
+        try:
+            for quant in self:
+                quant.valuation_salesprice = quant.product_id.free_sold_qty * quant.product_id.lst_price
+        except Exception as e:
+            raise ValidationError(_(e.args))
 
 
 class StockScrapInh(models.Model):

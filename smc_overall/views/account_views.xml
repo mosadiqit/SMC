@@ -87,8 +87,6 @@
         </field>
     </record>
 
-
-
     <record id="view_account_payment_form_inh" model="ir.ui.view">
         <field name="name">account.payment.inh</field>
         <field name="model">account.payment</field>
@@ -102,9 +100,6 @@
 <!--                <field name="journal_id" domain="[('type', 'in', ('bank', 'cash'))]" attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
                 <attribute name="domain">[('id', 'in', journals_ids)]</attribute>
             </xpath>
-
-
-
         </field>
     </record>
 
@@ -129,7 +124,6 @@
             </xpath>
         </field>
     </record>
-
 
     <record id="account.res_partner_action_customer" model="ir.actions.act_window">
         <field name="domain">[]</field>

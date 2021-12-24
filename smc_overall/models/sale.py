@@ -34,3 +34,5 @@ class SaleOrderInh(models.Model):
         return super(SaleOrderInh, self).action_cancel()
 
 
+
+
