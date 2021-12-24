@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import locale
+import urllib
 from datetime import datetime
 from operator import itemgetter
 
@@ -52,7 +54,35 @@ class SaleOrderInh(models.Model):
         for order in self:
             for picking in order.picking_ids:
                 picking.do_unreserve()
+        if self.warehouse_id.name == 'RAIWIND WAREHOUSE' and self.user_picking_type == 'deliver_at_site':
+            flag = False
+            for line in self.order_line:
+                if line.product_id.type == 'service':
+                    flag = True
+                    break
+            if not flag:
+                raise UserError('Please Add Shipping Changes')
+        self.action_so_sms_api()
         return res
+
+    def action_so_sms_api(self):
+        user = '03334220752'
+        password = '03334220752'
+        sender = 'SMC'
+        to = self.partner_id.mobile
+        # locale.setlocale(locale.LC_ALL, '')
+        # amnt = str(locale.currency(self.amount_total, grouping=True))
+        msg = 'Dear Customer,\nYour Quotation# ' + self.name + ' has been approved. Kindly pay Rs ' + str(self.amount_total) + '\nBest Regards,\nSMC Team'
+        params = urllib.parse.urlencode(
+            {'Username': user, 'Password': password, 'To': to, 'From': sender, 'Message': msg})
+        url = "http://my.ezeee.pk/sendsms_url.html?send_sms&%s" % params
+        f = urllib.request.urlopen(url)
+        ret = f.read().decode('utf-8')
+        if ret:
+            print("The message was sent successfully")
+        else:
+            print("There was an error Parameters")
+            print("Error number is [%s]" % ret)
 
 
 class StockBackorderConfirmationInh(models.TransientModel):
@@ -165,6 +195,11 @@ class StockPickingInh(models.Model):
         ('none', 'None'),
         ('ceo', 'Reserve Approved By CEO'), ], string='Reserve Approved By CEO', default='none')
 
+    def action_assign(self):
+        record = super(StockPickingInh, self).action_assign()
+        self.action_availability_sms_api()
+        return record
+
     def action_assign_custom(self):
         self.do_unreserve()
         self.action_assign()
@@ -182,13 +217,49 @@ class StockPickingInh(models.Model):
     def button_validate(self):
         if self.picking_type_id.code == 'outgoing':
             self.state = 'in_transit'
+            self.action_transit_sms_api()
         else:
             record = super(StockPickingInh, self).button_validate()
             return record
 
+    def action_transit_sms_api(self):
+        user = '03334220752'
+        password = '03334220752'
+        sender = 'SMC'
+        to = self.partner_id.mobile
+        msg = 'Dear Customer,\nYour shipment against Sale Order #: ' + self.origin + ' is on the way.' + '\nDriver Name: ' + self.driver.name + '\nTruck No: ' + self.vehicle_no + '\nMobile: ' + self.mobile + '\nBest Regards,\nSMC Team'
+        params = urllib.parse.urlencode(
+            {'Username': user, 'Password': password, 'To': to, 'From': sender, 'Message': msg})
+        url = "http://my.ezeee.pk/sendsms_url.html?send_sms&%s" % params
+        f = urllib.request.urlopen(url)
+        ret = f.read().decode('utf-8')
+        if ret:
+            print("The message was sent successfully")
+        else:
+            print("There was an error Parameters")
+            print("Error number is [%s]" % ret)
+
     def action_validate_inh(self):
         record = super(StockPickingInh, self).button_validate()
+        self.action_validate_sms_api()
         return record
+
+    def action_validate_sms_api(self):
+        user = '03334220752'
+        password = '03334220752'
+        sender = 'SMC'
+        to = self.partner_id.mobile
+        msg = 'Dear Customer,\nYour Sale Order #: ' + self.origin + ' has been delivered. Thank you for purchasing from SMC.\nBest Regards,\nSMC Team'
+        params = urllib.parse.urlencode(
+            {'Username': user, 'Password': password, 'To': to, 'From': sender, 'Message': msg})
+        url = "http://my.ezeee.pk/sendsms_url.html?send_sms&%s" % params
+        f = urllib.request.urlopen(url)
+        ret = f.read().decode('utf-8')
+        if ret:
+            print("The message was sent successfully")
+        else:
+            print("There was an error Parameters")
+            print("Error number is [%s]" % ret)
 
     def action_reject(self):
         self.state = 'confirmed'
@@ -246,8 +317,26 @@ class StockPickingInh(models.Model):
                         raise UserError('There is no enough Advance Payment available to Reserve this DO.')
                 else:
                     raise UserError('There is no enough Advance Payment available to Reserve this DO.')
+
             else:
                 rec.action_assign()
+
+    def action_availability_sms_api(self):
+        user = '03334220752'
+        password = '03334220752'
+        sender = 'SMC'
+        to = self.partner_id.mobile
+        msg = 'Dear Customer,\nYour Sale Order #: ' + self.origin + ' has been reserved ' + '\nBest Regards,\nSMC Team'
+        params = urllib.parse.urlencode(
+            {'Username': user, 'Password': password, 'To': to, 'From': sender, 'Message': msg})
+        url = "http://my.ezeee.pk/sendsms_url.html?send_sms&%s" % params
+        f = urllib.request.urlopen(url)
+        ret = f.read().decode('utf-8')
+        if ret:
+            print("The message was sent successfully")
+        else:
+            print("There was an error Parameters")
+            print("Error number is [%s]" % ret)
 
     def action_manager_approval(self):
         self.is_approved_by_manager_credit = 'manager'
