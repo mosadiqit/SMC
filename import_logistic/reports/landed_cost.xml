@@ -45,25 +45,55 @@
                     <!--                    <t t-call="purchase_order_report.your_custom_layout_header">-->
                     <div class="page">
                         <!--                        <t t-call="web.external_layout_standard">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-8">-->
-<!--                            </div>-->
-<!--                            <div class="col-4">-->
-<!--                                <span>-->
-<!--                                    <span class="m-0" t-field="o.name"/>-->
-<!--                                </span>-->
-<!--                            </div>-->
-<!--                        </div><br/>-->
-<!--                        <div style="font-size:20px; font-weight: bold;" align="center">-->
-<!--                            <strong>Shahid Mahmood and Company</strong>-->
-<!--                        </div>-->
-                        <div style="font-size:18px; font-weight: bold;" align="center">
-                            <strong>Product Costing Report</strong>
+                        <div style="font-weight: bold;" align="center">
+                            <strong><h3>Product Costing Report</h3></strong>
                         </div><br/>
 
-                        <table><tr><td>&#160;</td></tr></table><br/><br/>
+                        <div class="row">
+                            <div class="col-6" style="font-size:18px;">
+                                <strong>PO No: <span class="m-0" t-field="o.name"/></strong>
+                            </div>
+                            <div class="col-6" style="font-size:17px;">
+                                <strong>Created By: </strong><span class="m-0" t-esc="user.name"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" style="font-size:18px;">
+                                <strong>Vendor: <span class="m-0" t-field="o.partner_id.name"/></strong>
+                            </div>
+                            <div class="col-6" style="font-size:17px;">
+                                <strong>Conversion Rate: </strong><span class="m-0" t-field="o.fx_rate"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" style="font-size:17px;">
+                                <strong>BL No: </strong><span class="m-0" t-field="o.bl_no"/>
+                            </div>
+                            <div class="col-6" style="font-size:17px;">
+                                <strong>Created Date: </strong><span class="m-0" t-esc="o.get_print_date()"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" style="font-size:17px;">
+                               <strong> GD No: </strong><span class="m-0" t-field="o.gd_no"/>
+                            </div>
+<!--                            <div class="col-6">-->
+<!--                                ///-->
+<!--                            </div>-->
+                        </div>
+                        <div class="row">
+                            <div class="col-6" style="font-size:17px;">
+                                <strong>INV No: </strong><span class="m-0" t-field="o.inv_no"/>
+                            </div>
+<!--                            <div class="col-6">-->
+<!--                                <span class="m-0" t-field="o.bl_no"/>-->
+<!--                            </div>-->
+                        </div>
+
+<!--                        <table><tr><td>&#160;</td></tr></table><br/><br/>-->
                         <t t-set="grand_total_sale" t-value="0"/>
                         <t t-set="grand_total_cost" t-value="0"/>
+                        <t t-set="grand_total_fc" t-value="0"/>
                         <table class="table table-sm o_main_table" >
                             <thead >
                                 <tr style="background-color:#F0F0F0">
@@ -232,6 +262,7 @@
                                     </tr>
                                     <t t-set="grand_total_sale" t-value="grand_total_sale + sale_total"/>
                                     <t t-set="grand_total_cost" t-value="grand_total_cost + total_cost"/>
+                                    <t t-set="grand_total_fc" t-value="total_fc"/>
                                 </t>
                             </tbody>
                         </table>
@@ -271,6 +302,38 @@
                                 <tr class="text-center">
                                     <td style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;">Total</td>
                                     <td class="text-right" style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;"><span t-esc="lc_total" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+
+                        <table width="40%" style="table-layout:fixed;" >
+                            <thead class="thead-light">
+                                <tr>
+                                    <th name="th_description" class="text-center" colspan="2" style="border:1px solid black;padding:5px;"><h4>Invoice Value in Pkr</h4></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<!--                                <t t-set="lc" t-value="o.get_lc()"/>-->
+<!--                                <t t-set="lc_total" t-value="0"/>-->
+<!--                                <t t-foreach="lc.cost_lines" t-as="line">-->
+<!--                                    <tr class="text-center">-->
+<!--                                        <td style="border:1px solid black;padding:5px;font-size:20px;"><span t-field="line.product_id.name" /></td>-->
+<!--                                        <td class="text-right" style="border:1px solid black; padding:5px;font-size:20px;"><span t-field="line.price_unit" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>-->
+<!--                                        <t t-set="lc_total" t-value="lc_total + line.price_unit"/>-->
+<!--                                    </tr>-->
+<!--                                </t>-->
+                                <tr class="text-center">
+                                    <td style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;">Total Invoice In Currency(<span t-esc="o.currency_id.symbol"/>)</td>
+                                    <td class="text-right" style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;"><span t-esc="grand_total_fc" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;">Rate</td>
+                                    <td class="text-right" style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;"><span t-esc="o.fx_rate" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;">Total</td>
+                                    <td class="text-right" style="border:1px solid black; padding:5px;font-size:20px;font-weight:bold;"><span t-esc="o.fx_rate * grand_total_fc" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 2}"/></td>
                                 </tr>
                             </tbody>
                         </table>

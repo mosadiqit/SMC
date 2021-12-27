@@ -1,3 +1,7 @@
+from datetime import datetime
+from pytz import timezone
+
+
 from odoo import api, fields, models
 
 
@@ -52,7 +56,7 @@ class StockLandedCost(models.Model):
 
                         unit = (i.unit_pricefc * purchase.fx_rate) + (i.cust_duty / i.product_qty) + (
                                     i.other_charges / i.product_qty)
-
+                        print(unit)
                         i.product_id.standard_price = unit
                         self.create_assess_history(i.assessed_value, i.unit_pricefc, i)
                     purchase.lc_cost_origin = self.name
@@ -132,6 +136,14 @@ class PurchaseOrder(models.Model):
     condition = fields.Many2one('lc.condition', "Condition")
 
     lc_cost_origin = fields.Char("LC Origin")
+    gd_no = fields.Char('GD No')
+    bl_no = fields.Char('BL No')
+    inv_no = fields.Char('INV No')
+
+    def get_print_date(self):
+        now_utc_date = datetime.now()
+        now_dubai = now_utc_date.astimezone(timezone('Asia/Karachi'))
+        return now_dubai.strftime('%d/%m/%Y %H:%M:%S')
 
     def get_lc(self):
         lc = self.env['stock.landed.cost'].search([('name', '=', self.lc_cost_origin)])

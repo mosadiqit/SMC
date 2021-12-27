@@ -123,6 +123,7 @@
                     <field name="is_tt" attrs="{'invisible':['|',('s_for','=','local'),('is_lc','=',True)],'required':[('s_for','=','import')]}"/>
                     <field name="lc_ref" readonly="1" attrs="{'invisible':['|',('s_for','=','local'),('is_tt','=',True)]}"/>
                     <field name="tt_ref" readonly="1" attrs="{'invisible':['|',('s_for','=','local'),('is_lc','=',True)]}"/>
+
                 </xpath>
 
                 <xpath expr="//field[@name='currency_id']" position="after">
@@ -130,6 +131,9 @@
                     <field name="lc_ref_no"  attrs="{'invisible':[('s_for','!=','import')]}"/>
                     <field name="bank_name" attrs="{'invisible':[('s_for','!=','import')]}"/>
                     <field name="condition" attrs="{'invisible':[('s_for','!=','import')]}"/>
+                    <field name="gd_no"  attrs="{'invisible':[('s_for','!=','import')]}"/>
+                    <field name="bl_no"  attrs="{'invisible':[('s_for','!=','import')]}"/>
+                    <field name="inv_no" attrs="{'invisible':[('s_for','!=','import')]}"/>
                 </xpath>
 
                 <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_uom']" position="attributes">
