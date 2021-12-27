@@ -12,13 +12,9 @@
                             <div class="col-6" >
                                 <strong>Partner: </strong> <span t-esc="docs.partner_id.name"/>
                             </div>
-<!--                            <div class="col-6">-->
-<!--                                <strong>Print Date: </strong> <span t-esc="print_date"/>-->
-<!--                            </div>-->
                         </div>
                         <p><strong>Date: </strong><span t-esc="docs.date_from" t-options="{'widget': 'date'}"/>  <strong>- </strong><span t-esc="docs.date_to" t-options="{'widget': 'date'}"/></p>
                     </div>
-
                     <table class="table table-sm" name="account_lines_table" style="border-bottom:1px solid black;">
                         <tr style="border-bottom:1px solid black; font-size: 13px; font-weight:bold;">
                             <td style="border-bottom:1px solid black;"><strong>Date</strong></td>
@@ -33,16 +29,14 @@
                         <tbody>
                             <t t-foreach="invoices" t-as="invoice" style="font-size: 13px;">
                             <tr t-foreach="invoice.invoice_line_ids" t-as="line" style="font-size: 13px;" >
-<!--                                <t t-if="line.product_id">-->
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="invoice.invoice_date" t-options="{'widget': 'date'}"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="invoice.name"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.product_id.name"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.product_uom_id.name"/></td>
-                                <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.quantity"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.price_unit"/></td>
+                                <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.quantity"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.discount"/></td>
                                 <td style="border-bottom:1px solid black;" class="text-left"><span t-esc="line.price_subtotal"/></td>
-<!--                                </t>-->
                             </tr>
                             </t>
                         </tbody>
@@ -51,6 +45,5 @@
                 </div>
             </t>
         </t>
-        <!--                </t>-->
     </template>
 </odoo>

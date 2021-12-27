@@ -24,5 +24,5 @@
         <field name="view_id" ref="partner_product_wizard_form"/>
         <field name="target">new</field>
     </record>
-    <menuitem id="partner_product_wizard_root" name="Client Account Statement" parent="sale.menu_sale_report" action="partner_product_wizard_action" sequence="20"/>
+    <menuitem id="partner_product_wizard_root" name="Client Account Statement" parent="sale.product_menu_catalog" action="partner_product_wizard_action" sequence="20"/>
 </odoo>
