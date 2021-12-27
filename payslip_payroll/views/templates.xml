@@ -17,7 +17,7 @@
             <div class="page">
            <div class="header">
            <h1>Header title</h1>
-          <t t-call="payslip.my_custom_layout_header">
+          <t t-call="payslip_payroll.my_custom_layout_header">
           </t>
     </div>
                 <div style="text-align:center;">
