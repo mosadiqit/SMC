@@ -51,6 +51,8 @@ class AccountAccountInh(models.Model):
     _inherit = 'account.account'
 
     branch_id = fields.Many2one('res.branch')
+    is_new = fields.Boolean()
+    is_old = fields.Boolean()
 
 
 class AccountJournalInh(models.Model):

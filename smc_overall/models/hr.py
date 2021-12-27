@@ -28,6 +28,24 @@ class HrPayslipInh(models.Model):
     address_id = fields.Many2one('res.partner')
     work_location = fields.Char('Work Location')
 
+    def action_payslip_done(self):
+        record = super(HrPayslipInh, self).action_payslip_done()
+        for rec in self:
+            new_partner = ''
+            old_partner = ''
+            if rec.employee_id.partner_ids:
+                for partner in rec.employee_id.partner_ids:
+                    if partner.is_current:
+                        new_partner = partner.id
+                    if not partner.is_current:
+                        old_partner = partner.id
+            for line in rec.move_id.line_ids:
+                if line.account_id.is_new:
+                    line.partner_id = new_partner
+                if line.account_id.is_old:
+                    line.partner_id = old_partner
+        return record
+
     def compute_sheet(self):
         payslips = self.filtered(lambda slip: slip.state in ['draft', 'verify'])
         # delete old payslip lines

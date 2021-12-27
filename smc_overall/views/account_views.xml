@@ -110,6 +110,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='group_id']" position="after">
                 <field name="branch_id"/>
+                <field name="is_new"/>
+                <field name="is_old"/>
             </xpath>
         </field>
     </record>
